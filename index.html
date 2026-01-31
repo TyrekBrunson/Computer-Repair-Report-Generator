@@ -1240,7 +1240,7 @@
     }
 
     /**
-     * Copy On Hold text - removes "ON HOLD – PENDING\n" prefix
+     * Copy On Hold text - removes "ON HOLD – PENDING\n" prefix and "Waiting Warranty Part from OEM\n" prefix
      */
     function copyOnHoldText() {
         let holdText = document.getElementById('on-hold-output').innerText;
@@ -1248,6 +1248,9 @@
 
         // Remove "ON HOLD – PENDING\n" prefix if it exists
         holdText = holdText.replace(/^ON HOLD – PENDING\n/, '');
+        
+        // Remove "Waiting Warranty Part from OEM\n" prefix if it exists
+        holdText = holdText.replace(/^Waiting Warranty Part from OEM\n/, '');
 
         // Create a temp textarea to hold the text
         const textarea = document.createElement('textarea');
