@@ -21,12 +21,77 @@
             padding: 30px;
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: relative; /* For absolute positioning of hamburger menu */
         }
 
         h1 {
             color: #0056b3;
             text-align: center;
             margin-bottom: 30px;
+        }
+
+        /* Hamburger Menu Styling */
+        .hamburger-menu {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .hamburger-icon {
+            width: 30px;
+            height: 25px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .hamburger-icon span {
+            display: block;
+            height: 3px;
+            width: 100%;
+            background-color: #0056b3;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-dropdown {
+            display: none;
+            position: absolute;
+            top: 35px;
+            right: 0;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            min-width: 250px;
+            z-index: 1000;
+        }
+
+        .menu-dropdown.show {
+            display: block;
+        }
+
+        .menu-item {
+            padding: 12px 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .menu-item label {
+            cursor: pointer;
+            user-select: none;
+            flex-grow: 1;
+        }
+
+        .menu-item input[type="checkbox"] {
+            cursor: pointer;
         }
 
         /* Input and Report Sections */
@@ -55,6 +120,10 @@
             border-radius: 4px;
             box-sizing: border-box;
             resize: vertical;
+        }
+
+        #unit-description.no-issue {
+            color: #dc3545; /* Red text for "No Issue Given." */
         }
         
         /* New Checkbox Styling for Contract/Verify */
@@ -200,6 +269,7 @@
             cursor: pointer;
             font-size: 1em;
             transition: background-color 0.3s;
+            min-width: 150px; /* Ensures all buttons have the same minimum width */
         }
         
         #generate-button {
@@ -218,6 +288,25 @@
         
         #clear-button:hover {
             background-color: #c82333;
+        }
+
+        #copy-button, #copy-onhold-button, #copy-repairs-button {
+            background-color: #0056b3;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s;
+            min-width: 150px;
+            width: 150px; /* Fixed width to match other buttons */
+            margin-top: 10px;
+            display: inline-block;
+        }
+
+        #copy-button:hover, #copy-onhold-button:hover, #copy-repairs-button:hover {
+            background-color: #003d82;
         }
 
         /* Numbered List Styling */
@@ -255,7 +344,9 @@
             margin-bottom: 20px; 
         }
 
-        /* --- On Hold Status Formatting --- */
+        /* Removed the no-issue-text class - we'll handle this with inline styling in JavaScript */
+
+        /* --- Status Section Formatting --- */
         .status-section {
             margin-top: 20px;
         }
@@ -274,10 +365,42 @@
             color: #cc6600; 
             font-weight: bold;
         }
+        
+        /* --- REPAIRS COMPLETED Formatting --- */
+        #repairs-completed-output {
+            background-color: #fff;
+            padding: 15px;
+            border: 1px solid #28a745; /* Green border for completed repairs */
+            border-radius: 4px;
+            font-size: 1.0em;
+            min-height: 50px;
+            line-height: 1.4;
+            font-family: Arial, sans-serif;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            color: #218838;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
 <div class="container">
+    <!-- Hamburger Menu -->
+    <div class="hamburger-menu">
+        <div class="hamburger-icon" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="menu-dropdown" id="menu-dropdown">
+            <div class="menu-item">
+                <input type="checkbox" id="dont-close-on-clear" name="dont-close-on-clear">
+                <label for="dont-close-on-clear">Don't Close Dropdowns on Clear</label>
+            </div>
+            <!-- Future menu options can be added here -->
+        </div>
+    </div>
+
     <h1>💻 Computer Repair Report Generator</h1>
 
     <div class="input-section">
@@ -339,6 +462,7 @@
         <div class="button-group">
             <button onclick="generateReport()" id="generate-button">GENERATE REPORT</button>
             <button onclick="clearAllIssues()" id="clear-button">CLEAR ALL ISSUES</button>
+			<button onclick="copytext()" id="copy-button">COPY TEXT</button>
         </div>
         <div id="report-output"></div>
     </div>
@@ -346,6 +470,13 @@
     <div class="status-section">
         <h2>ON HOLD STATUS</h2>
         <div id="on-hold-output"></div>
+        <button onclick="copyOnHoldText()" id="copy-onhold-button">COPY TEXT</button>
+    </div>
+    
+    <div class="status-section">
+        <h2>REPAIRS COMPLETED</h2>
+        <div id="repairs-completed-output"></div>
+        <button onclick="copyRepairsText()" id="copy-repairs-button">COPY TEXT</button>
     </div>
 </div>
 
@@ -369,10 +500,24 @@
             'LCD SCREEN DAMAGED IN MULTIPLE PLACES.',
             'LCD SCREEN HAS DAMAGED PIXELS.',
             'LCD SCREEN CRACKED IN SEVERAL PLACES EXTERNALLY.',
+			'LCD SCREEN CRACKED ON THE RIGHT SIDE.',
+			'LCD SCREEN CRACKED AT TOP RIGHT CORNER.',
+			'LCD SCREEN CRACKED AT BOTTOM RIGHT CORNER.',
+			'LCD SCREEN CRACKED IN THE CENTER.',
+			'LCD SCREEN CRACKED ON THE LEFT SIDE.',
+			'LCD SCREEN CRACKED AT THE TOP LEFT CORNER.',
+			'LCD SCREEN CRACKED AT THE BOTTOM LEFT CORNER.',
             'LCD SCREEN PHYSICALLY DAMAGED DUE TO DELAMINATION OF LCD FILM.'
         ],
         'LCD SCREEN (Latitude 2-in-1)': [
             'LCD SCREEN CRACKED IN SEVERAL PLACES EXTERNALLY.',
+			'LCD SCREEN CRACKED ON THE RIGHT SIDE.',
+			'LCD SCREEN CRACKED AT TOP RIGHT CORNER.',
+			'LCD SCREEN CRACKED AT BOTTOM RIGHT CORNER.',
+			'LCD SCREEN CRACKED IN THE CENTER.',
+			'LCD SCREEN CRACKED ON THE LEFT SIDE.',
+			'LCD SCREEN CRACKED AT THE TOP LEFT CORNER.',
+			'LCD SCREEN CRACKED AT THE BOTTOM LEFT CORNER.',
             'LCD SCREEN DAMAGED INTERNALLY AT CLIPS SECURING TO DEVICE TOP COVER.',
             'LCD SCREEN BEZEL CHIPPED AT BOTTOM LEFT / BOTTOM RIGHT CORNER.',
             'LCD SCREEN HAS DAMAGED PIXELS.',
@@ -388,6 +533,8 @@
             'BEZEL CRACKED AT BOTH BOTTOM CORNERS.',
             'BEZEL CRACKED AT LEFT SAFETY BUMPER.',
             'BEZEL CRACKED AT RIGHT SAFETY BUMPER.',
+            'BEZEL IS MISSING LEFT HINGE COVER.',
+			'BEZEL IS MISSING RIGHT HINGE COVER.',
             'BEZEL DAMAGED INTERNALLY AT BOTH HINGES (BROKEN LOCKING TABS).',
             'BEZEL IS MISSING SEVERAL SAFETY BUMPERS.',
             'BEZEL MISSING HALF OF THE SAFETY BUMPERS.',
@@ -473,7 +620,8 @@
             'KEYBOARD IS MISSING LATTICE.',
             'KEYBOARD LATTICE CRACKED BETWEEN SEVERAL KEYS.',
             'KEYBOARD HAS SEVERAL DAMAGED KEYS.',
-            'KEYBOARD LATTICE CRACKED IN MULTIPLE AREAS BETWEEN SEVERAL KEYS.'
+            'KEYBOARD LATTICE CRACKED IN MULTIPLE AREAS BETWEEN SEVERAL KEYS.',
+			'KEYBOARD IS MISSING THE aaa KEY.'
         ],
         'HINGES (Chromebook)': [
             'LEFT HINGE DAMAGED AND SNAPPED IN HALF.',
@@ -485,11 +633,13 @@
         'HINGES (Latitude 2-IN-1)': [
             'LEFT HINGE DAMAGED AND SNAPPED IN HALF.',
             'RIGHT HINGE DAMAGED AND SNAPPED IN HALF.',
+			'BOTH HINGES ARE DAMAGED AND SNAPPED IN HALF.',
             'LEFT HINGE IS BENT AND FAILING TO SECURE TO DEVICE TOP COVER.',
             'RIGHT HINGE IS BENT AND FAILING TO SECURE TO DEVICE TOP COVER.',
-            'BOTH HINGES ARE DAMAGED AND SNAPPED IN HALF.',
+            'BOTH HINGES ARE BENT AND FAILING TO SECURE TO DEVICE TOP COVER.',
             'RIGHT HINGE DAMAGED AT HINGE COVER.',
-            'LEFT HINGE DAMAGED AT HINGE COVER.'
+            'LEFT HINGE DAMAGED AT HINGE COVER.',
+			'BOTH HINGES ARE DAMAGED AT HINGE COVER.'
         ],
         'DC-IN (Latitude)': [
             'DC-IN PORT FAILING TO RECOGNIZE AC ADAPTER AND CHARGE UNIT BATTERY.',
@@ -514,7 +664,7 @@
             '(Not Recognizing Keyboard): MOTHERBOARD IS CAUSING AN ISSUE WITH RECOGNIZING KEY STROKES AND INPUTTING CORRECT KEY COMMANDS. TECHNICIAN NOTICED THAT SEVERAL KEY STROKES ARE NOT BEING INPUTTED AND USED A KNOWN GOOD KEYBOARD TO VERIFY; ALSO DID NOT PRODUCE KEYSTROKES. RESEATED SEVERAL TIMES AND CLEANED MOTHERBOARD CONNECTION, VERIFYING KEYBOARD RIBBON CABLE IS PROPERLY SEATED ON MOTHERBOARD CLIP; ISSUE WITH KEYSTROKES PERSISTED. USED ORIGINAL DEVICE KEYBOARD IN ANOTHER UNIT AND TYPED CORRECTLY. NO VISUAL DAMAGES ON MOTHERBOARD.'
         ],
         'LCD SCREEN (System Failure)': [
-            '(White burn pixels): LCD SCREEN HAS PIXELS CAUSING A WHITE BURN EFFECT WHEN ILLUMINATED (POWERED ON/IN USE). RESEATED AND TESTED LCD SCREEN AGAIN AND LCD SCREEN STILL DISPLAYS WHITE BURN PIXELS IN VARIOUS PLACES ON LCD SCREEN, THUS CONTINUING TO HINDER THE VIEW/DISPLAY ON THE LCD SCREEN. NO VISUAL DAMAGES.',
+            '(White burn pixels): LCD SCREEN HAS PIXELS CAUSING A WHITE BURN EFFECT WHEN ILLUMINATED (POWERED ON/IN USE). RESEATED AND TESTED LCD SCREEN AGAIN AND LCD SCREEN STILL DISPLAYS WHITE BURN PIXELS IN VARIOUS PLACES ON LCD SCREEN, THUS CONTINUING TO HINDER THE VIEW/DISPLAY ON THE LCD SCREEN. TESTED WITH KNOWN GOOD LCD SCREEN; AND WHITEBURN ILLUMINATION DID NOT PERSIST; ISOLATING THE ISSUE TO THE LCD SCREEN. NO VISUAL DAMAGES.',
             '(Touchscreen not detecting touch): TOUCHSCREEN FAILING TO PROPERLY REGISTER TOUCH COMMANDS. LCD SCREEN STRUGGLES TO DETECT TOUCH INPUTS IN CERTAIN REGIONS OF THE SCREEN. RESEATED LCD CABLE, NO CHANGE. TESTED KNOWN GOOD LCD SCREEN, TOUCH SCREEN FUNCTIONED AS INTENDED. NO VISUAL DAMAGES.',
             '(Illumination failure): LCD SCREEN FAILING TO ILLUMINATE AND SHOW A CLEAR DISPLAY. TESTED DEVICE WITH KNOWN GOOD TEST LCD SCREEN; DISPLAY ILLUMINATED FINE. TESTED LCD SCREEN WITH KNOWN GOOD LCD CABLE; FAILED TO ILLUMINATE. NO VISUAL DAMAGES.',
             '(Phantom Touch): ISSUE WITH LCD SCREEN TOUCH DIGITIZER CAUSING A PHANTOM TOUCH EFFECT WHEN ILLUMINATED (POWERED ON/IN USE). ERRATIC AND NON-USER INPUT TOUCH COMMANDS ARE CONSTANT WHEN DEVICE IS POWERED ON. RESEATED EDP CABLE ON MOTHERBOARD AND LCD SCREEN; ISSUE PERSISTS. TRIED KNOWN GOOD TOUCH LCD SCREEN; ISSUE RESOLVES. NO VISUAL DAMAGES TO LCD SCREEN.',
@@ -778,6 +928,9 @@
      * Clears all selections, resets the report state, and scrolls to the top.
      */
     function clearAllIssues() {
+        // FIRST: Immediately scroll to the top
+        window.scrollTo(0, 0);
+        
         // 1. Clear the tracking array
         selectedIssues = [];
         
@@ -809,9 +962,21 @@
         // 6. Clear the generated report output
         document.getElementById('report-output').textContent = '';
         document.getElementById('on-hold-output').textContent = ''; 
+        // **NEW: Clear the repairs completed output**
+        document.getElementById('repairs-completed-output').textContent = '';
         
-        // 7. Scroll to the top of the page
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        // 7. Handle dropdown closing based on menu setting
+        const dontCloseOnClear = document.getElementById('dont-close-on-clear').checked;
+        
+        if (dontCloseOnClear) {
+            // When checked: Close all dropdowns
+            document.querySelectorAll('.issue-dropdown').forEach(details => {
+                details.open = false;
+            });
+        } else {
+            // When not checked: Keep dropdowns open (do nothing)
+            // Dropdowns maintain their current state
+        }
     }
 
     /**
@@ -828,6 +993,13 @@
         const initialCommentChecked = document.getElementById('initial-comment-checkbox').checked;
         const initialCommentDescription = document.getElementById('initial-comment-description').value.trim();
 
+        // Check if no initial issue description is provided
+        const hasNoInitialIssue = !customDescription;
+        
+        // Show browser popup if no initial issue is given
+        if (hasNoInitialIssue) {
+            alert('Please make sure to add an initial issue description!');
+        }
 
         // Filter parts for status check
         const nonAdpPartObjects = selectedIssues.filter(issue => issue.type === 'NON-ADP');
@@ -916,7 +1088,7 @@
         finalBody = finalBody.replace(/\/\/\s+/g, '//');
         
         // 2. Remove spaces around the final .// separator 
-        finalBody = finalBody.replace(/\s*\.\/\//g, './/');
+        finalBody = finalBody.replace(/\s*\.\/\//g, '. //');
         
         // 3. Fix for multiple consecutive periods (e.g., if a custom comment ends with a period and is followed by an ADP issue with one)
         finalBody = finalBody.replace(/\. \./g, '.');
@@ -955,9 +1127,25 @@
 
         // Combine all lines with only a single newline character
         const reportText = [line1, line2, line3].join('\n');
-        document.getElementById('report-output').textContent = reportText;
         
-        // --- ON HOLD STATUS GENERATION (Final Logic) ---
+        // Handle "No Issue Given." text coloring
+        const reportOutput = document.getElementById('report-output');
+        if (hasNoInitialIssue) {
+            // Replace "No Issue Given." with a red-colored version using HTML
+            const styledReportText = reportText.replace(
+                'No Issue Given.',
+                '<span style="color: #dc3545;">No Issue Given.</span>'
+            );
+            reportOutput.innerHTML = styledReportText.replace(/\n/g, '<br>');
+        } else {
+            // Normal black text
+            reportOutput.textContent = reportText;
+        }
+        
+		// TRINITY - Attempt at a copy button
+		
+		
+        // --- ON HOLD STATUS GENERATION (Logic Unchanged) ---
         let holdStatusText = '';
         
         // Status logic relies on the selection status of issues.
@@ -978,6 +1166,20 @@
         }
         
         document.getElementById('on-hold-output').textContent = holdStatusText;
+        
+        // --- NEW REPAIRS COMPLETED STATUS GENERATION ---
+        let repairsText = '';
+        
+        // Use the calculated partsListText (which is the list of parts or 'NONE')
+        if (partsListText.toUpperCase() !== 'NONE') {
+            // Format: REPAIRS COMPLETED: REPLACED [PART LIST]. UNIT IS FULLY FUNCTIONAL.
+            repairsText = `REPAIRS COMPLETED: REPLACED ${partsListText.toUpperCase()}. UNIT IS FULLY FUNCTIONAL.`;
+        } else {
+             // If no parts were ordered, display nothing for this section
+             repairsText = ''; 
+        }
+
+        document.getElementById('repairs-completed-output').textContent = repairsText;
     }
 
     /**
@@ -1004,7 +1206,128 @@
         if (!checkbox.checked) {
             document.getElementById('cannot-verify-description').value = '';
         }
+     }
+
+        // --- Copy Text Functionality ---
+    function copytext() {
+        const reportText = document.getElementById('report-output').innerText;
+        if (!reportText) return; // Do nothing if empty
+
+        // Create a temp textarea to hold the text
+        const textarea = document.createElement('textarea');
+        textarea.value = reportText;
+        document.body.appendChild(textarea);
+        
+        // Select and copy
+        textarea.select();
+        document.execCommand('copy');
+        
+        // Clean up
+        document.body.removeChild(textarea);
+        
+        // Visual feedback
+        const copyButton = document.getElementById('copy-button');
+        const originalText = copyButton.textContent;
+        const originalColor = copyButton.style.backgroundColor;
+
+        copyButton.textContent = 'COPIED!';
+        copyButton.style.backgroundColor = '#28a745'; // Green for success
+        
+        setTimeout(() => {
+            copyButton.textContent = originalText;
+            copyButton.style.backgroundColor = originalColor || '#0056b3'; // Revert color
+        }, 2000);
     }
+
+    /**
+     * Copy On Hold text - removes "ON HOLD – PENDING\n" prefix
+     */
+    function copyOnHoldText() {
+        let holdText = document.getElementById('on-hold-output').innerText;
+        if (!holdText) return; // Do nothing if empty
+
+        // Remove "ON HOLD – PENDING\n" prefix if it exists
+        holdText = holdText.replace(/^ON HOLD – PENDING\n/, '');
+
+        // Create a temp textarea to hold the text
+        const textarea = document.createElement('textarea');
+        textarea.value = holdText;
+        document.body.appendChild(textarea);
+        
+        // Select and copy
+        textarea.select();
+        document.execCommand('copy');
+        
+        // Clean up
+        document.body.removeChild(textarea);
+        
+        // Visual feedback
+        const copyButton = document.getElementById('copy-onhold-button');
+        const originalText = copyButton.textContent;
+        const originalColor = copyButton.style.backgroundColor;
+
+        copyButton.textContent = 'COPIED!';
+        copyButton.style.backgroundColor = '#28a745'; // Green for success
+        
+        setTimeout(() => {
+            copyButton.textContent = originalText;
+            copyButton.style.backgroundColor = originalColor || '#0056b3'; // Revert color
+        }, 2000);
+    }
+
+    /**
+     * Copy Repairs Completed text
+     */
+    function copyRepairsText() {
+        const repairsText = document.getElementById('repairs-completed-output').innerText;
+        if (!repairsText) return; // Do nothing if empty
+
+        // Create a temp textarea to hold the text
+        const textarea = document.createElement('textarea');
+        textarea.value = repairsText;
+        document.body.appendChild(textarea);
+        
+        // Select and copy
+        textarea.select();
+        document.execCommand('copy');
+        
+        // Clean up
+        document.body.removeChild(textarea);
+        
+        // Visual feedback
+        const copyButton = document.getElementById('copy-repairs-button');
+        const originalText = copyButton.textContent;
+        const originalColor = copyButton.style.backgroundColor;
+
+        copyButton.textContent = 'COPIED!';
+        copyButton.style.backgroundColor = '#28a745'; // Green for success
+        
+        setTimeout(() => {
+            copyButton.textContent = originalText;
+            copyButton.style.backgroundColor = originalColor || '#0056b3'; // Revert color
+        }, 2000);
+    }
+
+
+    /**
+     * Toggles the hamburger menu dropdown
+     */
+    function toggleMenu() {
+        const dropdown = document.getElementById('menu-dropdown');
+        dropdown.classList.toggle('show');
+    }
+
+    /**
+     * Close menu when clicking outside
+     */
+    document.addEventListener('click', function(event) {
+        const menu = document.querySelector('.hamburger-menu');
+        const dropdown = document.getElementById('menu-dropdown');
+        
+        if (menu && !menu.contains(event.target) && dropdown) {
+            dropdown.classList.remove('show');
+        }
+    });
 
 
     // --- Initialization ---
