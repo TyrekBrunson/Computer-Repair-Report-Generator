@@ -17,3 +17,6 @@ FEATURES TO IMPLEMENT
   PPID:
 
 -Split HINGE verbiage to include "left" and "right" hinges under "parts ordered"
+
+-IREDELL Button?
+ "Awaiting CHS Repairs"
