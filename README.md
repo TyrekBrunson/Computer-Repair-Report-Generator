@@ -16,8 +16,5 @@ FEATURES TO IMPLEMENT
   *NON-ADP PART* IS DEAD ON ARRIVAL WHEN INSTALLED. *PUT NON-ADP VERBAIGE HERE* (have it generate with selected nadp vrbaige)?
   PPID:
 
--Split HINGE verbiage to include "left" and "right" hinges under "parts ordered"
-# Turner just did that one the first try after not using git hub or visual studios since 2018. Im so satisfied right now. Also I just made the "V1.8" I dont know if we want to do that for just editiing 2 lines. I dont know how that works. 
-
 -IREDELL Button?
  "Awaiting CHS Repairs"
