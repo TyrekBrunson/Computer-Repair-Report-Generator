@@ -883,6 +883,8 @@
             if (firstWord === 'KEYBOARD') return 'KEYBOARD';
             if (issueValue.includes('LEFT HINGE')) return 'LEFT HINGE';
             if (issueValue.includes('RIGHT HINGE')) return 'RIGHT HINGE';
+            // Accept both singular/plural variations produced in issue text
+            if (issueValue.includes('BOTH HINGE') || issueValue.includes('BOTH HINGES')) return 'LEFT HINGE AND RIGHT HINGE';
             if (issueValue.startsWith('DC-IN')) return 'DC-IN PORT';
             return 'PART';
         }
@@ -1162,6 +1164,15 @@
 
         // Line 3: PARTS ORDERED: (Still uses all selected issues, regardless of "Cannot Verify" status)
         const parts = [...new Set(selectedIssues.map(issue => issue.part))]; 
+
+        // Special handling: if an entry represents both hinges as a single part
+        // (i.e. 'LEFT HINGE AND RIGHT HINGE') and there are other parts selected,
+        // expand it into two separate entries so grammar is correct when listing.
+        const combinedHingeIndex = parts.indexOf('LEFT HINGE AND RIGHT HINGE');
+        if (combinedHingeIndex !== -1 && parts.length > 1) {
+            // Replace the single combined entry with two separate entries
+            parts.splice(combinedHingeIndex, 1, 'LEFT HINGE', 'RIGHT HINGE');
+        }
         let partsListText = '';
 
         if (parts.length === 0) {
