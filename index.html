@@ -568,7 +568,7 @@
         ],
         'PALMREST (Chromebook)': [
             'PALMREST IS DAMAGED INTERNALLY AT BOTH HINGES (BROKEN/LOOSE GROMMETS).',
-			'PALMRSET IS DAMAGED AT RIGHT HINGE (BROKEN/LOOSE GROMMETS)',
+            'PALMREST IS DAMAGED AT RIGHT HINGE (BROKEN/LOOSE GROMMETS)',
 			'PALMREST IS DAMAGED AT LEFT HINGE (BROKEN/LOOSE GROMMETS)',
             'PALMREST CRACKED NEAR OR AROUND TOUCHPAD.',
             'PALMREST CRACKED NEAR OR AROUND KEYBOARD.',
@@ -881,10 +881,10 @@
             if (firstWord === 'PALMREST') return 'PALMREST';
             if (firstWord === 'BOTTOM') return 'BOTTOM COVER';
             if (firstWord === 'KEYBOARD') return 'KEYBOARD';
-            if (issueValue.includes('LEFT HINGE')) return 'LEFT HINGE';
-            if (issueValue.includes('RIGHT HINGE')) return 'RIGHT HINGE';
+            if (issueValue.startsWith('LEFT HINGE')) return 'LEFT HINGE';
+            if (issueValue.startsWith('RIGHT HINGE')) return 'RIGHT HINGE';
             // Accept both singular/plural variations produced in issue text
-            if (issueValue.includes('BOTH HINGE') || issueValue.includes('BOTH HINGES')) return 'LEFT HINGE AND RIGHT HINGE';
+            if (issueValue.startsWith('BOTH HINGES') || issueValue.startsWith('BOTH HINGES')) return 'LEFT HINGE AND RIGHT HINGE';
             if (issueValue.startsWith('DC-IN')) return 'DC-IN PORT';
             return 'PART';
         }
