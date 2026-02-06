@@ -210,6 +210,22 @@
             margin-top: 5px;
         }
 
+        /*Iredell button in the works*/
+        #iredell-option, .initial-comment-option, .verify-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .iredell-option {
+            border: 1px solid #f78bbd;
+            background-color: #f79eef;
+        }
+        .iredell-option label {
+            font-weight: bold;
+            color: #ff47d1;
+        }
 
         /* Dropdown/Checkbox Styling */
         .category-group {
@@ -433,6 +449,10 @@
         <div id="cannot-verify-description-container" style="display:none;">
             <label for="cannot-verify-description">Cannot Verify Issue Description:</label>
             <textarea id="cannot-verify-description" placeholder="e.g., CURSOR DISPLAYED ON INITIAL DIAGNOSTICS AND CONTINUED FUNCTIONING THROUGH ADVANCED DIAGNOSTICS."></textarea>
+        </div>
+         <div class="iredell-option">
+                <input type="checkbox" id="iredell-checkbox">
+                <label for="iredell-checkbox">Iredell Contract</label>
         </div>
     </div>
 
@@ -1040,6 +1060,7 @@
     function generateReport() {
         const customDescription = document.getElementById('unit-description').value.trim();
         const isRichlandWorth = document.getElementById('richland-worth-checkbox').checked;
+        const isIredell = document.getElementById('iredell-checkbox').checked;
         
         const cannotVerifyChecked = document.getElementById('cannot-verify-checkbox').checked;
         const cannotVerifyDescription = document.getElementById('cannot-verify-description').value.trim();
@@ -1224,7 +1245,9 @@
 
         } else if (adpIssuesCount > 0 && !isRichlandWorth) {
             holdStatusText = `ON HOLD – PENDING\nAWAITING ADP REPAIRS.`;
-            
+
+        } else if (isIredell > 0) {
+            holdStatusText = `ON HOLD – PENDING\nAWAITING CHS REPAIRS.`;
         } else {
             holdStatusText = '';
         }
