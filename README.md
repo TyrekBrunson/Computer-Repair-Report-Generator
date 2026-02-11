@@ -18,3 +18,7 @@ FEATURES TO IMPLEMENT
 
 -IREDELL Button?
  "Awaiting CHS Repairs"
+
+ More buttons!
+ imaging ending verbiage
+ ber ending verbiage
