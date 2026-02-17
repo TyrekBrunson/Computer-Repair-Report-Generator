@@ -13,17 +13,6 @@
             background-color: #f4f7f9;
             color: #333;
         }
-
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            position: relative; /* For absolute positioning of hamburger menu */
-        }
-
         h1 {
             color: #0056b3;
             text-align: center;
@@ -35,23 +24,119 @@
 
     <div class=" input-section">
         <h2>What did you repair?</h2>
-        <h3>Plastics/Shell</h3>
-        <div class="repair-options">
-            <div class="bottom-cover">
-                <input type="checkbox" id="bottom-cover-checkbox">
-                <label for="bottom-cover-checkbox">Bottom Cover</label>
-            </div>
-            <div class="top-cover">
-                <input type="checkbox" id="top-cover-checkbox">
-                <label for="top-cover-checkbox">Top Cover</label>
-            </div>
-            <div class="palmrest">
-                <input type="checkbox" id="palm-rest-checkbox">
-                <label for="palm-rest-checkbox">Palm Rest</label>
-            </div>
-            <div class="bezel">
-                <input type="checkbox" id="bezel-checkbox">
-                <label for="bezel-checkbox">Bezel</label>
-            </div>
+            <h3>Top End</h3>
+                <div class="repair-options">
+                    <div class="top-cover">
+                        <input type="checkbox" id="top-cover-checkbox">
+                        <label for="top-cover-checkbox">Top Cover</label>
+                    </div>
+                    <div class="lcd-screen">
+                        <input type="checkbox" id="screen-checkbox">
+                        <label for="screen-checkbox">LCD Screen</label>
+                    </div>
+                    <div class="'bezel">
+                        <input type="checkbox" id="bezel-checkbox">
+                        <label for="bezel-checkbox">Bezel</label>
+                    </div>
+                    <div class="left-hinge">
+                        <input type="checkbox" id="left-hinge-checkbox">
+                        <label for="left-hinge-checkbox">Left Hinge</label>
+                    </div>
+                    <div class="right-hinge">
+                        <input type="checkbox" id="right-hinge-checkbox">
+                        <label for="right-hinge-checkbox">Right Hinge</label>
+                    </div>
+                    <div class="edp-cable">
+                        <input type="checkbox" id="edp-cable-checkbox">
+                        <label for="edp-cable-checkbox">EDP Cable</label>
+                    </div>
+                    <div class="webcam">
+                        <input type="checkbox" id="webcam-checkbox">
+                        <label for="webcam-checkbox">Webcam</label>
+                    </div>
+                    <div class="'hall-sensor">
+                        <input type="checkbox" id="hall-sensor-checkbox">
+                        <label for="hall-sensor-checkbox">Hall Sensor</label>
+                    </div>
+            <h3>Bottom End</h3>
+                    <div class="palm-rest">
+                        <input type="checkbox" id="palm-rest-checkbox">
+                        <label for="palm-rest-checkbox">Palm Rest</label>
+                    </div>
+                    <div class="keyboard">
+                        <input type="checkbox" id="keyboard-checkbox">
+                        <label for="keyboard-checkbox">Keyboard</label>
+                    </div>
+                    <div class="touchpad">
+                        <input type="checkbox" id="touchpad-checkbox">
+                        <label for="touchpad-checkbox">Touchpad</label>
+                    </div>
+                    <div class="bottom-cover">
+                        <input type="checkbox" id="bottom-cover-checkbox">
+                        <label for="bottom-cover-checkbox">Bottom Cover</label>
+                    </div>
+            <h3>Internals</h3>
+                    <div class="motherboard">
+                        <input type="checkbox" id="motherboard-checkbox">
+                        <label for="motherboard-checkbox">Motherboard</label>
+                    </div>
+                    <div class="daughterboard">
+                        <input type="checkbox" id="daughterboard-checkbox">
+                        <label for="daughterboard-checkbox">Daughterboard</label>
+                    </div>
+                    <div class="audio-board">
+                        <input type="checkbox" id="audio-board-checkbox">
+                        <label for="audio-board-checkbox">Audio Board</label>
+                    </div>
+                    <div class="ram">
+                        <input type="checkbox" id="ram-checkbox">
+                        <label for="ram-checkbox">RAM</label>
+                    </div>
+                    <div class="ssd">
+                        <input type="checkbox" id="ssd-checkbox">
+                        <label for="ssd-checkbox">SSD</label>
+                    </div>
+                    <div class="nic">
+                        <input type="checkbox" id="nic-checkbox">
+                        <label for="nic-checkbox">NIC</label>
+                    </div>
+                    <div class="dc-in-port">
+                        <input type="checkbox" id="dc-in-port-checkbox">
+                        <label for="dc-in-port-checkbox">DC-In Port</label>
+                    </div>
+                    <div class="cpu-fan">
+                        <input type="checkbox" id="cpu-fan-checkbox">
+                        <label for ="cpu-fan-checkbox">CPU Fan</label>
+                    </div>
+                    <div class="battery">
+                        <input type="checkbox" id="battery-checkbox">
+                        <label for="battery-checkbox">Battery</label>
+                    </div>
+                    <div class="battery-cable">
+                        <input type="checkbox" id="battery-cable-checkbox">
+                        <label for="battery-cable-checkbox">Battery Cable</label>
+                    </div>
+                    <div class="speakers"></div>
+                        <input type="checkbox" id="speakers-checkbox">
+                        <label for="speakers-checkbox">Speakers</label>
+                    </div>
+            <h3>Miscellaneous</h3>
+                    <div class="miscellaneous">
+                         <input type="checkbox" id="miscellaneous-checkbox" data-issue-type="miscellaneous" value="MISCELLANEOUS ISSUE - PLEASE DESCRIBE IN NOTES" class="issue-checkbox">
+                        <label for="miscellaneous-checkbox">MISCELLANEOUS PART - PLEASE DESCRIBE IN NOTES</label>
+                    </div>
+                    <div id="miscellaneous-description-container" style="display:none;">
+                        <textarea id="miscellaneous-comment-area" placeholder="Enter miscellaneous part here."></textarea>
     </div>
+    <div class="report-section">
+        <h2>Generated Report</h2>
+        <div class="button-group">
+            <button onclick="generateReport()" id="generate-button">GENERATE REPORT</button>
+            <button onclick="clearAllIssues()" id="clear-button">CLEAR ALL ISSUES</button>
+            <button onclick="copytext()" id="copy-button">COPY TEXT</button>
+        </div>
+        <div id="report-output"></div>
+    <div class="required-photos-section">
+        <h2>Required Photos</h2>
+        <ul id="required-photos-list"></ul>
 </body>
