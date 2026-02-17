@@ -1,5 +1,5 @@
 <!DOCTYPE html> 
-<html lang="en"></html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,7 +22,7 @@
 <body>
     <h1>Computer Repair Report Generator🛠️</h1>
 
-    <div class=" input-section">
+    <div class="input-section">
         <h2>What did you repair?</h2>
             <h3>Top End</h3>
                 <div class="repair-options">
@@ -58,7 +58,9 @@
                         <input type="checkbox" id="hall-sensor-checkbox">
                         <label for="hall-sensor-checkbox">Hall Sensor</label>
                     </div>
+                </div>
             <h3>Bottom End</h3>
+                <div class="repair-options">
                     <div class="palm-rest">
                         <input type="checkbox" id="palm-rest-checkbox">
                         <label for="palm-rest-checkbox">Palm Rest</label>
@@ -75,7 +77,9 @@
                         <input type="checkbox" id="bottom-cover-checkbox">
                         <label for="bottom-cover-checkbox">Bottom Cover</label>
                     </div>
+                </div>
             <h3>Internals</h3>
+                <div class="repair-options">
                     <div class="motherboard">
                         <input type="checkbox" id="motherboard-checkbox">
                         <label for="motherboard-checkbox">Motherboard</label>
@@ -120,16 +124,46 @@
                         <input type="checkbox" id="speakers-checkbox">
                         <label for="speakers-checkbox">Speakers</label>
                     </div>
+                </div>
             <h3>Miscellaneous</h3>
+                <div class="repair-options">
                     <div class="miscellaneous">
                          <input type="checkbox" id="miscellaneous-checkbox" data-issue-type="miscellaneous" value="MISCELLANEOUS ISSUE - PLEASE DESCRIBE IN NOTES" class="issue-checkbox">
                         <label for="miscellaneous-checkbox">MISCELLANEOUS PART - PLEASE DESCRIBE IN NOTES</label>
                     </div>
                     <div id="miscellaneous-description-container" style="display:none;">
                         <textarea id="miscellaneous-comment-area" placeholder="Enter miscellaneous part here."></textarea>
+                </div>
+            <h3>Verbaige Modifiers</h3>
+                <div class="verbaige-modifiers">
+                    <div class="cannot-verify">
+                        <input type="checkbox" id="cannot-verify-checkbox">
+                        <label for="cannot-verify-checkbox">Cannot Verify Initial Issue </label>
+                    </div>
+                    <div class="fixed-without-parts">
+                        <input type="checkbox" id="fixed-without-parts-checkbox">
+                        <label for="fixed-without-parts-checkbox">Fixed Without Parts</label>
+                    </div>
+                    <div class="battery-oow">
+                        <input type="checkbox" id="battery-oow-checkbox">
+                        <label for="battery-oow-checkbox">Battery OOW</label>
+                    </div>
+                    <div class="needs-imaging">
+                        <input type="checkbox" id="needs-imaging-checkbox">
+                        <label for="needs-imaging-checkbox">Needs Imaging</label>
+                    </div>
+                    <div class="needs-os">
+                        <input type="checkbox" id="needs-os-checkbox">
+                        <label for="needs-os-checkbox">Needs OS Installed</label>
+                    </div>
+                    <div class="bugs"> 
+                        <input type="checkbox" id="bugs-checkbox">
+                        <label for="bugs-checkbox">BUGS!!</label>
+                    </div>
+                </div>
     </div>
     <div class="report-section">
-        <h2>Generated Report</h2>
+        <h2>Generate Report</h2>
         <div class="button-group">
             <button onclick="generateReport()" id="generate-button">GENERATE REPORT</button>
             <button onclick="clearAllIssues()" id="clear-button">CLEAR ALL ISSUES</button>
@@ -139,4 +173,10 @@
     <div class="required-photos-section">
         <h2>Required Photos</h2>
         <ul id="required-photos-list"></ul>
+
+<script>
+    // Global array to track the order of selected issues
+    let selectedRepairs = [];
+</script>
 </body>
+</html>
