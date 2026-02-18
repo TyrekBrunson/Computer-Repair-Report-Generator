@@ -1239,10 +1239,10 @@
         // --- NEW REPAIRS COMPLETED STATUS GENERATION ---
         let repairsText = '';
         
-        // Use the calculated partsListText (which is the list of parts or 'NONE')
+        // Use the calculated partsListText (which is the list of parts or 'NONE') --> ${partsListText.toUpperCase()}.
         if (partsListText.toUpperCase() !== 'NONE') {
             // Format: REPAIRS COMPLETED: REPLACED [PART LIST]. UNIT IS FULLY FUNCTIONAL.
-            repairsText = `REPAIRS COMPLETED: REPLACED ${partsListText.toUpperCase()}. UNIT IS FULLY FUNCTIONAL.`;
+            repairsText = `[PLACEHOLDER, DO NOT USE]`;
         } else {
              // If no parts were ordered, display nothing for this section
              repairsText = ''; 
