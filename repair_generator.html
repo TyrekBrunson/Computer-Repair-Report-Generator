@@ -291,8 +291,10 @@
 <script>
     // JavaScript code to handle checkbox interactions and report generation
    function generateReport() {
-    var checkBox = document.getElementById("motherboard-checkbox")
-
+    if(document.getElementById("motherboard-checkbox").checked){
+        return"Motherboard";
+    
+   }
 </script>
 </body>
 </html>
