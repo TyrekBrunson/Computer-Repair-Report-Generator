@@ -13,6 +13,14 @@
             background-color: #f4f7f9;
             color: #333;
         }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
         h1 {
             color: #0056b3;
             text-align: center;
@@ -31,8 +39,8 @@
             margin-bottom: 15px;
         }
         .verbaige-modifiers {
-            padding: 20px;
-            margin-bottom: 20px;
+            padding:5px;
+            margin-bottom: 10px;
             display: flex;
             flex-wrap: wrap;
             gap: 10px; /* Space between the two primary checkboxes */
@@ -121,6 +129,7 @@
         </style>
        
 <body>
+    <div class="container">
     <h1>Computer Repair Report Generator🛠️</h1>
 
     <div class="input-section">
@@ -278,7 +287,7 @@
         <ul id="required-photos-list"></ul>
         <div id="required-photos-output"></div>
     </div>
-
+</div>
 <script>
     // JavaScript code to handle checkbox interactions and report generation
    function generateReport() {
