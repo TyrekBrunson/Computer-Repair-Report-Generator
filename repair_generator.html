@@ -18,7 +18,108 @@
             text-align: center;
             margin-bottom: 30px;
         }
+         /* Input and Report Sections */
+        .repair-options {
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background-color: #fafafa;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px; /* Space between the two primary checkboxes */
+            margin-bottom: 15px;
+        }
+        .verbaige-modifiers {
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px; /* Space between the two primary checkboxes */
+            margin-bottom: 15px;
+        }
+
+        h2 {
+            color: #333;
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .button-group button{
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s;
+            min-width: 150px; /* Ensures all buttons have the same minimum width */
+        }
+
+        #generate-button {
+            background-color: #28a745;
+            color: white;
+        }
+
+        #clear-button {
+            background-color: #dc3545;
+            color: white;
+        }
+        
+         #copy-button {
+            background-color: #0056b3;
+            color: white;
+        }
+        #repairs-completed-output {
+            background-color: #fff;
+            padding: 15px;
+            border: 1px solid #28a745; /* Green border for completed repairs */
+            border-radius: 4px;
+            font-size: 1.0em;
+            min-height: 50px;
+            line-height: 1.4;
+            font-family: Arial, sans-serif;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            color: #218838;
+            font-weight: bold;
+             margin-top: 20px;
+        }
+        #required-photos-output{
+            background-color: #fff;
+            padding: 15px;
+            border: 1px solid #0056b3; /* Blue border for required photos */
+            border-radius: 4px;
+            font-size: 1.0em;
+            min-height: 50px;
+            line-height: 1.4;
+            font-family: Arial, sans-serif;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            color: #218838;
+            font-weight: bold;
+        }
+
+        /* Numbered List Styling */
+        .issue-order {
+            display: inline-block;
+            width: 20px;
+            text-align: center;
+            background-color: #0056b3;
+            color: white;
+            border-radius: 50%;
+            font-size: 0.75em;
+            margin-right: 5px;
+            line-height: 20px;
+            height: 20px;
+            visibility: hidden;
+            flex-shrink: 0;
+        }
+        .issue-item input[type="checkbox"]:checked + .issue-order {
+            visibility: visible;
+        }
         </style>
+       
 <body>
     <h1>Computer Repair Report Generator🛠️</h1>
 
@@ -128,55 +229,61 @@
             <h3>Miscellaneous</h3>
                 <div class="repair-options">
                     <div class="miscellaneous">
-                         <input type="checkbox" id="miscellaneous-checkbox" data-issue-type="miscellaneous" value="MISCELLANEOUS ISSUE - PLEASE DESCRIBE IN NOTES" class="issue-checkbox">
+                        <input type="checkbox" id="miscellaneous-checkbox">
                         <label for="miscellaneous-checkbox">MISCELLANEOUS PART - PLEASE DESCRIBE IN NOTES</label>
                     </div>
                     <div id="miscellaneous-description-container" style="display:none;">
                         <textarea id="miscellaneous-comment-area" placeholder="Enter miscellaneous part here."></textarea>
+                    </div>
                 </div>
             <h3>Verbaige Modifiers</h3>
-                <div class="verbaige-modifiers">
-                    <div class="cannot-verify">
-                        <input type="checkbox" id="cannot-verify-checkbox">
-                        <label for="cannot-verify-checkbox">Cannot Verify Initial Issue </label>
-                    </div>
-                    <div class="fixed-without-parts">
-                        <input type="checkbox" id="fixed-without-parts-checkbox">
-                        <label for="fixed-without-parts-checkbox">Fixed Without Parts</label>
-                    </div>
-                    <div class="battery-oow">
-                        <input type="checkbox" id="battery-oow-checkbox">
-                        <label for="battery-oow-checkbox">Battery OOW</label>
-                    </div>
-                    <div class="needs-imaging">
-                        <input type="checkbox" id="needs-imaging-checkbox">
-                        <label for="needs-imaging-checkbox">Needs Imaging</label>
-                    </div>
-                    <div class="needs-os">
-                        <input type="checkbox" id="needs-os-checkbox">
-                        <label for="needs-os-checkbox">Needs OS Installed</label>
-                    </div>
-                    <div class="bugs"> 
-                        <input type="checkbox" id="bugs-checkbox">
-                        <label for="bugs-checkbox">BUGS!!</label>
-                    </div>
+                <div class="repair-options">
+                    <div class="verbaige-modifiers">
+                        <div class="cannot-verify">
+                            <input type="checkbox" id="cannot-verify-checkbox">
+                            <label for="cannot-verify-checkbox">Cannot Verify Initial Issue </label>
+                        </div>
+                        <div class="fixed-without-parts">
+                            <input type="checkbox" id="fixed-without-parts-checkbox">
+                            <label for="fixed-without-parts-checkbox">Fixed Without Parts</label>
+                        </div>
+                        <div class="battery-oow">
+                            <input type="checkbox" id="battery-oow-checkbox">
+                            <label for="battery-oow-checkbox">Battery OOW</label>
+                        </div>
+                        <div class="needs-imaging">
+                            <input type="checkbox" id="needs-imaging-checkbox">
+                            <label for="needs-imaging-checkbox">Needs Imaging</label>
+                        </div>
+                        <div class="needs-os">
+                            <input type="checkbox" id="needs-os-checkbox">
+                            <label for="needs-os-checkbox">Needs OS Installed</label>
+                        </div>
+                        <div class="bugs"> 
+                            <input type="checkbox" id="bugs-checkbox">
+                            <label for="bugs-checkbox">BUGS!!</label>
+                        </div>
                 </div>
     </div>
     <div class="report-section">
-        <h2>Generate Report</h2>
+        <h2>Generate Repair Report </h2>
         <div class="button-group">
             <button onclick="generateReport()" id="generate-button">GENERATE REPORT</button>
             <button onclick="clearAllIssues()" id="clear-button">CLEAR ALL ISSUES</button>
             <button onclick="copytext()" id="copy-button">COPY TEXT</button>
         </div>
-        <div id="report-output"></div>
+        <div id="repairs-completed-output"></div>
     <div class="required-photos-section">
         <h2>Required Photos</h2>
         <ul id="required-photos-list"></ul>
+        <div id="required-photos-output"></div>
+    </div>
 
 <script>
-    // Global array to track the order of selected issues
-    let selectedRepairs = [];
+    // JavaScript code to handle checkbox interactions and report generation
+   function generateReport() {
+    var checkBox = document.getElementById("motherboard-checkbox")
+
 </script>
 </body>
 </html>
