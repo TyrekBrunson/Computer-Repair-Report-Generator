@@ -1,11 +1,10 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Repair Generator</title>
-      <style>
-        /* Base Styling */
+    <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
@@ -26,62 +25,48 @@
             text-align: center;
             margin-bottom: 30px;
         }
-         /* Input and Report Sections */
         .repair-options {
             padding: 20px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             border: 1px solid #ddd;
             border-radius: 6px;
             background-color: #fafafa;
             display: flex;
             flex-wrap: wrap;
-            gap: 10px; /* Space between the two primary checkboxes */
-            margin-bottom: 15px;
+            gap: 10px;
         }
-        .verbaige-modifiers {
-            padding:5px;
-            margin-bottom: 10px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px; /* Space between the two primary checkboxes */
-            margin-bottom: 15px;
-        }
-
         h2 {
             color: #333;
             border-bottom: 2px solid #0056b3;
             padding-bottom: 10px;
             margin-bottom: 20px;
         }
-        /* Button Styling */
-        .button-group button{
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+        .button-group button {
             padding: 10px 20px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
             font-size: 1em;
             transition: background-color 0.3s;
-            min-width: 150px; /* Ensures all buttons have the same minimum width */
+            min-width: 150px;
         }
+        #generate-button { background-color: #28a745; color: white; }
+        #generate-button:hover { background-color: #218838; }
+        #clear-button { background-color: #dc3545; color: white; }
+        #clear-button:hover { background-color: #c82333; }
+        #copy-button { background-color: #0056b3; color: white; }
+        #copy-button:hover { background-color: #004494; }
 
-        #generate-button {
-            background-color: #28a745;
-            color: white;
-        }
-
-        #clear-button {
-            background-color: #dc3545;
-            color: white;
-        }
-        
-         #copy-button {
-            background-color: #0056b3;
-            color: white;
-        }
         #repairs-completed-output {
             background-color: #fff;
             padding: 15px;
-            border: 1px solid #28a745; /* Green border for completed repairs */
+            border: 1px solid #28a745;
             border-radius: 4px;
             font-size: 1.0em;
             min-height: 50px;
@@ -91,12 +76,12 @@
             word-wrap: break-word;
             color: #218838;
             font-weight: bold;
-             margin-top: 20px;
+            margin-top: 20px;
         }
-        #required-photos-output{
+        #required-photos-output {
             background-color: #fff;
             padding: 15px;
-            border: 1px solid #0056b3; /* Blue border for required photos */
+            border: 1px solid #0056b3;
             border-radius: 4px;
             font-size: 1.0em;
             min-height: 50px;
@@ -108,264 +93,443 @@
             font-weight: bold;
         }
 
-        /* Numbered List Styling */
-        .issue-order {
-            display: inline-block;
+        /* Misc textarea */
+        #miscellaneous-description-container {
+            width: 100%;
+            margin-top: 8px;
+        }
+        #miscellaneous-comment-area {
+            width: 100%;
+            min-height: 60px;
+            padding: 8px;
+            border: 1px solid #fcd34d;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 0.9em;
+            resize: vertical;
+            box-sizing: border-box;
+        }
+
+        /* Verbiage modifiers layout */
+        .verbaige-modifiers {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .verbaige-modifiers div {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Order badge on part checkboxes */
+        .repair-options > div {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .part-order {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             width: 20px;
-            text-align: center;
+            height: 20px;
             background-color: #0056b3;
             color: white;
             border-radius: 50%;
-            font-size: 0.75em;
-            margin-right: 5px;
-            line-height: 20px;
-            height: 20px;
+            font-size: 0.72em;
+            font-weight: bold;
             visibility: hidden;
             flex-shrink: 0;
+            order: -1; /* Move badge to the far left */
         }
-        .issue-item input[type="checkbox"]:checked + .issue-order {
-            visibility: visible;
-        }
-        </style>
-       
+    </style>
+</head>
 <body>
-    <div class="container">
-    <h1>Computer Repair Report Generator🛠️</h1>
+<div class="container">
+    <h1>Computer Repair Report Generator 🛠️</h1>
 
     <div class="input-section">
         <h2>What did you repair?</h2>
-            <h3>Top End</h3>
-                <div class="repair-options">
-                    <div class="top-cover">
-                        <input type="checkbox" id="top-cover-checkbox">
-                        <label for="top-cover-checkbox">Top Cover</label>
-                    </div>
-                    <div class="lcd-screen">
-                        <input type="checkbox" id="screen-checkbox">
-                        <label for="screen-checkbox">LCD Screen</label>
-                    </div>
-                    <div class="'bezel">
-                        <input type="checkbox" id="bezel-checkbox">
-                        <label for="bezel-checkbox">Bezel</label>
-                    </div>
-                    <div class="left-hinge">
-                        <input type="checkbox" id="left-hinge-checkbox">
-                        <label for="left-hinge-checkbox">Left Hinge</label>
-                    </div>
-                    <div class="right-hinge">
-                        <input type="checkbox" id="right-hinge-checkbox">
-                        <label for="right-hinge-checkbox">Right Hinge</label>
-                    </div>
-                    <div class="edp-cable">
-                        <input type="checkbox" id="edp-cable-checkbox">
-                        <label for="edp-cable-checkbox">EDP Cable</label>
-                    </div>
-                    <div class="webcam">
-                        <input type="checkbox" id="webcam-checkbox">
-                        <label for="webcam-checkbox">Webcam</label>
-                    </div>
-                    <div class="'hall-sensor">
-                        <input type="checkbox" id="hall-sensor-checkbox">
-                        <label for="hall-sensor-checkbox">Hall Sensor</label>
-                    </div>
+
+        <h3>Top End</h3>
+        <div class="repair-options">
+            <div>
+                <input type="checkbox" id="top-cover-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="top-cover-checkbox">Top Cover</label>
+            </div>
+            <div>
+                <input type="checkbox" id="screen-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="screen-checkbox">LCD Screen</label>
+            </div>
+            <div>
+                <input type="checkbox" id="bezel-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="bezel-checkbox">Bezel</label>
+            </div>
+            <div>
+                <input type="checkbox" id="left-hinge-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="left-hinge-checkbox">Left Hinge</label>
+            </div>
+            <div>
+                <input type="checkbox" id="right-hinge-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="right-hinge-checkbox">Right Hinge</label>
+            </div>
+            <div>
+                <input type="checkbox" id="edp-cable-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="edp-cable-checkbox">EDP Cable</label>
+            </div>
+            <div>
+                <input type="checkbox" id="webcam-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="webcam-checkbox">Webcam</label>
+            </div>
+            <div>
+                <input type="checkbox" id="hall-sensor-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="hall-sensor-checkbox">Hall Sensor</label>
+            </div>
+        </div>
+
+        <h3>Bottom End</h3>
+        <div class="repair-options">
+            <div>
+                <input type="checkbox" id="palm-rest-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="palm-rest-checkbox">Palm Rest</label>
+            </div>
+            <div>
+                <input type="checkbox" id="keyboard-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="keyboard-checkbox">Keyboard</label>
+            </div>
+            <div>
+                <input type="checkbox" id="touchpad-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="touchpad-checkbox">Touchpad</label>
+            </div>
+            <div>
+                <input type="checkbox" id="bottom-cover-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="bottom-cover-checkbox">Bottom Cover</label>
+            </div>
+        </div>
+
+        <h3>Internals</h3>
+        <div class="repair-options">
+            <div>
+                <input type="checkbox" id="motherboard-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="motherboard-checkbox">Motherboard</label>
+            </div>
+            <div>
+                <input type="checkbox" id="daughterboard-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="daughterboard-checkbox">Daughterboard</label>
+            </div>
+            <div>
+                <input type="checkbox" id="audio-board-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="audio-board-checkbox">Audio Board</label>
+            </div>
+            <div>
+                <input type="checkbox" id="ram-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="ram-checkbox">RAM</label>
+            </div>
+            <div>
+                <input type="checkbox" id="ssd-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="ssd-checkbox">SSD</label>
+            </div>
+            <div>
+                <input type="checkbox" id="nic-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="nic-checkbox">NIC</label>
+            </div>
+            <div>
+                <input type="checkbox" id="dc-in-port-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="dc-in-port-checkbox">DC-In Port</label>
+            </div>
+            <div>
+                <input type="checkbox" id="cpu-fan-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="cpu-fan-checkbox">CPU Fan</label>
+            </div>
+            <div>
+                <input type="checkbox" id="battery-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="battery-checkbox">Battery</label>
+            </div>
+            <div>
+                <input type="checkbox" id="battery-cable-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="battery-cable-checkbox">Battery Cable</label>
+            </div>
+            <div>
+                <input type="checkbox" id="speakers-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="speakers-checkbox">Speakers</label>
+            </div>
+        </div>
+
+        <h3>Miscellaneous</h3>
+        <div class="repair-options">
+            <div>
+                <input type="checkbox" id="miscellaneous-checkbox">
+                <label for="miscellaneous-checkbox">MISCELLANEOUS PART - PLEASE DESCRIBE IN NOTES</label>
+            </div>
+            <div id="miscellaneous-description-container" style="display:none;">
+                <textarea id="miscellaneous-comment-area" placeholder="Enter miscellaneous part here."></textarea>
+            </div>
+        </div>
+
+        <h3>Verbiage Modifiers</h3>
+        <div class="repair-options">
+            <div class="verbaige-modifiers">
+                <div>
+                    <input type="checkbox" id="cannot-verify-checkbox">
+                    <label for="cannot-verify-checkbox">Cannot Verify Initial Issue</label>
                 </div>
-            <h3>Bottom End</h3>
-                <div class="repair-options">
-                    <div class="palm-rest">
-                        <input type="checkbox" id="palm-rest-checkbox">
-                        <label for="palm-rest-checkbox">Palm Rest</label>
-                    </div>
-                    <div class="keyboard">
-                        <input type="checkbox" id="keyboard-checkbox">
-                        <label for="keyboard-checkbox">Keyboard</label>
-                    </div>
-                    <div class="touchpad">
-                        <input type="checkbox" id="touchpad-checkbox">
-                        <label for="touchpad-checkbox">Touchpad</label>
-                    </div>
-                    <div class="bottom-cover">
-                        <input type="checkbox" id="bottom-cover-checkbox">
-                        <label for="bottom-cover-checkbox">Bottom Cover</label>
-                    </div>
+                <div>
+                    <input type="checkbox" id="fixed-without-parts-checkbox">
+                    <label for="fixed-without-parts-checkbox">Fixed Without Parts</label>
                 </div>
-            <h3>Internals</h3>
-                <div class="repair-options">
-                    <div class="motherboard">
-                        <input type="checkbox" id="motherboard-checkbox">
-                        <label for="motherboard-checkbox">Motherboard</label>
-                    </div>
-                    <div class="daughterboard">
-                        <input type="checkbox" id="daughterboard-checkbox">
-                        <label for="daughterboard-checkbox">Daughterboard</label>
-                    </div>
-                    <div class="audio-board">
-                        <input type="checkbox" id="audio-board-checkbox">
-                        <label for="audio-board-checkbox">Audio Board</label>
-                    </div>
-                    <div class="ram">
-                        <input type="checkbox" id="ram-checkbox">
-                        <label for="ram-checkbox">RAM</label>
-                    </div>
-                    <div class="ssd">
-                        <input type="checkbox" id="ssd-checkbox">
-                        <label for="ssd-checkbox">SSD</label>
-                    </div>
-                    <div class="nic">
-                        <input type="checkbox" id="nic-checkbox">
-                        <label for="nic-checkbox">NIC</label>
-                    </div>
-                    <div class="dc-in-port">
-                        <input type="checkbox" id="dc-in-port-checkbox">
-                        <label for="dc-in-port-checkbox">DC-In Port</label>
-                    </div>
-                    <div class="cpu-fan">
-                        <input type="checkbox" id="cpu-fan-checkbox">
-                        <label for ="cpu-fan-checkbox">CPU Fan</label>
-                    </div>
-                    <div class="battery">
-                        <input type="checkbox" id="battery-checkbox">
-                        <label for="battery-checkbox">Battery</label>
-                    </div>
-                    <div class="battery-cable">
-                        <input type="checkbox" id="battery-cable-checkbox">
-                        <label for="battery-cable-checkbox">Battery Cable</label>
-                    </div>
-                    <div class="speakers"></div>
-                        <input type="checkbox" id="speakers-checkbox">
-                        <label for="speakers-checkbox">Speakers</label>
-                    </div>
+                <div>
+                    <input type="checkbox" id="battery-oow-checkbox">
+                    <label for="battery-oow-checkbox">Battery OOW</label>
                 </div>
-            <h3>Miscellaneous</h3>
-                <div class="repair-options">
-                    <div class="miscellaneous">
-                        <input type="checkbox" id="miscellaneous-checkbox">
-                        <label for="miscellaneous-checkbox">MISCELLANEOUS PART - PLEASE DESCRIBE IN NOTES</label>
-                    </div>
-                    <div id="miscellaneous-description-container" style="display:none;">
-                        <textarea id="miscellaneous-comment-area" placeholder="Enter miscellaneous part here."></textarea>
-                    </div>
+                <div>
+                    <input type="checkbox" id="needs-imaging-checkbox">
+                    <label for="needs-imaging-checkbox">Needs Imaging</label>
                 </div>
-            <h3>Verbaige Modifiers</h3>
-                <div class="repair-options">
-                    <div class="verbaige-modifiers">
-                        <div class="cannot-verify">
-                            <input type="checkbox" id="cannot-verify-checkbox">
-                            <label for="cannot-verify-checkbox">Cannot Verify Initial Issue </label>
-                        </div>
-                        <div class="fixed-without-parts">
-                            <input type="checkbox" id="fixed-without-parts-checkbox">
-                            <label for="fixed-without-parts-checkbox">Fixed Without Parts</label>
-                        </div>
-                        <div class="battery-oow">
-                            <input type="checkbox" id="battery-oow-checkbox">
-                            <label for="battery-oow-checkbox">Battery OOW</label>
-                        </div>
-                        <div class="needs-imaging">
-                            <input type="checkbox" id="needs-imaging-checkbox">
-                            <label for="needs-imaging-checkbox">Needs Imaging</label>
-                        </div>
-                        <div class="needs-os">
-                            <input type="checkbox" id="needs-os-checkbox">
-                            <label for="needs-os-checkbox">Needs OS Installed</label>
-                        </div>
-                        <div class="bugs"> 
-                            <input type="checkbox" id="bugs-checkbox">
-                            <label for="bugs-checkbox">BUGS!!</label>
-                        </div>
+                <div>
+                    <input type="checkbox" id="needs-os-checkbox">
+                    <label for="needs-os-checkbox">Needs OS Installed</label>
                 </div>
+                <div>
+                    <input type="checkbox" id="bugs-checkbox">
+                    <label for="bugs-checkbox">BUGS!!</label>
+                </div>
+            </div>
+        </div>
     </div>
+
     <div class="report-section">
-        <h2>Generate Repair Report </h2>
+        <h2>Generate Repair Report</h2>
         <div class="button-group">
             <button onclick="generateReport()" id="generate-button">GENERATE REPORT</button>
             <button onclick="clearAllIssues()" id="clear-button">CLEAR ALL ISSUES</button>
-            <button onclick="copytext()" id="copy-button">COPY TEXT</button>
+            <button onclick="copyText()" id="copy-button">COPY TEXT</button>
         </div>
         <div id="repairs-completed-output"></div>
+    </div>
+
     <div class="required-photos-section">
         <h2>Required Photos</h2>
-        <ul id="required-photos-list"></ul>
         <div id="required-photos-output"></div>
     </div>
 </div>
+
 <script>
-    //Global array to store selected repairs
-    let SelectedRepairs = [];
+    // --- Order tracking array (mirrors the diagnostic tool's selectedIssues pattern) ---
+    let selectedParts = []; // Each entry: { id, name }
 
-    function handleIssueChange(event) {
-            const checkbox = event.target;
-            const issueValue = checkbox.value;
+    // Map checkbox IDs to display names
+    const allParts = [
+        { id: 'top-cover-checkbox',       name: 'Top Cover' },
+        { id: 'screen-checkbox',           name: 'LCD Screen' },
+        { id: 'bezel-checkbox',            name: 'Bezel' },
+        { id: 'left-hinge-checkbox',       name: 'Left Hinge' },
+        { id: 'right-hinge-checkbox',      name: 'Right Hinge' },
+        { id: 'edp-cable-checkbox',        name: 'EDP Cable' },
+        { id: 'webcam-checkbox',           name: 'Webcam' },
+        { id: 'hall-sensor-checkbox',      name: 'Hall Sensor' },
+        { id: 'palm-rest-checkbox',        name: 'Palm Rest' },
+        { id: 'keyboard-checkbox',         name: 'Keyboard' },
+        { id: 'touchpad-checkbox',         name: 'Touchpad' },
+        { id: 'bottom-cover-checkbox',     name: 'Bottom Cover' },
+        { id: 'motherboard-checkbox',      name: 'Motherboard' },
+        { id: 'daughterboard-checkbox',    name: 'Daughterboard' },
+        { id: 'audio-board-checkbox',      name: 'Audio Board' },
+        { id: 'ram-checkbox',              name: 'RAM' },
+        { id: 'ssd-checkbox',              name: 'SSD' },
+        { id: 'nic-checkbox',              name: 'NIC' },
+        { id: 'dc-in-port-checkbox',       name: 'DC-In Port' },
+        { id: 'cpu-fan-checkbox',          name: 'CPU Fan' },
+        { id: 'battery-checkbox',          name: 'Battery' },
+        { id: 'battery-cable-checkbox',    name: 'Battery Cable' },
+        { id: 'speakers-checkbox',         name: 'Speakers' },
+    ];
 
-            const issueObject = {
-                value: issueValue,
-                type: issueType,
-                // Pass the category key to ensure accurate part extraction for NON-ADP
-                part: extractPartName(issueValue, issueType, categoryKey)
-            };
+    const verbiageModifiers = [
+        { id: 'cannot-verify-checkbox',       text: 'RAN FULL DIAGNOSTICS. CANNOT REPLICATE CUSTOMER INITIAL ISSUE. UNIT IS FULLY FUNCTIONAL.' },
+        { id: 'fixed-without-parts-checkbox', text: 'NOTE: Fixed without parts.' },
+        { id: 'battery-oow-checkbox',         text: 'BATTERY HEALTH IS xx%. BATTERY HAS REACHED END OF LIFE. THE BATTERY IS FAILING TO HOLD A CHARGE. TESTED WITH A KNOWN-GOOD BATTERY IN THE UNIT. IT WAS ABLE TO CHARGE.' },
+        { id: 'needs-imaging-checkbox',       text: 'DEVICE IS AWAITING IMAGING.' },
+        { id: 'needs-os-checkbox',            text: 'NEEDS OPERATING SYSTEM INSTALLED. OTHER THEN NEEDING OS, THE UNIT IS FULLY FUNCTIONAL.' },
+        { id: 'bugs-checkbox',                text: 'NO REPAIRS COMPLETED. UNIT HAS INFESTATION OF BUGS. UNIT PLACED IN RED BIO-HAZARD BAG. RETURNING UNIT TO CUSTOMER. UNIT IS NOT FULLY FUNCTIONAL.' },
+    ];
 
-            if (checkbox.checked) {
-                // Only push if it's not already in the array
-                if (!selectedIssues.some(issue => issue.value === issueValue)) {
-                    // This maintains the selection order which is critical for the report
-                    selectedIssues.push(issueObject);
-                }
-            } else {
-                // Remove the issue
-                selectedIssues = selectedIssues.filter(issue => issue.value !== issueValue);
+    // --- Handle part checkbox change: push/remove and re-render badges ---
+    function handlePartChange(event) {
+        const checkbox = event.target;
+        const partDef = allParts.find(p => p.id === checkbox.id);
+        if (!partDef) return;
+
+        if (checkbox.checked) {
+            // Only add if not already tracked
+            if (!selectedParts.some(p => p.id === checkbox.id)) {
+                selectedParts.push({ id: partDef.id, name: partDef.name });
             }
-
-            // Re-render the numbers for all checkboxes
-            updateIssueOrderVisuals();
+        } else {
+            // Remove from array — all subsequent numbers shift down automatically
+            selectedParts = selectedParts.filter(p => p.id !== checkbox.id);
         }
 
-        function updateIssueOrderVisuals() {
-        // NOTE: We rely on the order in the selectedIssues array, not DOM order.
-        document.querySelectorAll('.issue-checkbox').forEach(cb => {
-            const index = selectedIssues.findIndex(issue => issue.value === cb.value);
-            const span = cb.nextElementSibling;
-            
-            // Show the number only if the issue is checked and found in the array
+        updateOrderBadges();
+    }
+
+    // Re-render all visible order badges based on current selectedParts array
+    function updateOrderBadges() {
+        document.querySelectorAll('.part-checkbox').forEach(cb => {
+            const badge = cb.nextElementSibling; // the <span class="part-order">
+            const index = selectedParts.findIndex(p => p.id === cb.id);
+
             if (cb.checked && index !== -1) {
-                span.textContent = index + 1;
-                span.style.visibility = 'visible';
+                badge.textContent = index + 1;
+                badge.style.visibility = 'visible';
             } else {
-                span.textContent = '';
-                span.style.visibility = 'hidden';
+                badge.textContent = '';
+                badge.style.visibility = 'hidden';
             }
         });
     }
-    function extractPartName(issueValue, issueType, categoryKey = null) {
-            // Explicitly map category names to Part Names
-            if (categoryKey.includes('MOBO')) return 'MOTHERBOARD';
-            if (categoryKey.includes('LCD SCREEN')) return 'LCD SCREEN';
-            if (categoryKey.includes('DABO')) return 'DAUGHTERBOARD';
-            if (categoryKey.includes('EDP CABLE') || categoryKey.includes('LCD CABLE')) return 'LCD CABLE';
-            if (categoryKey.includes('KEYBOARD')) return 'KEYBOARD';
-            if (categoryKey.includes('WEBCAM')) return 'WEBCAM';
-            if (categoryKey.includes('PALMREST')) return 'PALMREST';
-            if (categoryKey.includes('BATTERY')) return 'BATTERY';
-			if (categoryKey.includes('BATT CABLE')) return 'BATTERY CABLE';
-			if (categoryKey.includes('RAM')) return 'RAM';
-			if (categoryKey.includes('DC-IN PORT')) return 'DC-IN PORT';
-            if (categoryKey.includes('TOP COVER')) return 'TOP COVER';
-            if (categoryKey.includes('AUDIO BOARD')) return 'AUDIO BOARD';
-            if (categoryKey.includes('SSD') || categoryKey.includes('HDD')) return 'SSD';
-			if (categoryKey.includes('CPU FAN') || categoryKey.includes('CPU FAN')) return 'CPU FAN';
-			if (categoryKey.includes('SPEAKERS') || categoryKey.includes('SPEAKERS')) return 'SPEAKERS';
-			if (categoryKey.includes('WIFI CARD') || categoryKey.includes('WIFI CARD')) return 'WIFI CARD';
 
-            return 'PART';
+    // Attach change listeners to all part checkboxes
+    document.querySelectorAll('.part-checkbox').forEach(cb => {
+        cb.addEventListener('change', handlePartChange);
+    });
+
+    // Show/hide misc textarea when checkbox is toggled
+    document.getElementById('miscellaneous-checkbox').addEventListener('change', function () {
+        document.getElementById('miscellaneous-description-container').style.display =
+            this.checked ? 'block' : 'none';
+        if (!this.checked) {
+            document.getElementById('miscellaneous-comment-area').value = '';
+        }
+    });
+
+    function generateReport() {
+        const repairsOutput = document.getElementById('repairs-completed-output');
+        const photosOutput = document.getElementById('required-photos-output');
+
+        // Use selectedParts array (already in selection order) for the report
+        const orderedPartNames = selectedParts.map(p => p.name);
+
+        // Collect misc
+        const miscChecked = document.getElementById('miscellaneous-checkbox').checked;
+        const miscText = document.getElementById('miscellaneous-comment-area').value.trim();
+        if (miscChecked && miscText) {
+            orderedPartNames.push('Miscellaneous: ' + miscText);
+        } else if (miscChecked) {
+            orderedPartNames.push('Miscellaneous (no description provided)');
         }
 
+        // Collect verbiage modifiers
+        const activeModifiers = verbiageModifiers
+            .filter(m => document.getElementById(m.id).checked)
+            .map(m => m.text);
 
+        // Build repair report text
+        let reportText = '';
+        if (orderedPartNames.length === 0 && activeModifiers.length === 0) {
+            reportText = 'No repairs or modifiers selected.';
+        } else {
+            if (orderedPartNames.length > 0) {
+                reportText += 'REPAIRS COMPLETED: REPLACED \n';
+                orderedPartNames.forEach((part, i) => {
+                    reportText += `  ${i + 1}. ${part}\n`;
+                });
+            }
+            if (activeModifiers.length > 0) {
+                if (reportText) reportText += '\n';
+                reportText += activeModifiers.join('\n');
+            }
+        }
+        repairsOutput.textContent = reportText;
 
-    // JavaScript code to handle checkbox interactions and report generation
-   function generateReport() {
-    if(document.getElementById("motherboard-checkbox").checked){
-        return"Motherboard";
-    
-   }
-}
+        // Build required photos text
+        let photosText = '';
+        if (orderedPartNames.length > 0) {
+            photosText += 'REQUIRED PHOTOS:\n';
+            photosText += '  • Before photo (full device)\n';
+            orderedPartNames.forEach(part => {
+                photosText += `  • ${part} (before & after)\n`;
+            });
+            photosText += '  • After photo (full device)';
+        } else {
+            photosText = 'No parts selected — no photos required.';
+        }
+        photosOutput.textContent = photosText;
+    }
+
+    function clearAllIssues() {
+        // Reset order tracking array
+        selectedParts = [];
+
+        // Uncheck all part checkboxes and hide badges
+        allParts.forEach(p => {
+            const cb = document.getElementById(p.id);
+            if (cb) cb.checked = false;
+        });
+        updateOrderBadges();
+
+        // Uncheck verbiage modifiers
+        verbiageModifiers.forEach(m => {
+            const cb = document.getElementById(m.id);
+            if (cb) cb.checked = false;
+        });
+
+        // Clear misc
+        document.getElementById('miscellaneous-checkbox').checked = false;
+        document.getElementById('miscellaneous-comment-area').value = '';
+        document.getElementById('miscellaneous-description-container').style.display = 'none';
+
+        // Clear outputs
+        document.getElementById('repairs-completed-output').textContent = '';
+        document.getElementById('required-photos-output').textContent = '';
+    }
+
+    function copyText() {
+        const repairsText = document.getElementById('repairs-completed-output').textContent;
+        const photosText = document.getElementById('required-photos-output').textContent;
+        const combined = [repairsText, photosText].filter(Boolean).join('\n\n');
+
+        if (!combined.trim()) {
+            alert('Nothing to copy — generate a report first.');
+            return;
+        }
+
+        navigator.clipboard.writeText(combined).then(() => {
+            const btn = document.getElementById('copy-button');
+            const original = btn.textContent;
+            btn.textContent = '✓ COPIED!';
+            btn.style.backgroundColor = '#28a745';
+            setTimeout(() => {
+                btn.textContent = original;
+                btn.style.backgroundColor = '#0056b3';
+            }, 2000);
+        }).catch(() => {
+            alert('Copy failed. Please select and copy the text manually.');
+        });
+    }
 </script>
 </body>
 </html>
