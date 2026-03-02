@@ -53,7 +53,7 @@
             padding-bottom: 10px;
             margin-bottom: 20px;
         }
-
+        /* Button Styling */
         .button-group button{
             padding: 10px 20px;
             border: none;
@@ -289,12 +289,83 @@
     </div>
 </div>
 <script>
+    //Global array to store selected repairs
+    let SelectedRepairs = [];
+
+    function handleIssueChange(event) {
+            const checkbox = event.target;
+            const issueValue = checkbox.value;
+
+            const issueObject = {
+                value: issueValue,
+                type: issueType,
+                // Pass the category key to ensure accurate part extraction for NON-ADP
+                part: extractPartName(issueValue, issueType, categoryKey)
+            };
+
+            if (checkbox.checked) {
+                // Only push if it's not already in the array
+                if (!selectedIssues.some(issue => issue.value === issueValue)) {
+                    // This maintains the selection order which is critical for the report
+                    selectedIssues.push(issueObject);
+                }
+            } else {
+                // Remove the issue
+                selectedIssues = selectedIssues.filter(issue => issue.value !== issueValue);
+            }
+
+            // Re-render the numbers for all checkboxes
+            updateIssueOrderVisuals();
+        }
+
+        function updateIssueOrderVisuals() {
+        // NOTE: We rely on the order in the selectedIssues array, not DOM order.
+        document.querySelectorAll('.issue-checkbox').forEach(cb => {
+            const index = selectedIssues.findIndex(issue => issue.value === cb.value);
+            const span = cb.nextElementSibling;
+            
+            // Show the number only if the issue is checked and found in the array
+            if (cb.checked && index !== -1) {
+                span.textContent = index + 1;
+                span.style.visibility = 'visible';
+            } else {
+                span.textContent = '';
+                span.style.visibility = 'hidden';
+            }
+        });
+    }
+    function extractPartName(issueValue, issueType, categoryKey = null) {
+            // Explicitly map category names to Part Names
+            if (categoryKey.includes('MOBO')) return 'MOTHERBOARD';
+            if (categoryKey.includes('LCD SCREEN')) return 'LCD SCREEN';
+            if (categoryKey.includes('DABO')) return 'DAUGHTERBOARD';
+            if (categoryKey.includes('EDP CABLE') || categoryKey.includes('LCD CABLE')) return 'LCD CABLE';
+            if (categoryKey.includes('KEYBOARD')) return 'KEYBOARD';
+            if (categoryKey.includes('WEBCAM')) return 'WEBCAM';
+            if (categoryKey.includes('PALMREST')) return 'PALMREST';
+            if (categoryKey.includes('BATTERY')) return 'BATTERY';
+			if (categoryKey.includes('BATT CABLE')) return 'BATTERY CABLE';
+			if (categoryKey.includes('RAM')) return 'RAM';
+			if (categoryKey.includes('DC-IN PORT')) return 'DC-IN PORT';
+            if (categoryKey.includes('TOP COVER')) return 'TOP COVER';
+            if (categoryKey.includes('AUDIO BOARD')) return 'AUDIO BOARD';
+            if (categoryKey.includes('SSD') || categoryKey.includes('HDD')) return 'SSD';
+			if (categoryKey.includes('CPU FAN') || categoryKey.includes('CPU FAN')) return 'CPU FAN';
+			if (categoryKey.includes('SPEAKERS') || categoryKey.includes('SPEAKERS')) return 'SPEAKERS';
+			if (categoryKey.includes('WIFI CARD') || categoryKey.includes('WIFI CARD')) return 'WIFI CARD';
+
+            return 'PART';
+        }
+
+
+
     // JavaScript code to handle checkbox interactions and report generation
    function generateReport() {
     if(document.getElementById("motherboard-checkbox").checked){
         return"Motherboard";
     
    }
+}
 </script>
 </body>
 </html>
