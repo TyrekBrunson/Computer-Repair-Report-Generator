@@ -62,6 +62,8 @@
         #clear-button:hover { background-color: #c82333; }
         #copy-button { background-color: #0056b3; color: white; }
         #copy-button:hover { background-color: #004494; }
+        #copy-onhold-button { background-color: #0056b3; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 1em; transition: background-color 0.3s; min-width: 150px; }
+        #copy-onhold-button:hover { background-color: #004494; }
 
         #repairs-completed-output {
             background-color: #fff;
@@ -77,6 +79,20 @@
             color: #218838;
             font-weight: bold;
             margin-top: 20px;
+        }
+        #on-hold-output {
+            background-color: #fff;
+            padding: 15px;
+            border: 1px solid #ffa500; 
+            border-radius: 4px;
+            font-size: 1.0em;
+            min-height: 50px;
+            line-height: 1.4;
+            font-family: Arial, sans-serif;
+            white-space: pre-wrap; /* Crucial for preserving the newline character */
+            word-wrap: break-word;
+            color: #cc6600; 
+            font-weight: bold;
         }
         #required-photos-output {
             background-color: #fff;
@@ -330,7 +346,11 @@
         </div>
         <div id="repairs-completed-output"></div>
     </div>
-
+    <div class="status-section">
+        <h2>On Hold Status</h2>
+        <div id="on-hold-output"></div>
+        <button onclick="copyOnHoldText()" id="copy-onhold-button">COPY TEXT</button>
+    </div>
     <div class="required-photos-section">
         <h2>Required Photos</h2>
         <div id="required-photos-output"></div>
