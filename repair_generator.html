@@ -62,8 +62,6 @@
         #clear-button:hover { background-color: #c82333; }
         #copy-button { background-color: #0056b3; color: white; }
         #copy-button:hover { background-color: #004494; }
-        #copy-onhold-button { background-color: #0056b3; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 1em; transition: background-color 0.3s; min-width: 150px; }
-        #copy-onhold-button:hover { background-color: #004494; }
 
         #repairs-completed-output {
             background-color: #fff;
@@ -79,20 +77,6 @@
             color: #218838;
             font-weight: bold;
             margin-top: 20px;
-        }
-        #on-hold-output {
-            background-color: #fff;
-            padding: 15px;
-            border: 1px solid #ffa500; 
-            border-radius: 4px;
-            font-size: 1.0em;
-            min-height: 50px;
-            line-height: 1.4;
-            font-family: Arial, sans-serif;
-            white-space: pre-wrap; /* Crucial for preserving the newline character */
-            word-wrap: break-word;
-            color: #cc6600; 
-            font-weight: bold;
         }
         #required-photos-output {
             background-color: #fff;
@@ -299,7 +283,7 @@
         <div class="repair-options">
             <div>
                 <input type="checkbox" id="miscellaneous-checkbox">
-                <label for="miscellaneous-checkbox">MISCELLANEOUS PART - PLEASE DESCRIBE IN NOTES</label>
+                <label for="miscellaneous-checkbox">Miscellaneous Part</label>
             </div>
             <div id="miscellaneous-description-container" style="display:none;">
                 <textarea id="miscellaneous-comment-area" placeholder="Enter miscellaneous part here."></textarea>
@@ -322,10 +306,6 @@
                     <label for="battery-oow-checkbox">Battery OOW</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="needs-imaging-checkbox">
-                    <label for="needs-imaging-checkbox">Needs Imaging</label>
-                </div>
-                <div>
                     <input type="checkbox" id="needs-os-checkbox">
                     <label for="needs-os-checkbox">Needs OS Installed</label>
                 </div>
@@ -346,11 +326,7 @@
         </div>
         <div id="repairs-completed-output"></div>
     </div>
-    <div class="status-section">
-        <h2>On Hold Status</h2>
-        <div id="on-hold-output"></div>
-        <button onclick="copyOnHoldText()" id="copy-onhold-button">COPY TEXT</button>
-    </div>
+
     <div class="required-photos-section">
         <h2>Required Photos</h2>
         <div id="required-photos-output"></div>
@@ -389,12 +365,12 @@
     ];
 
     const verbiageModifiers = [
-        { id: 'cannot-verify-checkbox',       text: 'RAN FULL DIAGNOSTICS. CANNOT REPLICATE CUSTOMER INITIAL ISSUE. UNIT IS FULLY FUNCTIONAL.' },
+        { id: 'cannot-verify-checkbox',       text: 'NOTE: Could not verify initial issue.' },
         { id: 'fixed-without-parts-checkbox', text: 'NOTE: Fixed without parts.' },
-        { id: 'battery-oow-checkbox',         text: 'BATTERY HEALTH IS xx%. BATTERY HAS REACHED END OF LIFE. THE BATTERY IS FAILING TO HOLD A CHARGE. TESTED WITH A KNOWN-GOOD BATTERY IN THE UNIT. IT WAS ABLE TO CHARGE.' },
-        { id: 'needs-imaging-checkbox',       text: 'DEVICE IS AWAITING IMAGING.' },
-        { id: 'needs-os-checkbox',            text: 'NEEDS OPERATING SYSTEM INSTALLED. OTHER THEN NEEDING OS, THE UNIT IS FULLY FUNCTIONAL.' },
-        { id: 'bugs-checkbox',                text: 'NO REPAIRS COMPLETED. UNIT HAS INFESTATION OF BUGS. UNIT PLACED IN RED BIO-HAZARD BAG. RETURNING UNIT TO CUSTOMER. UNIT IS NOT FULLY FUNCTIONAL.' },
+        { id: 'battery-oow-checkbox',         text: 'NOTE: Battery is out of warranty.' },
+
+        { id: 'needs-os-checkbox',            text: 'NOTE: Device needs OS installed.' },
+        { id: 'bugs-checkbox',                text: '⚠️ WARNING: BUGS FOUND IN DEVICE!' },
     ];
 
     // --- Handle part checkbox change: push/remove and re-render badges ---
@@ -473,7 +449,7 @@
             reportText = 'No repairs or modifiers selected.';
         } else {
             if (orderedPartNames.length > 0) {
-                reportText += 'REPAIRS COMPLETED: REPLACED \n';
+                reportText += 'REPAIRS COMPLETED:\n';
                 orderedPartNames.forEach((part, i) => {
                     reportText += `  ${i + 1}. ${part}\n`;
                 });
