@@ -94,6 +94,17 @@
         .menu-item input[type="checkbox"] {
             cursor: pointer;
         }
+        #repair-link {
+            color: rgb(255, 255, 255);
+            text-decoration: none;
+            border: 1px solid #07850f;
+            background-color: #0c922b;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border-radius: 4px;
+        }
 
         /* Input and Report Sections */
         .input-section {
@@ -291,7 +302,7 @@
             background-color: #c82333;
         }
 
-        #copy-button, #copy-onhold-button, #copy-repairs-button {
+        #copy-button, #copy-onhold-button {
             background-color: #0056b3;
             color: white;
             padding: 10px 20px;
@@ -306,7 +317,7 @@
             display: inline-block;
         }
 
-        #copy-button:hover, #copy-onhold-button:hover, #copy-repairs-button:hover {
+        #copy-button:hover, #copy-onhold-button:hover {
             background-color: #003d82;
         }
 
@@ -367,11 +378,11 @@
             font-weight: bold;
         }
         
-        /* --- REPAIRS COMPLETED Formatting --- */
-        #repairs-completed-output {
+        /* --- REQUIRED PHOTOS Formatting --- */
+        #required-photos-output {
             background-color: #fff;
             padding: 15px;
-            border: 1px solid #28a745; /* Green border for completed repairs */
+            border: 1px solid #0056b3;
             border-radius: 4px;
             font-size: 1.0em;
             min-height: 50px;
@@ -398,6 +409,7 @@
                 <input type="checkbox" id="dont-close-on-clear" name="dont-close-on-clear">
                 <label for="dont-close-on-clear">Close Dropdowns on Clear</label>
             </div>
+             <a href="repair_generator.html" id="repair-link">Repair Generator 🛠️</a>
             <!-- Future menu options can be added here -->
         </div>
     </div>
@@ -475,9 +487,8 @@
     </div>
     
     <div class="status-section">
-        <h2>REPAIRS COMPLETED</h2>
-        <div id="repairs-completed-output"></div>
-        <button onclick="copyRepairsText()" id="copy-repairs-button">COPY TEXT</button>
+        <h2>REQUIRED PHOTOS</h2>
+        <div id="required-photos-output"></div>
     </div>
 </div>
 
@@ -1023,8 +1034,7 @@
         // 6. Clear the generated report output
         document.getElementById('report-output').textContent = '';
         document.getElementById('on-hold-output').textContent = ''; 
-        // **NEW: Clear the repairs completed output**
-        document.getElementById('repairs-completed-output').textContent = '';
+        document.getElementById('required-photos-output').textContent = '';
         
         // 7. Handle dropdown closing based on menu setting
         const dontCloseOnClear = document.getElementById('dont-close-on-clear').checked;
@@ -1236,20 +1246,33 @@
         }
         
         document.getElementById('on-hold-output').textContent = holdStatusText;
-        
-        // --- NEW REPAIRS COMPLETED STATUS GENERATION ---
-        let repairsText = '';
-        
-        // Use the calculated partsListText (which is the list of parts or 'NONE') --> ${partsListText.toUpperCase()}.
-        if (partsListText.toUpperCase() !== 'NONE') {
-            // Format: REPAIRS COMPLETED: REPLACED [PART LIST]. UNIT IS FULLY FUNCTIONAL.
-            repairsText = `[PLACEHOLDER, DO NOT USE]`;
-        } else {
-             // If no parts were ordered, display nothing for this section
-             repairsText = ''; 
-        }
 
-        document.getElementById('repairs-completed-output').textContent = repairsText;
+        // --- REQUIRED PHOTOS GENERATION ---
+        const allSelectedParts = selectedIssues.map(i => i.part.toUpperCase());
+        const hasMotherboard   = allSelectedParts.includes('MOTHERBOARD');
+        const hasLcd           = allSelectedParts.includes('LCD SCREEN');
+        const hasNonAdpKeyboard = selectedIssues.some(i => i.part.toUpperCase() === 'KEYBOARD' && i.type === 'NON-ADP');
+        const hasNonAdpPalmrest = selectedIssues.some(i => i.part.toUpperCase() === 'PALMREST' && i.type === 'NON-ADP');
+        const cannotVerifyCheckedForPhotos = document.getElementById('cannot-verify-checkbox').checked;
+
+        let photoLines = [];
+
+        if (hasMotherboard) {
+            photoLines.push('  • Motherboard Part Number');
+            photoLines.push('  • Service Tag');
+            photoLines.push('  • BIOS');
+        }
+        if (hasLcd) {
+            photoLines.push('  • LCD Screen (before & after)');
+        }
+        if (hasNonAdpKeyboard || hasNonAdpPalmrest) {
+            photoLines.push('  • Entire Palmrest');
+        }
+        if (cannotVerifyCheckedForPhotos) {
+            photoLines.push('  • Cannot Verify Initial Issue (proof)');
+        }
+        document.getElementById('required-photos-output').textContent =
+            'REQUIRED PHOTOS:\n' + photoLines.join('\n');
     }
 
     /**
@@ -1336,39 +1359,6 @@
         
         // Visual feedback
         const copyButton = document.getElementById('copy-onhold-button');
-        const originalText = copyButton.textContent;
-        const originalColor = copyButton.style.backgroundColor;
-
-        copyButton.textContent = 'COPIED!';
-        copyButton.style.backgroundColor = '#28a745'; // Green for success
-        
-        setTimeout(() => {
-            copyButton.textContent = originalText;
-            copyButton.style.backgroundColor = originalColor || '#0056b3'; // Revert color
-        }, 2000);
-    }
-
-    /**
-     * Copy Repairs Completed text
-     */
-    function copyRepairsText() {
-        const repairsText = document.getElementById('repairs-completed-output').innerText;
-        if (!repairsText) return; // Do nothing if empty
-
-        // Create a temp textarea to hold the text
-        const textarea = document.createElement('textarea');
-        textarea.value = repairsText;
-        document.body.appendChild(textarea);
-        
-        // Select and copy
-        textarea.select();
-        document.execCommand('copy');
-        
-        // Clean up
-        document.body.removeChild(textarea);
-        
-        // Visual feedback
-        const copyButton = document.getElementById('copy-repairs-button');
         const originalText = copyButton.textContent;
         const originalColor = copyButton.style.backgroundColor;
 
