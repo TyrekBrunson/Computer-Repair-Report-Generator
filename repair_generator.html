@@ -642,15 +642,13 @@
 
     function copyText() {
         const repairsText = document.getElementById('repairs-completed-output').textContent;
-        const photosText = document.getElementById('required-photos-output').textContent;
-        const combined = [repairsText, photosText].filter(Boolean).join('\n\n');
 
-        if (!combined.trim()) {
+        if (!repairsText.trim()) {
             alert('Nothing to copy — generate a report first.');
             return;
         }
 
-        navigator.clipboard.writeText(combined).then(() => {
+        navigator.clipboard.writeText(repairsText).then(() => {
             const btn = document.getElementById('copy-button');
             const original = btn.textContent;
             btn.textContent = '✓ COPIED!';
