@@ -283,7 +283,7 @@
         <div class="repair-options">
             <div>
                 <input type="checkbox" id="miscellaneous-checkbox">
-                <label for="miscellaneous-checkbox">Miscellaneous Part</label>
+                <label for="miscellaneous-checkbox">MISCELLANEOUS PART - PLEASE DESCRIBE IN NOTES</label>
             </div>
             <div id="miscellaneous-description-container" style="display:none;">
                 <textarea id="miscellaneous-comment-area" placeholder="Enter miscellaneous part here."></textarea>
@@ -306,12 +306,12 @@
                     <label for="battery-oow-checkbox">Battery OOW</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="needs-os-checkbox">
-                    <label for="needs-os-checkbox">Needs OS Installed</label>
+                    <input type="checkbox" id="richland-imaging-checkbox">
+                    <label for="richland-imaging-checkbox">Richland 1 Imaging</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="bugs-checkbox">
-                    <label for="bugs-checkbox">BUGS!!</label>
+                    <input type="checkbox" id="union-needs-os-checkbox">
+                    <label for="union-needs-os-checkbox">Union / Needs OS</label>
                 </div>
             </div>
         </div>
@@ -365,12 +365,11 @@
     ];
 
     const verbiageModifiers = [
-        { id: 'cannot-verify-checkbox',       text: 'NOTE: Could not verify initial issue.' },
-        { id: 'fixed-without-parts-checkbox', text: 'NOTE: Fixed without parts.' },
-        { id: 'battery-oow-checkbox',         text: 'NOTE: Battery is out of warranty.' },
-
-        { id: 'needs-os-checkbox',            text: 'NOTE: Device needs OS installed.' },
-        { id: 'bugs-checkbox',                text: '⚠️ WARNING: BUGS FOUND IN DEVICE!' },
+        { id: 'cannot-verify-checkbox',       text: '' },
+        { id: 'fixed-without-parts-checkbox', text: '' },
+        { id: 'battery-oow-checkbox',         text: '' },
+        { id: 'richland-imaging-checkbox',    text: '' },
+        { id: 'union-needs-os-checkbox',      text: '' },
     ];
 
     // --- Handle part checkbox change: push/remove and re-render badges ---
@@ -413,6 +412,25 @@
         cb.addEventListener('change', handlePartChange);
     });
 
+    // --- Force all checkboxes unchecked on page load to prevent browser cache mismatch ---
+    window.addEventListener('load', function () {
+        // Uncheck all part checkboxes
+        document.querySelectorAll('.part-checkbox').forEach(cb => {
+            cb.checked = false;
+        });
+        // Uncheck verbiage modifiers and misc
+        ['cannot-verify-checkbox','fixed-without-parts-checkbox','battery-oow-checkbox',
+         'richland-imaging-checkbox','union-needs-os-checkbox','miscellaneous-checkbox'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.checked = false;
+        });
+        // Hide misc textarea
+        document.getElementById('miscellaneous-description-container').style.display = 'none';
+        // Reset the tracking array and badges
+        selectedParts = [];
+        updateOrderBadges();
+    });
+
     // Show/hide misc textarea when checkbox is toggled
     document.getElementById('miscellaneous-checkbox').addEventListener('change', function () {
         document.getElementById('miscellaneous-description-container').style.display =
@@ -422,58 +440,177 @@
         }
     });
 
+    // Formats a list of part names into "Part1, Part2, and Part3" prose
+    function formatPartsList(names) {
+        if (names.length === 0) return '';
+        if (names.length === 1) return names[0].toUpperCase();
+        if (names.length === 2) return `${names[0].toUpperCase()} AND ${names[1].toUpperCase()}`;
+        const last = names[names.length - 1].toUpperCase();
+        const rest = names.slice(0, -1).map(n => n.toUpperCase());
+        return `${rest.join(', ')}, AND ${last}`;
+    }
+
     function generateReport() {
         const repairsOutput = document.getElementById('repairs-completed-output');
-        const photosOutput = document.getElementById('required-photos-output');
+        const photosOutput  = document.getElementById('required-photos-output');
 
-        // Use selectedParts array (already in selection order) for the report
+        // Build ordered part name list
         const orderedPartNames = selectedParts.map(p => p.name);
 
         // Collect misc
         const miscChecked = document.getElementById('miscellaneous-checkbox').checked;
-        const miscText = document.getElementById('miscellaneous-comment-area').value.trim();
-        if (miscChecked && miscText) {
-            orderedPartNames.push('Miscellaneous: ' + miscText);
-        } else if (miscChecked) {
-            orderedPartNames.push('Miscellaneous (no description provided)');
-        }
+        const miscText    = document.getElementById('miscellaneous-comment-area').value.trim();
+        if (miscChecked && miscText)  orderedPartNames.push(miscText);
+        else if (miscChecked)         orderedPartNames.push('MISCELLANEOUS PART');
 
-        // Collect verbiage modifiers
-        const activeModifiers = verbiageModifiers
-            .filter(m => document.getElementById(m.id).checked)
-            .map(m => m.text);
+        // Read modifier flags
+        const cannotVerify      = document.getElementById('cannot-verify-checkbox').checked;
+        const fixedWithoutParts = document.getElementById('fixed-without-parts-checkbox').checked;
+        const batteryOow        = document.getElementById('battery-oow-checkbox').checked;
+        const richlandImaging   = document.getElementById('richland-imaging-checkbox').checked;
+        const unionNeedsOs      = document.getElementById('union-needs-os-checkbox').checked;
 
-        // Build repair report text
+        const partsList = formatPartsList(orderedPartNames);
+        const hasParts  = orderedPartNames.length > 0;
+
         let reportText = '';
-        if (orderedPartNames.length === 0 && activeModifiers.length === 0) {
+
+        // Count active modifiers
+        const activeModifierCount = [cannotVerify, fixedWithoutParts, batteryOow, richlandImaging, unionNeedsOs].filter(Boolean).length;
+
+        // Helper strings
+        const replaced  = hasParts ? `REPLACED ${partsList}.` : '';
+        const reseated  = hasParts ? `RESEATED ${partsList}.` : '';
+
+        if (activeModifierCount === 0 && !hasParts) {
             reportText = 'No repairs or modifiers selected.';
+
+        // --- Single modifiers ---
+        } else if (activeModifierCount === 0) {
+            reportText = `REPAIRS COMPLETED: REPLACED ${partsList}. UNIT IS FULLY FUNCTIONAL.`;
+
+        } else if (activeModifierCount === 1) {
+            if (cannotVerify) {
+                reportText = `REPAIRS COMPLETED: ${replaced} RAN FULL DIAGNOSTICS. CANNOT REPLICATE CUSTOMER INITIAL ISSUE. UNIT IS FULLY FUNCTIONAL.`.trim();
+            } else if (fixedWithoutParts) {
+                reportText = `REPAIRS COMPLETED: ${reseated} UNIT IS FULLY FUNCTIONAL.`.trim();
+            } else if (batteryOow) {
+                reportText = `REPAIRS COMPLETED: ${replaced} BATTERY IS OUT OF WARRANTY. RECOMMEND CUSTOMER TO REPLACE CURRENT BATTERY SOON. UNIT IS OTHERWISE, FULLY FUNCTIONAL.`.trim();
+            } else if (richlandImaging) {
+                reportText = `REPAIRS COMPLETED: ${replaced} DEVICE IS AWAITING IMAGING.`.trim();
+            } else if (unionNeedsOs) {
+                reportText = `REPAIRS COMPLETED: ${replaced} NEEDS OPERATING SYSTEM INSTALLED. OTHER THEN NEEDING OS, THE UNIT IS FULLY FUNCTIONAL.`.trim();
+            }
+
+        // --- Two modifier combinations ---
+        } else if (activeModifierCount === 2) {
+            if (cannotVerify && fixedWithoutParts) {
+                reportText = `REPAIRS COMPLETED: ${reseated} RAN FULL DIAGNOSTICS. CANNOT REPLICATE CUSTOMER INITIAL ISSUE. UNIT IS FULLY FUNCTIONAL.`.trim();
+
+            } else if (cannotVerify && batteryOow) {
+                reportText = `REPAIRS COMPLETED: ${replaced} RAN FULL DIAGNOSTICS. CANNOT REPLICATE CUSTOMER INITIAL ISSUE. BATTERY IS OUT OF WARRANTY. RECOMMEND CUSTOMER TO REPLACE CURRENT BATTERY SOON. UNIT IS OTHERWISE, FULLY FUNCTIONAL.`.trim();
+
+            } else if (cannotVerify && unionNeedsOs) {
+                reportText = `REPAIRS COMPLETED: ${replaced} RAN FULL DIAGNOSTICS. CANNOT REPLICATE CUSTOMER INITIAL ISSUE. NEEDS OPERATING SYSTEM INSTALLED. OTHER THEN NEEDING OS, THE UNIT IS FULLY FUNCTIONAL.`.trim();
+
+            } else if (cannotVerify && richlandImaging) {
+                reportText = `REPAIRS COMPLETED: ${replaced} RAN FULL DIAGNOSTICS. CANNOT REPLICATE CUSTOMER INITIAL ISSUE. DEVICE IS AWAITING IMAGING.`.trim();
+
+            } else if (fixedWithoutParts && batteryOow) {
+                reportText = `REPAIRS COMPLETED: ${reseated} BATTERY IS OUT OF WARRANTY. RECOMMEND CUSTOMER TO REPLACE CURRENT BATTERY SOON. UNIT IS OTHERWISE, FULLY FUNCTIONAL.`.trim();
+
+            } else if (fixedWithoutParts && richlandImaging) {
+                reportText = `REPAIRS COMPLETED: ${reseated} DEVICE IS AWAITING IMAGING.`.trim();
+
+            } else if (fixedWithoutParts && unionNeedsOs) {
+                reportText = `REPAIRS COMPLETED: ${reseated} NEEDS OPERATING SYSTEM INSTALLED. OTHER THEN NEEDING OS, THE UNIT IS FULLY FUNCTIONAL.`.trim();
+
+            } else if (batteryOow && richlandImaging) {
+                reportText = `REPAIRS COMPLETED: ${replaced} BATTERY IS OUT OF WARRANTY. RECOMMEND CUSTOMER TO REPLACE CURRENT BATTERY SOON. DEVICE IS AWAITING IMAGING.`.trim();
+
+            } else if (batteryOow && unionNeedsOs) {
+                reportText = `REPAIRS COMPLETED: ${replaced} BATTERY IS OUT OF WARRANTY. RECOMMEND CUSTOMER TO REPLACE CURRENT BATTERY SOON. NEEDS OPERATING SYSTEM INSTALLED. OTHER THAN NEEDING OS AND BATTERY, THE UNIT IS FULLY FUNCTIONAL.`.trim();
+
+            } else {
+                alert('Verbiage Modifier Combination not possible!');
+                return;
+            }
+
+        // --- Three modifier combinations ---
+        } else if (activeModifierCount === 3) {
+            if (cannotVerify && fixedWithoutParts && batteryOow && !richlandImaging && !unionNeedsOs) {
+                reportText = `REPAIRS COMPLETED: ${reseated} RAN FULL DIAGNOSTICS. CANNOT REPLICATE CUSTOMER INITIAL ISSUE. BATTERY IS OUT OF WARRANTY. RECOMMEND CUSTOMER TO REPLACE CURRENT BATTERY SOON. UNIT IS OTHERWISE, FULLY FUNCTIONAL.`.trim();
+
+            } else if (cannotVerify && fixedWithoutParts && unionNeedsOs && !richlandImaging && !batteryOow) {
+                reportText = `REPAIRS COMPLETED: ${reseated} RAN FULL DIAGNOSTICS. CANNOT REPLICATE CUSTOMER INITIAL ISSUE. NEEDS OPERATING SYSTEM INSTALLED. OTHER THEN NEEDING OS, THE UNIT IS FULLY FUNCTIONAL.`.trim();
+
+            } else if (cannotVerify && fixedWithoutParts && richlandImaging && !unionNeedsOs && !batteryOow) {
+                reportText = `REPAIRS COMPLETED: ${reseated} RAN FULL DIAGNOSTICS. CANNOT REPLICATE CUSTOMER INITIAL ISSUE. DEVICE IS AWAITING IMAGING.`.trim();
+
+            } else if (fixedWithoutParts && batteryOow && unionNeedsOs && !cannotVerify && !richlandImaging) {
+                reportText = `REPAIRS COMPLETED: ${reseated} BATTERY IS OUT OF WARRANTY. RECOMMEND CUSTOMER TO REPLACE CURRENT BATTERY SOON. NEEDS OPERATING SYSTEM INSTALLED. OTHER THAN NEEDING OS AND BATTERY, THE UNIT IS FULLY FUNCTIONAL.`.trim();
+
+            } else if (fixedWithoutParts && batteryOow && richlandImaging && !cannotVerify && !unionNeedsOs) {
+                reportText = `REPAIRS COMPLETED: ${reseated} BATTERY IS OUT OF WARRANTY. RECOMMEND CUSTOMER TO REPLACE CURRENT BATTERY SOON. DEVICE IS AWAITING IMAGING.`.trim();
+
+            } else {
+                alert('Verbiage Modifier Combination not possible!');
+                return;
+            }
+
+        // --- Four modifier combinations ---
+        } else if (activeModifierCount === 4) {
+            if (cannotVerify && fixedWithoutParts && batteryOow && unionNeedsOs && !richlandImaging) {
+                reportText = `REPAIRS COMPLETED: ${reseated} RAN FULL DIAGNOSTICS. CANNOT REPLICATE CUSTOMER INITIAL ISSUE. BATTERY IS OUT OF WARRANTY. RECOMMEND CUSTOMER TO REPLACE CURRENT BATTERY SOON. NEEDS OPERATING SYSTEM INSTALLED. OTHER THAN NEEDING OS AND BATTERY, THE UNIT IS FULLY FUNCTIONAL.`.trim();
+
+            } else if (cannotVerify && fixedWithoutParts && batteryOow && richlandImaging && !unionNeedsOs) {
+                reportText = `REPAIRS COMPLETED: ${reseated} RAN FULL DIAGNOSTICS. CANNOT REPLICATE CUSTOMER INITIAL ISSUE. BATTERY IS OUT OF WARRANTY. RECOMMEND CUSTOMER TO REPLACE CURRENT BATTERY SOON. DEVICE IS AWAITING IMAGING.`.trim();
+
+            } else {
+                alert('Verbiage Modifier Combination not possible!');
+                return;
+            }
+
+        // --- Five modifiers = always invalid ---
         } else {
-            if (orderedPartNames.length > 0) {
-                reportText += 'REPAIRS COMPLETED:\n';
-                orderedPartNames.forEach((part, i) => {
-                    reportText += `  ${i + 1}. ${part}\n`;
-                });
-            }
-            if (activeModifiers.length > 0) {
-                if (reportText) reportText += '\n';
-                reportText += activeModifiers.join('\n');
-            }
+            alert('Verbiage Modifier Combination not possible!');
+            return;
         }
+
         repairsOutput.textContent = reportText;
 
-        // Build required photos text
-        let photosText = '';
-        if (orderedPartNames.length > 0) {
-            photosText += 'REQUIRED PHOTOS:\n';
-            photosText += '  • Before photo (full device)\n';
-            orderedPartNames.forEach(part => {
-                photosText += `  • ${part} (before & after)\n`;
-            });
-            photosText += '  • After photo (full device)';
-        } else {
-            photosText = 'No parts selected — no photos required.';
+        // Required photos
+        const batteryOowForPhotos = document.getElementById('battery-oow-checkbox').checked;
+        const cannotVerifyForPhotos = document.getElementById('cannot-verify-checkbox').checked;
+
+        let photoLines = [];
+
+        // Only if Motherboard was selected
+        if (orderedPartNames.some(n => n.toUpperCase() === 'MOTHERBOARD')) {
+            photoLines.push('• Motherboard Part Number');
+            photoLines.push('• Service Tag');
+            photoLines.push('• BIOS');
         }
-        photosOutput.textContent = photosText;
+
+        // Only if LCD Screen was selected
+        if (orderedPartNames.some(n => n.toUpperCase() === 'LCD SCREEN')) {
+            photoLines.push('• LCD Screen (before & after)');
+        }
+
+        // Only if Cannot Verify is checked
+        if (cannotVerifyForPhotos) {
+            photoLines.push('• Cannot Verify Initial Issue (proof)');
+        }
+
+        // Only if Battery OOW is checked
+        if (batteryOowForPhotos) {
+            photoLines.push('• Battery Health');
+        }
+
+        // Always required
+        photoLines.push('• Full frame device (after repair)');
+
+        photosOutput.textContent = 'REQUIRED PHOTOS:\n' + photoLines.map(l => '  ' + l).join('\n');
     }
 
     function clearAllIssues() {
