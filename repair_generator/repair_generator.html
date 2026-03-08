@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Repair Generator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7f9;
+            color: #333;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .hamburger-menu {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .hamburger-icon {
+            width: 30px;
+            height: 25px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .hamburger-icon span {
+            display: block;
+            height: 3px;
+            width: 100%;
+            background-color: #0056b3;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-dropdown {
+            display: none;
+            position: absolute;
+            top: 35px;
+            right: 0;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            min-width: 250px;
+            z-index: 1000;
+        }
+
+        .menu-dropdown.show {
+            display: block;
+        }
+
+        .menu-item {
+            padding: 12px 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+
+        #diag-link {
+            color: rgb(255, 255, 255);
+            text-decoration: none;
+            border: 1px solid #bb741d;
+            background-color: #e2af70;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        h1 {
+            color: #0056b3;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .repair-options {
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background-color: #fafafa;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        h2 {
+            color: #333;
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+        .button-group button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s;
+            min-width: 150px;
+        }
+        #generate-button { background-color: #28a745; color: white; }
+        #generate-button:hover { background-color: #218838; }
+        #clear-button { background-color: #dc3545; color: white; }
+        #clear-button:hover { background-color: #c82333; }
+        #copy-button { background-color: #0056b3; color: white; }
+        #copy-button:hover { background-color: #004494; }
+
+        #repairs-completed-output {
+            background-color: #fff;
+            padding: 15px;
+            border: 1px solid #28a745;
+            border-radius: 4px;
+            font-size: 1.0em;
+            min-height: 50px;
+            line-height: 1.4;
+            font-family: Arial, sans-serif;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            color: #218838;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        #required-photos-output {
+            background-color: #fff;
+            padding: 15px;
+            border: 1px solid #0056b3;
+            border-radius: 4px;
+            font-size: 1.0em;
+            min-height: 50px;
+            line-height: 1.4;
+            font-family: Arial, sans-serif;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            color: #218838;
+            font-weight: bold;
+        }
+
+        /* Misc textarea */
+        #miscellaneous-description-container {
+            width: 100%;
+            margin-top: 8px;
+        }
+        #miscellaneous-comment-area {
+            width: 100%;
+            min-height: 60px;
+            padding: 8px;
+            border: 1px solid #fcd34d;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 0.9em;
+            resize: vertical;
+            box-sizing: border-box;
+        }
+
+        /* Verbiage modifiers layout */
+        .verbaige-modifiers {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .verbaige-modifiers div {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Order badge on part checkboxes */
+        .repair-options > div {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .part-order {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            background-color: #0056b3;
+            color: white;
+            border-radius: 50%;
+            font-size: 0.72em;
+            font-weight: bold;
+            visibility: hidden;
+            flex-shrink: 0;
+            order: -1; /* Move badge to the far left */
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="hamburger-menu">
+        <div class="hamburger-icon" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="menu-dropdown" id="menu-dropdown">
+            <nav><a href="diagnostic_generator.html" id="diag-link">Diagnostic Generator 💻</a></nav>
+        </div>
+    </div>
+
+    <h1>Computer Repair Report Generator 🛠️</h1>
+
+    <div class="input-section">
+        <h2>What did you repair?</h2>
+
+        <h3>Top End</h3>
+        <div class="repair-options">
+            <div>
+                <input type="checkbox" id="top-cover-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="top-cover-checkbox">Top Cover</label>
+            </div>
+            <div>
+                <input type="checkbox" id="screen-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="screen-checkbox">LCD Screen</label>
+            </div>
+            <div>
+                <input type="checkbox" id="bezel-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="bezel-checkbox">Bezel</label>
+            </div>
+            <div>
+                <input type="checkbox" id="left-hinge-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="left-hinge-checkbox">Left Hinge</label>
+            </div>
+            <div>
+                <input type="checkbox" id="right-hinge-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="right-hinge-checkbox">Right Hinge</label>
+            </div>
+            <div>
+                <input type="checkbox" id="edp-cable-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="edp-cable-checkbox">EDP Cable</label>
+            </div>
+            <div>
+                <input type="checkbox" id="webcam-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="webcam-checkbox">Webcam</label>
+            </div>
+            <div>
+                <input type="checkbox" id="hall-sensor-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="hall-sensor-checkbox">Hall Sensor</label>
+            </div>
+        </div>
+
+        <h3>Bottom End</h3>
+        <div class="repair-options">
+            <div>
+                <input type="checkbox" id="palm-rest-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="palm-rest-checkbox">Palm Rest</label>
+            </div>
+            <div>
+                <input type="checkbox" id="keyboard-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="keyboard-checkbox">Keyboard</label>
+            </div>
+            <div>
+                <input type="checkbox" id="touchpad-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="touchpad-checkbox">Touchpad</label>
+            </div>
+            <div>
+                <input type="checkbox" id="bottom-cover-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="bottom-cover-checkbox">Bottom Cover</label>
+            </div>
+        </div>
+
+        <h3>Internals</h3>
+        <div class="repair-options">
+            <div>
+                <input type="checkbox" id="motherboard-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="motherboard-checkbox">Motherboard</label>
+            </div>
+            <div>
+                <input type="checkbox" id="daughterboard-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="daughterboard-checkbox">Daughterboard</label>
+            </div>
+            <div>
+                <input type="checkbox" id="audio-board-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="audio-board-checkbox">Audio Board</label>
+            </div>
+            <div>
+                <input type="checkbox" id="ram-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="ram-checkbox">RAM</label>
+            </div>
+            <div>
+                <input type="checkbox" id="ssd-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="ssd-checkbox">SSD</label>
+            </div>
+            <div>
+                <input type="checkbox" id="nic-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="nic-checkbox">NIC</label>
+            </div>
+            <div>
+                <input type="checkbox" id="dc-in-port-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="dc-in-port-checkbox">DC-In Port</label>
+            </div>
+            <div>
+                <input type="checkbox" id="cpu-fan-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="cpu-fan-checkbox">CPU Fan</label>
+            </div>
+            <div>
+                <input type="checkbox" id="battery-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="battery-checkbox">Battery</label>
+            </div>
+            <div>
+                <input type="checkbox" id="battery-cable-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="battery-cable-checkbox">Battery Cable</label>
+            </div>
+            <div>
+                <input type="checkbox" id="speakers-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="speakers-checkbox">Speakers</label>
+            </div>
+        </div>
+
+        <h3>Miscellaneous</h3>
+        <div class="repair-options">
+            <div>
+                <input type="checkbox" id="miscellaneous-checkbox">
+                <label for="miscellaneous-checkbox">MISCELLANEOUS PART - PLEASE DESCRIBE IN NOTES</label>
+            </div>
+            <div id="miscellaneous-description-container" style="display:none;">
+                <textarea id="miscellaneous-comment-area" placeholder="Enter miscellaneous part here."></textarea>
+            </div>
+        </div>
+
+        <h3>Verbiage Modifiers</h3>
+        <div class="repair-options">
+            <div class="verbaige-modifiers">
+                <div>
+                    <input type="checkbox" id="cannot-verify-checkbox">
+                    <label for="cannot-verify-checkbox">Cannot Verify Initial Issue</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="fixed-without-parts-checkbox">
+                    <label for="fixed-without-parts-checkbox">Fixed Without Parts</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="reseated-replaced-checkbox">
+                    <label for="reseated-replaced-checkbox">Reseated &amp; Replaced</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="battery-oow-checkbox">
+                    <label for="battery-oow-checkbox">Battery OOW</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="richland-imaging-checkbox">
+                    <label for="richland-imaging-checkbox">Richland 1 Imaging</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="union-needs-os-checkbox">
+                    <label for="union-needs-os-checkbox">Union / Needs OS</label>
+                </div>
+            </div>
+        </div>
+        <div id="reseated-replaced-container" style="display:none; width:100%; margin-top:8px;">
+            <input type="text" id="reseated-replaced-input"
+                placeholder="Enter item(s) that were reseated..."
+                style="width:100%; padding:8px; border:1px solid #fcd34d; border-radius:6px; font-family:inherit; font-size:0.9em; box-sizing:border-box;">
+        </div>
+    </div>
+
+    <div class="report-section">
+        <h2>Generate Repair Report</h2>
+        <div class="button-group">
+            <button onclick="generateReport()" id="generate-button">GENERATE REPORT</button>
+            <button onclick="clearAllIssues()" id="clear-button">CLEAR ALL REPAIRS</button>
+            <button onclick="copyText()" id="copy-button">COPY TEXT</button>
+        </div>
+        <div id="repairs-completed-output"></div>
+    </div>
+
+    <div class="required-photos-section">
+        <h2>Required Photos</h2>
+        <div id="required-photos-output"></div>
+    </div>
+</div>
+
+<script>
+    // --- Order tracking array (mirrors the diagnostic tool's selectedIssues pattern) ---
+    let selectedParts = []; // Each entry: { id, name }
+
+    // Map checkbox IDs to display names
+    const allParts = [
+        { id: 'top-cover-checkbox',       name: 'Top Cover' },
+        { id: 'screen-checkbox',           name: 'LCD Screen' },
+        { id: 'bezel-checkbox',            name: 'Bezel' },
+        { id: 'left-hinge-checkbox',       name: 'Left Hinge' },
+        { id: 'right-hinge-checkbox',      name: 'Right Hinge' },
+        { id: 'edp-cable-checkbox',        name: 'EDP Cable' },
+        { id: 'webcam-checkbox',           name: 'Webcam' },
+        { id: 'hall-sensor-checkbox',      name: 'Hall Sensor' },
+        { id: 'palm-rest-checkbox',        name: 'Palm Rest' },
+        { id: 'keyboard-checkbox',         name: 'Keyboard' },
+        { id: 'touchpad-checkbox',         name: 'Touchpad' },
+        { id: 'bottom-cover-checkbox',     name: 'Bottom Cover' },
+        { id: 'motherboard-checkbox',      name: 'Motherboard' },
+        { id: 'daughterboard-checkbox',    name: 'Daughterboard' },
+        { id: 'audio-board-checkbox',      name: 'Audio Board' },
+        { id: 'ram-checkbox',              name: 'RAM' },
+        { id: 'ssd-checkbox',              name: 'SSD' },
+        { id: 'nic-checkbox',              name: 'NIC' },
+        { id: 'dc-in-port-checkbox',       name: 'DC-In Port' },
+        { id: 'cpu-fan-checkbox',          name: 'CPU Fan' },
+        { id: 'battery-checkbox',          name: 'Battery' },
+        { id: 'battery-cable-checkbox',    name: 'Battery Cable' },
+        { id: 'speakers-checkbox',         name: 'Speakers' },
+    ];
+
+    const verbiageModifiers = [
+        { id: 'cannot-verify-checkbox',       text: '' },
+        { id: 'fixed-without-parts-checkbox', text: '' },
+        { id: 'battery-oow-checkbox',         text: '' },
+        { id: 'richland-imaging-checkbox',    text: '' },
+        { id: 'union-needs-os-checkbox',      text: '' },
+    ];
+
+    // --- Handle part checkbox change: push/remove and re-render badges ---
+    function handlePartChange(event) {
+        const checkbox = event.target;
+        const partDef = allParts.find(p => p.id === checkbox.id);
+        if (!partDef) return;
+
+        if (checkbox.checked) {
+            // Only add if not already tracked
+            if (!selectedParts.some(p => p.id === checkbox.id)) {
+                selectedParts.push({ id: partDef.id, name: partDef.name });
+            }
+        } else {
+            // Remove from array — all subsequent numbers shift down automatically
+            selectedParts = selectedParts.filter(p => p.id !== checkbox.id);
+        }
+
+        updateOrderBadges();
+    }
+
+    // Re-render all visible order badges based on current selectedParts array
+    function updateOrderBadges() {
+        document.querySelectorAll('.part-checkbox').forEach(cb => {
+            const badge = cb.nextElementSibling; // the <span class="part-order">
+            const index = selectedParts.findIndex(p => p.id === cb.id);
+
+            if (cb.checked && index !== -1) {
+                badge.textContent = index + 1;
+                badge.style.visibility = 'visible';
+            } else {
+                badge.textContent = '';
+                badge.style.visibility = 'hidden';
+            }
+        });
+    }
+
+    // Attach change listeners to all part checkboxes
+    document.querySelectorAll('.part-checkbox').forEach(cb => {
+        cb.addEventListener('change', handlePartChange);
+    });
+
+    // --- Force all checkboxes unchecked on page load to prevent browser cache mismatch ---
+    window.addEventListener('load', function () {
+        // Uncheck all part checkboxes
+        document.querySelectorAll('.part-checkbox').forEach(cb => {
+            cb.checked = false;
+        });
+        // Uncheck verbiage modifiers and misc
+        ['cannot-verify-checkbox','fixed-without-parts-checkbox','battery-oow-checkbox',
+         'richland-imaging-checkbox','union-needs-os-checkbox','reseated-replaced-checkbox','miscellaneous-checkbox'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.checked = false;
+        });
+        // Hide misc textarea and reseated input
+        document.getElementById('miscellaneous-description-container').style.display = 'none';
+        document.getElementById('reseated-replaced-container').style.display = 'none';
+        if (document.getElementById('reseated-replaced-input')) document.getElementById('reseated-replaced-input').value = '';
+        // Reset the tracking array and badges
+        selectedParts = [];
+        updateOrderBadges();
+    });
+
+    // Show/hide reseated & replaced input
+    document.getElementById('reseated-replaced-checkbox').addEventListener('change', function () {
+        document.getElementById('reseated-replaced-container').style.display = this.checked ? 'block' : 'none';
+        if (!this.checked) document.getElementById('reseated-replaced-input').value = '';
+        if (this.checked) document.getElementById('reseated-replaced-input').focus();
+    });
+
+    // Show/hide misc textarea when checkbox is toggled
+    document.getElementById('miscellaneous-checkbox').addEventListener('change', function () {
+        document.getElementById('miscellaneous-description-container').style.display =
+            this.checked ? 'block' : 'none';
+        if (!this.checked) {
+            document.getElementById('miscellaneous-comment-area').value = '';
+        }
+    });
+
+    // Formats a list of part names into "Part1, Part2, and Part3" prose
+    function formatPartsList(names) {
+        if (names.length === 0) return '';
+        if (names.length === 1) return names[0].toUpperCase();
+        if (names.length === 2) return `${names[0].toUpperCase()} AND ${names[1].toUpperCase()}`;
+        const last = names[names.length - 1].toUpperCase();
+        const rest = names.slice(0, -1).map(n => n.toUpperCase());
+        return `${rest.join(', ')}, AND ${last}`;
+    }
+
+    function generateReport() {
+        const repairsOutput = document.getElementById('repairs-completed-output');
+        const photosOutput  = document.getElementById('required-photos-output');
+
+        // Build ordered part name list
+        const orderedPartNames = selectedParts.map(p => p.name);
+
+        // Collect misc
+        const miscChecked = document.getElementById('miscellaneous-checkbox').checked;
+        const miscText    = document.getElementById('miscellaneous-comment-area').value.trim();
+        if (miscChecked && miscText)  orderedPartNames.push(miscText);
+        else if (miscChecked)         orderedPartNames.push('MISCELLANEOUS PART');
+
+        // Read modifier flags
+        const cannotVerify      = document.getElementById('cannot-verify-checkbox').checked;
+        const fixedWithoutParts = document.getElementById('fixed-without-parts-checkbox').checked;
+        const batteryOow        = document.getElementById('battery-oow-checkbox').checked;
+        const richlandImaging   = document.getElementById('richland-imaging-checkbox').checked;
+        const unionNeedsOs      = document.getElementById('union-needs-os-checkbox').checked;
+        const reseatedReplaced  = document.getElementById('reseated-replaced-checkbox').checked;
+        const reseatedItem      = document.getElementById('reseated-replaced-input').value.trim().toUpperCase();
+
+        const partsList = formatPartsList(orderedPartNames);
+        const hasParts  = orderedPartNames.length > 0;
+
+        let reportText = '';
+
+        // Count active modifiers
+        const activeModifierCount = [cannotVerify, fixedWithoutParts, batteryOow, richlandImaging, unionNeedsOs, reseatedReplaced].filter(Boolean).length;
+
+        // Helper strings
+        const replaced  = hasParts ? `REPLACED ${partsList}.` : '';
+        const reseated  = hasParts ? `RESEATED ${partsList}.` : '';
+
+        if (activeModifierCount === 0 && !hasParts) {
+            reportText = 'No repairs or modifiers selected.';
+
+        // --- Single modifiers ---
+        } else if (activeModifierCount === 0) {
+            reportText = `REPAIRS COMPLETED: REPLACED ${partsList}. UNIT IS FULLY FUNCTIONAL.`;
+
+        } else if (activeModifierCount === 1) {
+            if (cannotVerify) {
+                reportText = `REPAIRS COMPLETED: ${replaced} RAN FULL DIAGNOSTICS. CANNOT REPLICATE CUSTOMER INITIAL ISSUE. UNIT IS FULLY FUNCTIONAL.`.trim();
+            } else if (fixedWithoutParts) {
+                reportText = `REPAIRS COMPLETED: ${reseated} UNIT IS FULLY FUNCTIONAL.`.trim();
+            } else if (batteryOow) {
+                reportText = `REPAIRS COMPLETED: ${replaced} BATTERY IS OUT OF WARRANTY. RECOMMEND CUSTOMER TO REPLACE CURRENT BATTERY SOON. UNIT IS OTHERWISE, FULLY FUNCTIONAL.`.trim();
+            } else if (richlandImaging) {
+                reportText = `REPAIRS COMPLETED: ${replaced} DEVICE IS AWAITING IMAGING.`.trim();
+            } else if (unionNeedsOs) {
+                reportText = `REPAIRS COMPLETED: ${replaced} NEEDS OPERATING SYSTEM INSTALLED. OTHER THEN NEEDING OS, THE UNIT IS FULLY FUNCTIONAL.`.trim();
+            } else if (reseatedReplaced) {
+                const rl = reseatedItem || 'COMPONENTS';
+                reportText = `REPAIRS COMPLETED: RESEATED ${rl}. REPLACED ${partsList}. UNIT IS FULLY FUNCTIONAL.`.trim();
+            }
+
+        // --- Two modifier combinations ---
+        } else if (activeModifierCount === 2) {
+            if (cannotVerify && fixedWithoutParts) {
+                reportText = `REPAIRS COMPLETED: ${reseated} RAN FULL DIAGNOSTICS. CANNOT REPLICATE CUSTOMER INITIAL ISSUE. UNIT IS FULLY FUNCTIONAL.`.trim();
+
+            } else if (cannotVerify && batteryOow) {
+                reportText = `REPAIRS COMPLETED: ${replaced} RAN FULL DIAGNOSTICS. CANNOT REPLICATE CUSTOMER INITIAL ISSUE. BATTERY IS OUT OF WARRANTY. RECOMMEND CUSTOMER TO REPLACE CURRENT BATTERY SOON. UNIT IS OTHERWISE, FULLY FUNCTIONAL.`.trim();
+
+            } else if (cannotVerify && unionNeedsOs) {
+                reportText = `REPAIRS COMPLETED: ${replaced} RAN FULL DIAGNOSTICS. CANNOT REPLICATE CUSTOMER INITIAL ISSUE. NEEDS OPERATING SYSTEM INSTALLED. OTHER THEN NEEDING OS, THE UNIT IS FULLY FUNCTIONAL.`.trim();
+
+            } else if (cannotVerify && richlandImaging) {
+                reportText = `REPAIRS COMPLETED: ${replaced} RAN FULL DIAGNOSTICS. CANNOT REPLICATE CUSTOMER INITIAL ISSUE. DEVICE IS AWAITING IMAGING.`.trim();
+
+            } else if (fixedWithoutParts && batteryOow) {
+                reportText = `REPAIRS COMPLETED: ${reseated} BATTERY IS OUT OF WARRANTY. RECOMMEND CUSTOMER TO REPLACE CURRENT BATTERY SOON. UNIT IS OTHERWISE, FULLY FUNCTIONAL.`.trim();
+
+            } else if (fixedWithoutParts && richlandImaging) {
+                reportText = `REPAIRS COMPLETED: ${reseated} DEVICE IS AWAITING IMAGING.`.trim();
+
+            } else if (fixedWithoutParts && unionNeedsOs) {
+                reportText = `REPAIRS COMPLETED: ${reseated} NEEDS OPERATING SYSTEM INSTALLED. OTHER THEN NEEDING OS, THE UNIT IS FULLY FUNCTIONAL.`.trim();
+
+            } else if (batteryOow && richlandImaging) {
+                reportText = `REPAIRS COMPLETED: ${replaced} BATTERY IS OUT OF WARRANTY. RECOMMEND CUSTOMER TO REPLACE CURRENT BATTERY SOON. DEVICE IS AWAITING IMAGING.`.trim();
+
+            } else if (batteryOow && unionNeedsOs) {
+                reportText = `REPAIRS COMPLETED: ${replaced} BATTERY IS OUT OF WARRANTY. RECOMMEND CUSTOMER TO REPLACE CURRENT BATTERY SOON. NEEDS OPERATING SYSTEM INSTALLED. OTHER THAN NEEDING OS AND BATTERY, THE UNIT IS FULLY FUNCTIONAL.`.trim();
+
+            } else if (reseatedReplaced && cannotVerify) {
+                const rl = reseatedItem || 'COMPONENTS';
+                reportText = `REPAIRS COMPLETED: RESEATED ${rl}. REPLACED ${partsList}. RAN FULL DIAGNOSTICS. CANNOT REPLICATE CUSTOMER INITIAL ISSUE. UNIT IS FULLY FUNCTIONAL.`.trim();
+
+            } else if (reseatedReplaced && batteryOow) {
+                const rl = reseatedItem || 'COMPONENTS';
+                reportText = `REPAIRS COMPLETED: RESEATED ${rl}. REPLACED ${partsList}. BATTERY IS OUT OF WARRANTY. RECOMMEND CUSTOMER TO REPLACE CURRENT BATTERY SOON. UNIT IS OTHERWISE, FULLY FUNCTIONAL.`.trim();
+
+            } else if (reseatedReplaced && richlandImaging) {
+                const rl = reseatedItem || 'COMPONENTS';
+                reportText = `REPAIRS COMPLETED: RESEATED ${rl}. REPLACED ${partsList}. DEVICE IS AWAITING IMAGING.`.trim();
+
+            } else if (reseatedReplaced && unionNeedsOs) {
+                const rl = reseatedItem || 'COMPONENTS';
+                reportText = `REPAIRS COMPLETED: RESEATED ${rl}. REPLACED ${partsList}. NEEDS OPERATING SYSTEM INSTALLED. OTHER THEN NEEDING OS, THE UNIT IS FULLY FUNCTIONAL.`.trim();
+
+            } else {
+                alert('Verbiage Modifier Combination not possible!');
+                return;
+            }
+
+        // --- Three modifier combinations ---
+        } else if (activeModifierCount === 3) {
+            if (cannotVerify && fixedWithoutParts && batteryOow && !richlandImaging && !unionNeedsOs) {
+                reportText = `REPAIRS COMPLETED: ${reseated} RAN FULL DIAGNOSTICS. CANNOT REPLICATE CUSTOMER INITIAL ISSUE. BATTERY IS OUT OF WARRANTY. RECOMMEND CUSTOMER TO REPLACE CURRENT BATTERY SOON. UNIT IS OTHERWISE, FULLY FUNCTIONAL.`.trim();
+
+            } else if (cannotVerify && fixedWithoutParts && unionNeedsOs && !richlandImaging && !batteryOow) {
+                reportText = `REPAIRS COMPLETED: ${reseated} RAN FULL DIAGNOSTICS. CANNOT REPLICATE CUSTOMER INITIAL ISSUE. NEEDS OPERATING SYSTEM INSTALLED. OTHER THEN NEEDING OS, THE UNIT IS FULLY FUNCTIONAL.`.trim();
+
+            } else if (cannotVerify && fixedWithoutParts && richlandImaging && !unionNeedsOs && !batteryOow) {
+                reportText = `REPAIRS COMPLETED: ${reseated} RAN FULL DIAGNOSTICS. CANNOT REPLICATE CUSTOMER INITIAL ISSUE. DEVICE IS AWAITING IMAGING.`.trim();
+
+            } else if (fixedWithoutParts && batteryOow && unionNeedsOs && !cannotVerify && !richlandImaging) {
+                reportText = `REPAIRS COMPLETED: ${reseated} BATTERY IS OUT OF WARRANTY. RECOMMEND CUSTOMER TO REPLACE CURRENT BATTERY SOON. NEEDS OPERATING SYSTEM INSTALLED. OTHER THAN NEEDING OS AND BATTERY, THE UNIT IS FULLY FUNCTIONAL.`.trim();
+
+            } else if (fixedWithoutParts && batteryOow && richlandImaging && !cannotVerify && !unionNeedsOs) {
+                reportText = `REPAIRS COMPLETED: ${reseated} BATTERY IS OUT OF WARRANTY. RECOMMEND CUSTOMER TO REPLACE CURRENT BATTERY SOON. DEVICE IS AWAITING IMAGING.`.trim();
+
+            } else if (reseatedReplaced && cannotVerify && batteryOow && !richlandImaging && !unionNeedsOs && !fixedWithoutParts) {
+                const rl = reseatedItem || 'COMPONENTS';
+                reportText = `REPAIRS COMPLETED: RESEATED ${rl}. REPLACED ${partsList}. RAN FULL DIAGNOSTICS. CANNOT REPLICATE CUSTOMER INITIAL ISSUE. BATTERY IS OUT OF WARRANTY. RECOMMEND CUSTOMER TO REPLACE CURRENT BATTERY SOON. UNIT IS OTHERWISE, FULLY FUNCTIONAL.`.trim();
+
+            } else if (reseatedReplaced && cannotVerify && unionNeedsOs && !richlandImaging && !batteryOow && !fixedWithoutParts) {
+                const rl = reseatedItem || 'COMPONENTS';
+                reportText = `REPAIRS COMPLETED: RESEATED ${rl}. REPLACED ${partsList}. RAN FULL DIAGNOSTICS. CANNOT REPLICATE CUSTOMER INITIAL ISSUE. NEEDS OPERATING SYSTEM INSTALLED. OTHER THEN NEEDING OS, THE UNIT IS FULLY FUNCTIONAL.`.trim();
+
+            } else if (reseatedReplaced && cannotVerify && richlandImaging && !unionNeedsOs && !batteryOow && !fixedWithoutParts) {
+                const rl = reseatedItem || 'COMPONENTS';
+                reportText = `REPAIRS COMPLETED: RESEATED ${rl}. REPLACED ${partsList}. RAN FULL DIAGNOSTICS. CANNOT REPLICATE CUSTOMER INITIAL ISSUE. DEVICE IS AWAITING IMAGING.`.trim();
+
+            } else if (reseatedReplaced && batteryOow && richlandImaging && !cannotVerify && !unionNeedsOs && !fixedWithoutParts) {
+                const rl = reseatedItem || 'COMPONENTS';
+                reportText = `REPAIRS COMPLETED: RESEATED ${rl}. REPLACED ${partsList}. BATTERY IS OUT OF WARRANTY. RECOMMEND CUSTOMER TO REPLACE CURRENT BATTERY SOON. DEVICE IS AWAITING IMAGING.`.trim();
+
+            } else if (reseatedReplaced && batteryOow && unionNeedsOs && !cannotVerify && !richlandImaging && !fixedWithoutParts) {
+                const rl = reseatedItem || 'COMPONENTS';
+                reportText = `REPAIRS COMPLETED: RESEATED ${rl}. REPLACED ${partsList}. BATTERY IS OUT OF WARRANTY. RECOMMEND CUSTOMER TO REPLACE CURRENT BATTERY SOON. NEEDS OPERATING SYSTEM INSTALLED. OTHER THAN NEEDING OS AND BATTERY, THE UNIT IS FULLY FUNCTIONAL.`.trim();
+
+            } else {
+                alert('Verbiage Modifier Combination not possible!');
+                return;
+            }
+
+        // --- Four modifier combinations ---
+        } else if (activeModifierCount === 4) {
+            if (cannotVerify && fixedWithoutParts && batteryOow && unionNeedsOs && !richlandImaging) {
+                reportText = `REPAIRS COMPLETED: ${reseated} RAN FULL DIAGNOSTICS. CANNOT REPLICATE CUSTOMER INITIAL ISSUE. BATTERY IS OUT OF WARRANTY. RECOMMEND CUSTOMER TO REPLACE CURRENT BATTERY SOON. NEEDS OPERATING SYSTEM INSTALLED. OTHER THAN NEEDING OS AND BATTERY, THE UNIT IS FULLY FUNCTIONAL.`.trim();
+
+            } else if (cannotVerify && fixedWithoutParts && batteryOow && richlandImaging && !unionNeedsOs) {
+                reportText = `REPAIRS COMPLETED: ${reseated} RAN FULL DIAGNOSTICS. CANNOT REPLICATE CUSTOMER INITIAL ISSUE. BATTERY IS OUT OF WARRANTY. RECOMMEND CUSTOMER TO REPLACE CURRENT BATTERY SOON. DEVICE IS AWAITING IMAGING.`.trim();
+
+            } else if (reseatedReplaced && cannotVerify && batteryOow && unionNeedsOs && !richlandImaging && !fixedWithoutParts) {
+                const rl = reseatedItem || 'COMPONENTS';
+                reportText = `REPAIRS COMPLETED: RESEATED ${rl}. REPLACED ${partsList}. RAN FULL DIAGNOSTICS. CANNOT REPLICATE CUSTOMER INITIAL ISSUE. BATTERY IS OUT OF WARRANTY. RECOMMEND CUSTOMER TO REPLACE CURRENT BATTERY SOON. NEEDS OPERATING SYSTEM INSTALLED. OTHER THAN NEEDING OS AND BATTERY, THE UNIT IS FULLY FUNCTIONAL.`.trim();
+
+            } else if (reseatedReplaced && cannotVerify && batteryOow && richlandImaging && !unionNeedsOs && !fixedWithoutParts) {
+                const rl = reseatedItem || 'COMPONENTS';
+                reportText = `REPAIRS COMPLETED: RESEATED ${rl}. REPLACED ${partsList}. RAN FULL DIAGNOSTICS. CANNOT REPLICATE CUSTOMER INITIAL ISSUE. BATTERY IS OUT OF WARRANTY. RECOMMEND CUSTOMER TO REPLACE CURRENT BATTERY SOON. DEVICE IS AWAITING IMAGING.`.trim();
+
+            } else {
+                alert('Verbiage Modifier Combination not possible!');
+                return;
+            }
+
+        // --- Five or more modifiers = always invalid ---
+        } else {
+            alert('Verbiage Modifier Combination not possible!');
+            return;
+        }
+
+        repairsOutput.textContent = reportText;
+
+        // Required photos
+        const batteryOowForPhotos = document.getElementById('battery-oow-checkbox').checked;
+        const cannotVerifyForPhotos = document.getElementById('cannot-verify-checkbox').checked;
+
+        let photoLines = [];
+
+        // Only if Motherboard was selected
+        if (orderedPartNames.some(n => n.toUpperCase() === 'MOTHERBOARD')) {
+            photoLines.push('• Motherboard Part Number');
+            photoLines.push('• Service Tag');
+            photoLines.push('• BIOS');
+        }
+
+        // Only if LCD Screen was selected
+        if (orderedPartNames.some(n => n.toUpperCase() === 'LCD SCREEN')) {
+            photoLines.push('• LCD Screen (before & after)');
+        }
+
+        // Only if Cannot Verify is checked
+        if (cannotVerifyForPhotos) {
+            photoLines.push('• Cannot Verify Initial Issue (proof)');
+        }
+
+        // Only if Battery OOW is checked
+        if (batteryOowForPhotos) {
+            photoLines.push('• Battery Health');
+        }
+
+        // Always required
+        photoLines.push('• Full frame device (after repair)');
+
+        photosOutput.textContent = 'REQUIRED PHOTOS:\n' + photoLines.map(l => '  ' + l).join('\n');
+    }
+
+    function clearAllIssues() {
+        // Scroll to top immediately
+        window.scrollTo(0, 0);
+        // Reset order tracking array
+        selectedParts = [];
+
+        // Uncheck all part checkboxes and hide badges
+        allParts.forEach(p => {
+            const cb = document.getElementById(p.id);
+            if (cb) cb.checked = false;
+        });
+        updateOrderBadges();
+
+        // Uncheck verbiage modifiers
+        verbiageModifiers.forEach(m => {
+            const cb = document.getElementById(m.id);
+            if (cb) cb.checked = false;
+        });
+
+        // Clear misc
+        document.getElementById('miscellaneous-checkbox').checked = false;
+        document.getElementById('miscellaneous-comment-area').value = '';
+        document.getElementById('miscellaneous-description-container').style.display = 'none';
+
+        // Clear outputs
+        document.getElementById('repairs-completed-output').textContent = '';
+        document.getElementById('required-photos-output').textContent = '';
+    }
+
+    function copyText() {
+        const repairsText = document.getElementById('repairs-completed-output').textContent;
+
+        if (!repairsText.trim()) {
+            alert('Nothing to copy — generate a report first.');
+            return;
+        }
+
+        navigator.clipboard.writeText(repairsText).then(() => {
+            const btn = document.getElementById('copy-button');
+            const original = btn.textContent;
+            btn.textContent = '✓ COPIED!';
+            btn.style.backgroundColor = '#28a745';
+            setTimeout(() => {
+                btn.textContent = original;
+                btn.style.backgroundColor = '#0056b3';
+            }, 2000);
+        }).catch(() => {
+            alert('Copy failed. Please select and copy the text manually.');
+        });
+    }
+    function toggleMenu() {
+        const dropdown = document.getElementById('menu-dropdown');
+        dropdown.classList.toggle('show');
+    }
+
+    document.addEventListener('click', function(event) {
+        const menu = document.querySelector('.hamburger-menu');
+        const dropdown = document.getElementById('menu-dropdown');
+        if (menu && !menu.contains(event.target) && dropdown) {
+            dropdown.classList.remove('show');
+        }
+    });
+</script>
+</body>
+</html>
