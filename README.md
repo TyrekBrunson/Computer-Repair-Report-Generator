@@ -1,5 +1,9 @@
-This branch is to attempt to make a customizable repairs completed generator. 
+FEATURES TO IMPLEMENT
 
-index.html has been renamed to diagnostic_generator to better separate the future pages
+-BUG BUTTON UNIT PRESENTED WITH DESCRIPTION OF:  UPON ARRIVAL: COULD NOT VERIFY INITIAL ISSUE: UNIT HAS INFESTATION OF BUGS. UNIT PLACED IN RED BIO-HAZARD BAG. RETURNING UNIT BACK TO CUSTOMER WITH NO REPAIRS COMPLETED. PARTS ORDERED: NO PARTS ORDERED. REPAIRS COMPLETED: NO REPAIRS COMPLETED. UNIT HAS INFESTATION OF BUGS. UNIT PLACED IN RED BIO-HAZARD BAG. RETURNING UNIT TO CUSTOMER. UNIT IS NOT FULLY FUNCTIONAL.
 
-The end vision is to have one website, with links to both the diagnostic and repair generators, with room for expansion such as an Iredell specific generator
+-DOA BUTTON? NON-ADP PART IS DEAD ON ARRIVAL WHEN INSTALLED. PUT NON-ADP VERBAIGE HERE (have it generate with selected nadp vrbaige)? PPID:
+
+-IREDELL Button? "Awaiting CHS Repair
+
+ber ending verbiage
