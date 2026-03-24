@@ -1,7 +1,7 @@
 FEATURES TO IMPLEMENT
 
 Diag Generator:
-  DOA button/verbaige
+	DOA button/verbaige
   BER button/verbaige
   Dropdown fillable textbox for misc issue
   New battery verbaige
