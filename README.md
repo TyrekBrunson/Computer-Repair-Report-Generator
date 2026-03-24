@@ -1,9 +1,14 @@
 FEATURES TO IMPLEMENT
 
--BUG BUTTON UNIT PRESENTED WITH DESCRIPTION OF:  UPON ARRIVAL: COULD NOT VERIFY INITIAL ISSUE: UNIT HAS INFESTATION OF BUGS. UNIT PLACED IN RED BIO-HAZARD BAG. RETURNING UNIT BACK TO CUSTOMER WITH NO REPAIRS COMPLETED. PARTS ORDERED: NO PARTS ORDERED. REPAIRS COMPLETED: NO REPAIRS COMPLETED. UNIT HAS INFESTATION OF BUGS. UNIT PLACED IN RED BIO-HAZARD BAG. RETURNING UNIT TO CUSTOMER. UNIT IS NOT FULLY FUNCTIONAL.
+Diag Generator:
+  DOA button/verbaige
+  BER button/verbaige
+  Dropdown fillable textbox for misc issue
+  New battery verbaige
+  Bold-text the () in NADP verbaige for easy reading
 
--DOA BUTTON? NON-ADP PART IS DEAD ON ARRIVAL WHEN INSTALLED. PUT NON-ADP VERBIAGE HERE (have it generate with selected NON-ADP verbiage)? PPID:
+  Condense the webpage
 
--IREDELL Button? "Awaiting CHS Repair
-
-ber ending verbiage
+Repair Generator:
+  BER ending verbaige
+  Battery repair and battery OOW verbaige modifier shouldn't be possible.
