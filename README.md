@@ -1,9 +1,28 @@
 FEATURES TO IMPLEMENT
 
--BUG BUTTON UNIT PRESENTED WITH DESCRIPTION OF:  UPON ARRIVAL: COULD NOT VERIFY INITIAL ISSUE: UNIT HAS INFESTATION OF BUGS. UNIT PLACED IN RED BIO-HAZARD BAG. RETURNING UNIT BACK TO CUSTOMER WITH NO REPAIRS COMPLETED. PARTS ORDERED: NO PARTS ORDERED. REPAIRS COMPLETED: NO REPAIRS COMPLETED. UNIT HAS INFESTATION OF BUGS. UNIT PLACED IN RED BIO-HAZARD BAG. RETURNING UNIT TO CUSTOMER. UNIT IS NOT FULLY FUNCTIONAL.
+Diag Generator:
 
--DOA BUTTON? NON-ADP PART IS DEAD ON ARRIVAL WHEN INSTALLED. PUT NON-ADP VERBIAGE HERE (have it generate with selected NON-ADP verbiage)? PPID:
+DOA button/verbaige
 
--IREDELL Button? "Awaiting CHS Repair
+BER button/verbaige
 
-ber ending verbiage
+Dropdown fillable textbox for misc issue
+
+New battery verbaige
+
+Bold-text the () in NADP verbaige for easy reading
+
+Condense the webpage
+
+
+
+
+Repair Generator:
+
+BER ending verbaige
+
+Battery repair and battery OOW verbaige modifier shouldn't be possible.
+
+
+
+Cannot Verify: Require Dell BIOS photo
