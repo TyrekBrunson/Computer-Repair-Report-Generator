@@ -1254,6 +1254,7 @@
         const allSelectedParts = selectedIssues.map(i => i.part.toUpperCase());
         const hasMotherboard   = allSelectedParts.includes('MOTHERBOARD');
         const hasLcd           = allSelectedParts.includes('LCD SCREEN');
+        const hasLcdCable       = allSelectedParts.includes('LCD CABLE');
         const hasNonAdpKeyboard = selectedIssues.some(i => i.part.toUpperCase() === 'KEYBOARD' && i.type === 'NON-ADP');
         const hasNonAdpPalmrest = selectedIssues.some(i => i.part.toUpperCase() === 'PALMREST' && i.type === 'NON-ADP');
         const cannotVerifyCheckedForPhotos = document.getElementById('cannot-verify-checkbox').checked;
@@ -1263,7 +1264,7 @@
         if (hasMotherboard) {
             photoLines.push('  • Motherboard Part Number');
         }
-        if (hasLcd) {
+        if (hasLcd || hasLcdCable || (hasLcd && hasLcdCable)) {
             photoLines.push('  • LCD Screen (before & after)');
         }
         if (hasNonAdpKeyboard || hasNonAdpPalmrest) {
