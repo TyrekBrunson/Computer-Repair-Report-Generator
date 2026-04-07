@@ -1,0 +1,442 @@
+/* Base Styling */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7f9;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: relative; /* For absolute positioning of hamburger menu */
+        }
+
+        h1 {
+            color: #0056b3;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        /* Hamburger Menu Styling */
+        .hamburger-menu {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .hamburger-icon {
+            width: 30px;
+            height: 25px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .hamburger-icon span {
+            display: block;
+            height: 3px;
+            width: 100%;
+            background-color: #0056b3;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-dropdown {
+            display: none;
+            position: absolute;
+            top: 35px;
+            right: 0;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            min-width: 250px;
+            z-index: 1000;
+        }
+
+        .menu-dropdown.show {
+            display: block;
+        }
+
+        .menu-item {
+            padding: 12px 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .menu-item label {
+            cursor: pointer;
+            user-select: none;
+            flex-grow: 1;
+        }
+
+        .menu-item input[type="checkbox"] {
+            cursor: pointer;
+        }
+        #repair-link {
+            color: rgb(255, 255, 255);
+            text-decoration: none;
+            border: 1px solid #07850f;
+            background-color: #0c922b;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        /* Input and Report Sections */
+        .input-section {
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background-color: #fafafa;
+        }
+
+        h2 {
+            color: #333;
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* Custom Description Input */
+        #unit-description {
+            width: 100%;
+            min-height: 80px;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            resize: vertical;
+        }
+
+        #unit-description.no-issue {
+            color: #dc3545; /* Red text for "No Issue Given." */
+        }
+        
+        /* New Checkbox Styling for Contract/Verify */
+        .contract-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px; /* Space between the two primary checkboxes */
+            margin-bottom: 15px;
+        }
+        
+        .richland-option, .initial-comment-option, .verify-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        
+        .richland-option {
+            border: 1px solid #b3d4fc;
+            background-color: #e6f0ff;
+        }
+        
+        /* --- NEW INITIAL COMMENT STYLING --- */
+        .initial-comment-option {
+            border: 1px solid #c3e6cb; /* Light Green Border */
+            background-color: #e2f7e4; /* Very Light Green Background */
+        }
+
+        .initial-comment-option label {
+            font-weight: bold;
+            color: #155724; /* Darker Green Text */
+        }
+        
+        #initial-comment-description-container {
+            margin-top: 10px;
+            padding: 10px;
+            border-left: 3px solid #155724; /* Green border */
+            background-color: #f0fff2;
+        }
+
+        #initial-comment-description {
+            width: 100%;
+            min-height: 50px;
+            padding: 8px;
+            border: 1px solid #155724;
+            border-radius: 4px;
+            box-sizing: border-box;
+            resize: vertical;
+            margin-top: 5px;
+        }
+        /* --- END NEW INITIAL COMMENT STYLING --- */
+
+        .verify-option {
+            border: 1px solid #ffccb3;
+            background-color: #fff0e6;
+        }
+        
+        .richland-option label {
+            font-weight: bold;
+            color: #0056b3;
+        }
+
+        .verify-option label {
+            font-weight: bold;
+            color: #cc6600;
+        }
+
+        #cannot-verify-description-container {
+            margin-top: 10px;
+            padding: 10px;
+            border-left: 3px solid #cc6600;
+            background-color: #fff8f5;
+        }
+
+        #cannot-verify-description {
+            width: 100%;
+            min-height: 50px;
+            padding: 8px;
+            border: 1px solid #cc6600;
+            border-radius: 4px;
+            box-sizing: border-box;
+            resize: vertical;
+            margin-top: 5px;
+        }
+
+
+        /* Dropdown/Checkbox Styling */
+        .category-group {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+        }
+
+        .issue-dropdown {
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .issue-dropdown summary {
+            padding: 10px;
+            font-weight: bold;
+            background-color: #e9ecef;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .issue-list {
+            padding: 10px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .issue-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 5px;
+        }
+
+        .issue-item label {
+            flex-grow: 1; 
+            padding-left: 8px;
+            cursor: pointer;
+            line-height: 1.4;
+        }
+        
+        .issue-item input[type="checkbox"] {
+            margin-top: 3px;
+        }
+
+        /* Button Styling */
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .button-group button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s;
+            min-width: 150px; /* Ensures all buttons have the same minimum width */
+        }
+        
+        #generate-button {
+            background-color: #28a745;
+            color: white;
+        }
+        
+        #generate-button:hover {
+            background-color: #218838;
+        }
+
+        #clear-button {
+            background-color: #dc3545;
+            color: white;
+        }
+        
+        #clear-button:hover {
+            background-color: #c82333;
+        }
+
+        #copy-button, #copy-onhold-button {
+            background-color: #0056b3;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s;
+            min-width: 150px;
+            width: 150px; /* Fixed width to match other buttons */
+            margin-top: 10px;
+            display: inline-block;
+        }
+
+        #copy-button:hover, #copy-onhold-button:hover {
+            background-color: #003d82;
+        }
+
+        /* Numbered List Styling */
+        .issue-order {
+            display: inline-block;
+            width: 20px;
+            text-align: center;
+            background-color: #0056b3;
+            color: white;
+            border-radius: 50%;
+            font-size: 0.75em;
+            margin-right: 5px;
+            line-height: 20px;
+            height: 20px;
+            visibility: hidden;
+            flex-shrink: 0;
+        }
+        
+        .issue-item input[type="checkbox"]:checked + .issue-order {
+            visibility: visible;
+        }
+
+        /* --- Report Output Formatting --- */
+        #report-output {
+            background-color: #fff;
+            padding: 15px;
+            border: 1px solid #0056b3;
+            border-radius: 4px;
+            font-size: 1.0em;
+            min-height: 150px;
+            line-height: 1.4;
+            font-family: Arial, sans-serif; 
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            margin-bottom: 20px; 
+        }
+
+        /* Removed the no-issue-text class - we'll handle this with inline styling in JavaScript */
+
+        /* --- Status Section Formatting --- */
+        .status-section {
+            margin-top: 20px;
+        }
+        
+        #on-hold-output {
+            background-color: #fff;
+            padding: 15px;
+            border: 1px solid #ffa500; 
+            border-radius: 4px;
+            font-size: 1.0em;
+            min-height: 50px;
+            line-height: 1.4;
+            font-family: Arial, sans-serif;
+            white-space: pre-wrap; /* Crucial for preserving the newline character */
+            word-wrap: break-word;
+            color: #cc6600; 
+            font-weight: bold;
+        }
+        
+        /* --- REQUIRED PHOTOS Formatting --- */
+        #required-photos-output {
+            background-color: #fff;
+            padding: 15px;
+            border: 1px solid #0056b3;
+            border-radius: 4px;
+            font-size: 1.0em;
+            min-height: 50px;
+            line-height: 1.4;
+            font-family: Arial, sans-serif;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            color: #218838;
+            font-weight: bold;
+        }
+               /* Level 1: Device parent (Chromebook / Latitude) */
+        .device-group {
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .device-group > summary {
+            padding: 10px 14px;
+            font-weight: bold;
+            font-size: 1em;
+            background-color: #0056b3;
+            color: #fff;
+            cursor: pointer;
+            list-style: none;
+            user-select: none;
+            outline: none;
+            border-radius: 3px;
+        }
+        .device-group > summary::-webkit-details-marker { display: none; }
+        .device-group[open] > summary { border-radius: 3px 3px 0 0; }
+
+        /* Level 2: ADP / NON-ADP — uses same grey as existing .issue-dropdown summary,
+           with a subtle left-border accent so the hierarchy is clear */
+        .contract-group {
+            margin: 10px 10px 6px 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .contract-group > summary {
+            padding: 10px;
+            font-weight: bold;
+            background-color: #e9ecef;
+            cursor: pointer;
+            list-style: none;
+            user-select: none;
+            outline: none;
+        }
+        .contract-group > summary::-webkit-details-marker { display: none; }
+
+        .contract-group.adp-group > summary {
+            border-left: 4px solid #cc6600;
+            color: #cc6600;
+        }
+        .contract-group.non-adp-group > summary {
+            border-left: 4px solid #0056b3;
+            color: #0056b3;
+        }
+
+        /* Level 3 inner padding — .issue-dropdown itself untouched from diag-styles.css */
+        .contract-group-inner-pad {
+            padding: 8px 10px 10px 10px;
+        }
+        .contract-group-inner-pad .issue-dropdown {
+            margin-bottom: 8px;
+        }
