@@ -385,26 +385,21 @@
             color: #218838;
             font-weight: bold;
         }
-               /* Level 1: Device parent (Chromebook / Latitude) */
+  /* Level 1: Device header — always visible, not clickable */
         .device-group {
             margin-bottom: 20px;
             border: 1px solid #ddd;
             border-radius: 4px;
         }
-        .device-group > summary {
+        .device-group-label {
             padding: 10px 14px;
             font-weight: bold;
             font-size: 1em;
             background-color: #0056b3;
             color: #fff;
-            cursor: pointer;
-            list-style: none;
+            border-radius: 3px 3px 0 0;
             user-select: none;
-            outline: none;
-            border-radius: 3px;
         }
-        .device-group > summary::-webkit-details-marker { display: none; }
-        .device-group[open] > summary { border-radius: 3px 3px 0 0; }
 
         /* Level 2: ADP / NON-ADP — uses same grey as existing .issue-dropdown summary,
            with a subtle left-border accent so the hierarchy is clear */
