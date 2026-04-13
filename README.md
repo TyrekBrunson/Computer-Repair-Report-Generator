@@ -10,12 +10,6 @@ Dropdown fillable textbox for misc issue
 
 New battery verbaige
 
-Bold-text the () in NADP verbaige for easy reading
-
-Condense the webpage
-
-
-
 
 Repair Generator:
 
