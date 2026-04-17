@@ -3,3 +3,7 @@ This branch is to attempt to make a customizable repairs completed generator.
 index.html has been renamed to diagnostic_generator to better separate the future pages
 
 The end vision is to have one website, with links to both the diagnostic and repair generators, with room for expansion such as an Iredell specific generator
+
+
+Edits to make:
+Change the text to where only "(2-in-1)" is in bold

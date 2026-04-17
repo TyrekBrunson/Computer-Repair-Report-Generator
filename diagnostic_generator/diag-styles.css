@@ -395,8 +395,8 @@
             padding: 10px 14px;
             font-weight: bold;
             font-size: 1em;
-            background-color: #0056b3;
-            color: #fff;
+            background-color: #e6f0ff;
+            color: #0056b3;
             border-radius: 3px 3px 0 0;
             user-select: none;
         }
@@ -420,12 +420,12 @@
         .contract-group > summary::-webkit-details-marker { display: none; }
 
         .contract-group.adp-group > summary {
-            border-left: 4px solid #cc6600;
-            color: #cc6600;
-        }
-        .contract-group.non-adp-group > summary {
             border-left: 4px solid #0056b3;
             color: #0056b3;
+        }
+        .contract-group.non-adp-group > summary {
+            border-left: 4px solid #cc6600;
+            color: #cc6600;
         }
 
         /* Level 3 inner padding — .issue-dropdown itself untouched from diag-styles.css */
