@@ -507,6 +507,9 @@
             'MOTHERBOARD HAS DAMAGED USB PORT, VISIBLE DAMAGE PRESENT.',
             'MOTHERBOARD HAS VISIBLE BURN MARKS, VISIBLE DAMAGE PRESENT.'
         ],
+		'EDP CABLE (Physical Damage)': [
+			'EDP CABLE DAMAGED OR FRAYED.'
+		],
         'LCD SCREEN (Chromebook)': [
             'LCD SCREEN CRACKED IN MULTIPLE PLACES.',
             'LCD SCREEN DAMAGED IN MULTIPLE PLACES.',
@@ -892,6 +895,12 @@
                 issueValue.includes('DAMAGED USB PORT') ||
                 issueValue.includes('VISIBLE SCRATCHES')) {
                 return 'MOTHERBOARD';
+			}
+			
+            // Check for EDP physical damage section explicitly
+            if (issueValue.startsWith('EDP CABLE DAMAGED') || 
+                issueValue.includes('OR FRAYED')) {
+                return 'EDP CABLE';
             }
 
             // Simplified part matching for other ADP issues
