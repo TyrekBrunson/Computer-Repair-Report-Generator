@@ -213,6 +213,24 @@
             resize: vertical;
             margin-top: 5px;
         }
+        #miscellaneous-description-container {
+            margin-top: 10px;
+            padding: 10px;
+            border-left: 3px solid #cc6600;
+            background-color: #fff8f5;
+        }
+
+        #miscellaneous-description {
+            width: 100%;
+            min-height: 50px;
+            padding: 8px;
+            border: 1px solid #cc6600;
+            border-radius: 4px;
+            box-sizing: border-box;
+            resize: vertical;
+            margin-top: 5px;
+        }
+     
 
 
         /* Dropdown/Checkbox Styling */
