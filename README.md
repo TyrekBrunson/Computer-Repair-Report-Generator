@@ -1,6 +1,7 @@
 FEATURES TO IMPLEMENT
 
 Diag Generator:
+remove physical damage tab in chromebook
 
 DOA button/verbaige
 
@@ -20,3 +21,9 @@ Battery repair and battery OOW verbaige modifier shouldn't be possible.
 
 
 Cannot Verify: Require Dell BIOS photo
+
+
+BUGS
+
+Change the front () to [], to remove unintentional bolding in verbaige
+i.e (BROKEN LOCKING TABS) -> [BROKEN LOCKING TABS]
