@@ -18,7 +18,7 @@ BER ending verbaige
 
 Battery repair and battery OOW verbaige modifier shouldn't be possible.
 
-
+add battery cable verbaige to nadp latitude
 
 Cannot Verify: Require Dell BIOS photo
 
