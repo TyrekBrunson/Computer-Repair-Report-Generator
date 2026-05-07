@@ -27,3 +27,5 @@ BUGS
 
 Change the front () to [], to remove unintentional bolding in verbaige
 i.e (BROKEN LOCKING TABS) -> [BROKEN LOCKING TABS]
+
+BUGS Bottom cover latitude 2/1 returning PART - diag
