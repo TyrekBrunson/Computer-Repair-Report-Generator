@@ -145,6 +145,20 @@
             font-weight: bold;
             margin-top: 20px;
         }
+        #on-hold-status-output {
+            background-color: #fff;
+            padding: 15px;
+            border: 1px solid #0056b3;
+            border-radius: 4px;
+            font-size: 1.0em;
+            min-height: 50px;
+            line-height: 1.4;
+            font-family: Arial, sans-serif;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            color: #218838;
+            font-weight: bold;
+        }
         #required-photos-output {
             background-color: #fff;
             padding: 15px;
@@ -412,6 +426,16 @@
             <button onclick="copyText()" id="copy-button">COPY TEXT</button>
         </div>
         <div id="repairs-completed-output"></div>
+    </div>
+
+    <div class="on-hold-status">
+        <h2>On Hold Status</h2>
+        <div id="on-hold-status-output">AWAITING QA.</div>
+        <button onclick="copyOnHoldStatus()" id="copy-on-hold-button" 
+            style="margin-top:10px; padding:10px 20px; background-color:#0056b3; color:white; 
+                border:none; border-radius:4px; cursor:pointer; font-size:1em; min-width:150px;">
+            COPY TEXT
+        </button>
     </div>
 
     <div class="required-photos-section">
@@ -797,6 +821,26 @@
 
         navigator.clipboard.writeText(repairsText).then(() => {
             const btn = document.getElementById('copy-button');
+            const original = btn.textContent;
+            btn.textContent = '✓ COPIED!';
+            btn.style.backgroundColor = '#28a745';
+            setTimeout(() => {
+                btn.textContent = original;
+                btn.style.backgroundColor = '#0056b3';
+            }, 2000);
+        }).catch(() => {
+            alert('Copy failed. Please select and copy the text manually.');
+        });
+    }
+
+    function copyOnHoldStatus() {
+        const text = document.getElementById('on-hold-status-output').textContent;
+        if (!text.trim()) {
+            alert('Nothing to copy.');
+            return;
+        }
+        navigator.clipboard.writeText(text).then(() => {
+            const btn = document.getElementById('copy-on-hold-button');
             const original = btn.textContent;
             btn.textContent = '✓ COPIED!';
             btn.style.backgroundColor = '#28a745';
