@@ -672,7 +672,11 @@
                 const rl = reseatedItem || 'COMPONENTS';
                 reportText = `REPAIRS COMPLETED: RESEATED ${rl}. REPLACED ${partsList}. NEEDS OPERATING SYSTEM INSTALLED. OTHER THAN NEEDING OS, THE UNIT IS FULLY FUNCTIONAL.`.trim();
 
-            } else {
+            } else if (batteryOow && allParts.getElementById('battery-checkbox').checked) {
+                alert('Verbiage Modifier Combination not possible!');
+                return;
+            }
+             else {
                 alert('Verbiage Modifier Combination not possible!');
                 return;
             }
@@ -769,6 +773,7 @@
         // Only if Cannot Verify is checked
         if (cannotVerifyForPhotos) {
             photoLines.push('• Cannot Verify Initial Issue (proof)');
+            photoLines.push('• BIOS');
         }
 
         // Only if Battery OOW is checked

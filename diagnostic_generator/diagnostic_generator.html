@@ -47,6 +47,14 @@
                 <input type="checkbox" id="cannot-verify-checkbox">
                 <label for="cannot-verify-checkbox">Could Not Verify Initial Issue</label>
             </div>
+            <div class="ber-option">
+                <input type="checkbox" id="ber-checkbox">
+                <label for="ber-checkbox">BER Unit</label>
+            </div>
+            <div class="doa-option">
+                <input type="checkbox" id="doa-checkbox">
+                <label for="doa-checkbox">DOA Part</label>
+            </div>
         </div>
         
         <div id="initial-comment-description-container" style="display:none;">
@@ -68,14 +76,12 @@
         <!-- Miscellaneous always standalone -->
         <div class="category-group">
             <h3>Miscellaneous Issues</h3>
-            <div class="issue-item">
-                <input type="checkbox" id="misc-1" data-issue-type="MISCELLANEOUS" value="MISCELLANEOUS ISSUE" class="issue-checkbox">
-                <span class="issue-order"></span>
-                <label for="misc-1">MISCELLANEOUS ISSUE</label>
+            <div>
+                <input type="checkbox" id="miscellaneous-checkbox">
+                <label for="miscellaneous-checkbox">MISCELLANEOUS PART - PLEASE DESCRIBE IN NOTES</label>
             </div>
             <div id="miscellaneous-description-container" style="display:none;">
-                <label for="miscellaneous-description">Miscellaneous Issue Description:</label>
-                <textarea id="miscellaneous-description" placeholder="e.g., TOUCHPAD CUT IN HALF."></textarea>
+                <textarea id="miscellaneous-comment-area" placeholder="Enter miscellaneous part here."></textarea>
             </div>
         </div>
     </div>
@@ -113,15 +119,6 @@
     const ISSUE_DATA = {
         'Chromebook': {
             ADP: {
-                'MOBO (Physical Damage)': [
-                    'MOTHERBOARD SNAPPED IN HALF, VISIBLE DAMAGE PRESENT.',
-                    'MOTHERBOARD HAS DAMAGED AUDIO PORT, VISIBLE DAMAGE PRESENT.',
-                    'MOTHERBOARD HAS VISIBLE SCRATCHES, VISIBLE DAMAGE PRESENT.',
-                    'MOTHERBOARD HAS MISSING COMPONENTS, VISIBLE DAMAGE PRESENT.',
-                    'MOTHERBOARD HAS DAMAGED USB-C PORT, VISIBLE DAMAGE PRESENT.',
-                    'MOTHERBOARD HAS DAMAGED USB PORT, VISIBLE DAMAGE PRESENT.',
-                    'MOTHERBOARD HAS VISIBLE BURN MARKS, VISIBLE DAMAGE PRESENT.'
-                ],
                 'LCD SCREEN': [
                     'LCD SCREEN CRACKED IN MULTIPLE PLACES.',
                     'LCD SCREEN CRACKED ON THE RIGHT SIDE.',

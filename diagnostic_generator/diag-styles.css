@@ -195,6 +195,28 @@
             font-weight: bold;
             color: #cc6600;
         }
+        .ber-option {
+            border: 1px solid #F5AB56;
+            background-color: #fad6ad;
+            color:#CD730C;
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .doa-option {
+            border: 1px solid #ebb4ba;
+            background-color: #f0bcc2;
+            color:#c72525;
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
         #cannot-verify-description-container {
             margin-top: 10px;
@@ -214,21 +236,19 @@
             margin-top: 5px;
         }
         #miscellaneous-description-container {
-            margin-top: 10px;
-            padding: 10px;
-            border-left: 3px solid #cc6600;
-            background-color: #fff8f5;
-        }
-
-        #miscellaneous-description {
             width: 100%;
-            min-height: 50px;
+            margin-top: 8px;
+        }
+        #miscellaneous-comment-area {
+            width: 100%;
+            min-height: 60px;
             padding: 8px;
-            border: 1px solid #cc6600;
-            border-radius: 4px;
-            box-sizing: border-box;
+            border: 1px solid #fcd34d;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 0.9em;
             resize: vertical;
-            margin-top: 5px;
+            box-sizing: border-box;
         }
 
 
