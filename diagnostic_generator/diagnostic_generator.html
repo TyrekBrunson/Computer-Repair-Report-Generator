@@ -289,7 +289,8 @@
                     'LCD SCREEN IS INTERNALLY CRACKED / DAMAGED PIXELS.',
                     'LCD SCREEN PHYSICALLY DAMAGED DUE TO DELAMINATION OF LCD FILM.',
                     '(2-IN-1): LCD SCREEN DAMAGED INTERNALLY AT CLIPS SECURING TO DEVICE TOP COVER.',
-                    '(2-IN-1): LCD SCREEN BEZEL CHIPPED AT BOTTOM LEFT / BOTTOM RIGHT CORNER.',
+                    '(2-IN-1): LCD SCREEN BEZEL CHIPPED AT BOTTOM LEFT',
+                    '(2-IN-1): LCD SCREEN BEZEL CHIPPED AT BOTTOM RIGHT CORNER.',
                     '(2-IN-1): LCD SCREEN DAMAGED AT CLIPS SECURING DEVICE LCD SCREEN TO INTEGRATED BEZEL.'
                 ],
                 'BEZEL': [
@@ -324,7 +325,7 @@
                     'TOP COVER DAMAGED INTERNALLY AT BOTH HINGES (BROKEN/LOOSE GROMMETS).',
                     'TOP COVER DAMAGED INTERNALLY AT RIGHT HINGE (BROKEN/LOOSE GROMMETS).',
                     'TOP COVER DAMAGED INTERNALLY AT LEFT HINGE (BROKEN/LOOSE GROMMETS).',
-                    '(2-IN-1): TOP COVER DAMAGED AT LOCKING TABS SECURING TO DEVICE LCD SCREEN.',
+                    '(2-IN-1):TOP COVER DAMAGED AT LOCKING TABS SECURING TO DEVICE LCD SCREEN.',
                 ],
                 'PALMREST': [
                     'PALMREST DAMAGED AT CLIPS SECURING TO DEVICE BOTTOM COVER.',
@@ -353,7 +354,7 @@
                     'BOTTOM COVER CHIPPED/CRACKED EXTERNALLY AT HDMI PORT.',
                     'BOTTOM COVER CHIPPED/CRACKED EXTERNALLY AT USB-C PORT.',
                     'BOTTOM COVER CHIPPED/CRACKED EXTERNALLY AT USB-A PORT.',
-                    '(2-IN-1): BOTTOM COVER MISSING SCREW PORT.'
+                    'BOTTOM COVER MISSING SCREW PORT.'
                 ],
                 'HINGES (Latitude)': [
                     'LEFT HINGE DAMAGED OR SNAPPED IN HALF.',
@@ -447,50 +448,51 @@
     // =========================================================
     // PART NAME EXTRACTION
     // =========================================================
-    function extractPartName(issueValue, issueType, categoryKey) {
-        if (issueType === 'MISCELLANEOUS') return 'MISCELLANEOUS PART';
+   function extractPartName(issueValue, issueType, categoryKey) {
+    if (issueType === 'MISCELLANEOUS') return 'MISCELLANEOUS PART';
 
-        if (issueType === 'ADP') {
-            if (issueValue.startsWith('MOTHERBOARD')) return 'MOTHERBOARD';
-            const first = issueValue.split(' ')[0];
-            if (first === 'LCD') return 'LCD SCREEN';
-            if (first === 'BEZEL') return 'BEZEL';
-            if (first === 'TOP') return 'TOP COVER';
-            if (first === 'PALMREST') return 'PALMREST';
-            if (first === 'BOTTOM') return 'BOTTOM COVER';
-            if (first === 'KEYBOARD') return 'KEYBOARD';
-            if (issueValue.startsWith('LEFT HINGE')) return 'LEFT HINGE';
-            if (issueValue.startsWith('RIGHT HINGE')) return 'RIGHT HINGE';
-            if (issueValue.startsWith('BOTH HINGES')) return 'LEFT HINGE AND RIGHT HINGE';
-            if (issueValue.startsWith('DC-IN')) return 'DC-IN PORT';
-            return 'PART';
-        }
-
-        if (issueType === 'NON-ADP') {
-            if (!categoryKey) return 'NON-ADP PART';
-            const k = categoryKey.toUpperCase();
-            if (k.includes('MOBO') || k.includes('MOTHERBOARD')) return 'MOTHERBOARD';
-            if (k.includes('LCD SCREEN')) return 'LCD SCREEN';
-            if (k.includes('DABO') || k.includes('DAUGHTERBOARD')) return 'DAUGHTERBOARD';
-            if (k.includes('EDP CABLE') || k.includes('LCD CABLE')) return 'LCD CABLE';
-            if (k.includes('KEYBOARD')) return 'KEYBOARD';
-            if (k.includes('WEBCAM')) return 'WEBCAM';
-            if (k.includes('PALMREST')) return 'PALMREST';
-            if (k.includes('BATTERY CABLE') || k.includes('BATT CABLE')) return 'BATTERY CABLE';
-            if (k.includes('BATTERY')) return 'BATTERY';
-            if (k.includes('RAM')) return 'RAM';
-            if (k.includes('DC-IN PORT')) return 'DC-IN PORT';
-            if (k.includes('TOP COVER')) return 'TOP COVER';
-            if (k.includes('AUDIO BOARD')) return 'AUDIO BOARD';
-            if (k.includes('SSD') || k.includes('HDD')) return 'SSD';
-            if (k.includes('CPU FAN')) return 'CPU FAN';
-            if (k.includes('SPEAKERS')) return 'SPEAKERS';
-            if (k.includes('WIFI CARD')) return 'WIFI CARD';
-            return 'PART';
-        }
-
+    if (issueType === 'ADP') {
+        const stripped = issueValue.replace(/^\([^)]+\):\s*/, '');
+        if (stripped.startsWith('MOTHERBOARD')) return 'MOTHERBOARD';
+        const first = stripped.split(' ')[0];
+        if (first === 'LCD') return 'LCD SCREEN';
+        if (first === 'BEZEL') return 'BEZEL';
+        if (first === 'TOP') return 'TOP COVER';
+        if (first === 'PALMREST') return 'PALMREST';
+        if (first === 'BOTTOM') return 'BOTTOM COVER';
+        if (first === 'KEYBOARD') return 'KEYBOARD';
+        if (stripped.startsWith('LEFT HINGE')) return 'LEFT HINGE';
+        if (stripped.startsWith('RIGHT HINGE')) return 'RIGHT HINGE';
+        if (stripped.startsWith('BOTH HINGES')) return 'LEFT HINGE AND RIGHT HINGE';
+        if (stripped.startsWith('DC-IN')) return 'DC-IN PORT';
         return 'PART';
     }
+
+    if (issueType === 'NON-ADP') {
+        if (!categoryKey) return 'NON-ADP PART';
+        const k = categoryKey.toUpperCase();
+        if (k.includes('MOBO') || k.includes('MOTHERBOARD')) return 'MOTHERBOARD';
+        if (k.includes('LCD SCREEN')) return 'LCD SCREEN';
+        if (k.includes('DABO') || k.includes('DAUGHTERBOARD')) return 'DAUGHTERBOARD';
+        if (k.includes('EDP CABLE') || k.includes('LCD CABLE')) return 'LCD CABLE';
+        if (k.includes('KEYBOARD')) return 'KEYBOARD';
+        if (k.includes('WEBCAM')) return 'WEBCAM';
+        if (k.includes('PALMREST')) return 'PALMREST';
+        if (k.includes('BATTERY CABLE') || k.includes('BATT CABLE')) return 'BATTERY CABLE';
+        if (k.includes('BATTERY')) return 'BATTERY';
+        if (k.includes('RAM')) return 'RAM';
+        if (k.includes('DC-IN PORT')) return 'DC-IN PORT';
+        if (k.includes('TOP COVER')) return 'TOP COVER';
+        if (k.includes('AUDIO BOARD')) return 'AUDIO BOARD';
+        if (k.includes('SSD') || k.includes('HDD')) return 'SSD';
+        if (k.includes('CPU FAN')) return 'CPU FAN';
+        if (k.includes('SPEAKERS')) return 'SPEAKERS';
+        if (k.includes('WIFI CARD')) return 'WIFI CARD';
+        return 'PART';
+    }
+
+    return 'PART';
+}
 
     // =========================================================
     // CHECKBOX EVENT HANDLER
@@ -711,7 +713,7 @@
                     reportSections.push('//' + nonAdpBlock.join('. // ') + './/');
                     nonAdpBlock = [];
                 }
-                reportSections.push(issue.value);
+               reportSections.push(issue.value.replace(/^\([^)]+\):\s*/, ''));
             }
         });
         if (nonAdpBlock.length > 0) reportSections.push('//' + nonAdpBlock.join('. // ') + './/');
