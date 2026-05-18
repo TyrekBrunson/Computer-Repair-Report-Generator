@@ -642,6 +642,8 @@
         document.getElementById('initial-comment-checkbox').checked = false;
         document.getElementById('initial-comment-description').value = '';
         document.getElementById('initial-comment-description-container').style.display = 'none';
+        document.getElementById('ber-checkbox').checked = false;
+        document.getElementById('doa-checkbox').checked = false;
         document.getElementById('report-output').textContent = '';
         document.getElementById('on-hold-output').textContent = '';
         document.getElementById('required-photos-output').textContent = '';
@@ -665,12 +667,61 @@
 
     function generateReport() {
         const customDescription = document.getElementById('unit-description').value.trim();
+        const hasNoInitialIssue = !customDescription;
+        const reportOutput = document.getElementById('report-output');
+        const berChecked = document.getElementById('ber-checkbox').checked;
+        const doaChecked = document.getElementById('doa-checkbox').checked;
+
+        // =========================================================
+        // BER PATH — overrides everything; no issue selections needed
+        // =========================================================
+        if (berChecked) {
+            if (hasNoInitialIssue) alert('Please make sure to add an initial issue description!');
+            const berLine1 = `UNIT PRESENTED WITH DESCRIPTION OF: ${customDescription || 'No Issue Given.'}`;
+            const berLine2 = `UPON ARRIVAL: VERIFIED INITIAL ISSUE: LCD SCREEN CRACKED IN MULTIPLE PLACES.`;
+            const berLine3 = `PARTS ORDERED: NONE / AUTOMATIC BER.`;
+            const berLine4 = `REPAIRS COMPLETED: NONE.`;
+            const berText = [berLine1, berLine2, berLine3, berLine4].join('\n');
+            if (hasNoInitialIssue) {
+                reportOutput.innerHTML = berText
+                    .replace('No Issue Given.', '<span style="color: #dc3545;">No Issue Given.</span>')
+                    .replace(/\n/g, '<br>');
+            } else {
+                reportOutput.textContent = berText;
+            }
+            document.getElementById('on-hold-output').textContent = '';
+            document.getElementById('required-photos-output').textContent = '';
+            return;
+        }
+
+        // =========================================================
+        // DOA PATH — requires at least one NON-ADP issue selected
+        // =========================================================
+        if (doaChecked) {
+            const nonAdpIssues = selectedIssues.filter(i => i.type === 'NON-ADP');
+            if (nonAdpIssues.length === 0) {
+                alert('Please select at least one NON-ADP issue to use DOA.');
+                return;
+            }
+            const doaBlocks = nonAdpIssues.map(issue => {
+                const partName = issue.part;
+                const verbiage = cleanIssueDescription(issue.value);
+                return `THE ${partName} IS DEAD ON ARRIVAL WHEN INSTALLED. ${verbiage}.`;
+            });
+            reportOutput.textContent = doaBlocks.join('\n') + '\nPPID:';
+            document.getElementById('on-hold-output').textContent = '';
+            document.getElementById('required-photos-output').textContent = '';
+            return;
+        }
+
+        // =========================================================
+        // NORMAL PATH
+        // =========================================================
         const isRichlandWorth = document.getElementById('richland-worth-checkbox').checked;
         const cannotVerifyChecked = document.getElementById('cannot-verify-checkbox').checked;
         const cannotVerifyDescription = document.getElementById('cannot-verify-description').value.trim();
         const initialCommentChecked = document.getElementById('initial-comment-checkbox').checked;
         const initialCommentDescription = document.getElementById('initial-comment-description').value.trim();
-        const hasNoInitialIssue = !customDescription;
 
         if (hasNoInitialIssue) alert('Please make sure to add an initial issue description!');
 
@@ -733,7 +784,6 @@
         const line3 = `PARTS ORDERED: ${partsListText.toUpperCase()}.`;
         const reportText = [line1, line2, line3].join('\n');
 
-        const reportOutput = document.getElementById('report-output');
         if (hasNoInitialIssue) {
             reportOutput.innerHTML = reportText.replace('No Issue Given.', '<span style="color: #dc3545;">No Issue Given.</span>').replace(/\n/g, '<br>');
         } else {
