@@ -644,6 +644,9 @@
         document.getElementById('initial-comment-description-container').style.display = 'none';
         document.getElementById('ber-checkbox').checked = false;
         document.getElementById('doa-checkbox').checked = false;
+        document.getElementById('miscellaneous-checkbox').checked = false;
+        document.getElementById('miscellaneous-comment-area').value = '';
+        document.getElementById('miscellaneous-description-container').style.display = 'none';
         document.getElementById('report-output').textContent = '';
         document.getElementById('on-hold-output').textContent = '';
         document.getElementById('required-photos-output').textContent = '';
@@ -678,7 +681,13 @@
         if (berChecked) {
             if (hasNoInitialIssue) alert('Please make sure to add an initial issue description!');
             const berLine1 = `UNIT PRESENTED WITH DESCRIPTION OF: ${customDescription || 'No Issue Given.'}`;
-            const berLine2 = `UPON ARRIVAL: VERIFIED INITIAL ISSUE: LCD SCREEN CRACKED IN MULTIPLE PLACES.`;
+            const berNonAdpIssues = selectedIssues.filter(i => i.type === 'NON-ADP');
+            let berNonAdpVerbiage = '';
+            if (berNonAdpIssues.length > 0) {
+                const cleaned = berNonAdpIssues.map(i => cleanIssueDescription(i.value));
+                berNonAdpVerbiage = ' //' + cleaned.join('. // ') + './/';
+            }
+            const berLine2 = `UPON ARRIVAL: VERIFIED INITIAL ISSUE: LCD SCREEN CRACKED IN MULTIPLE PLACES.${berNonAdpVerbiage}`;
             const berLine3 = `PARTS ORDERED: NONE / AUTOMATIC BER.`;
             const berLine4 = `REPAIRS COMPLETED: NONE.`;
             const berText = [berLine1, berLine2, berLine3, berLine4].join('\n');
@@ -873,7 +882,34 @@
     // =========================================================
     document.addEventListener('DOMContentLoaded', () => {
         buildDropdowns();
-        document.getElementById('miscellaneous-checkbox').addEventListener('change', handleIssueChange);
+
+        // Miscellaneous — show/hide textarea and keep selectedIssues in sync
+        const miscCheckbox  = document.getElementById('miscellaneous-checkbox');
+        const miscContainer = document.getElementById('miscellaneous-description-container');
+        const miscTextarea  = document.getElementById('miscellaneous-comment-area');
+
+        miscCheckbox.addEventListener('change', function () {
+            miscContainer.style.display = this.checked ? 'block' : 'none';
+            if (this.checked) {
+                miscTextarea.focus();
+                if (!selectedIssues.some(i => i.type === 'MISCELLANEOUS')) {
+                    selectedIssues.push({ value: 'MISCELLANEOUS PART', type: 'MISCELLANEOUS', part: 'MISCELLANEOUS PART' });
+                }
+            } else {
+                miscTextarea.value = '';
+                selectedIssues = selectedIssues.filter(i => i.type !== 'MISCELLANEOUS');
+            }
+        });
+
+        miscTextarea.addEventListener('input', function () {
+            const idx = selectedIssues.findIndex(i => i.type === 'MISCELLANEOUS');
+            if (idx !== -1) {
+                const val = this.value.trim().toUpperCase();
+                selectedIssues[idx].value = val || 'MISCELLANEOUS PART';
+                selectedIssues[idx].part  = val || 'MISCELLANEOUS PART';
+            }
+        });
+
         document.getElementById('cannot-verify-checkbox').addEventListener('change', toggleCannotVerifyDescription);
         document.getElementById('initial-comment-checkbox').addEventListener('change', toggleInitialCommentDescription);
         toggleCannotVerifyDescription();
