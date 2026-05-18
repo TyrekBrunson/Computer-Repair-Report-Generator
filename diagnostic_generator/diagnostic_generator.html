@@ -716,7 +716,7 @@
         if (nonAdpBlock.length > 0) reportSections.push('//' + nonAdpBlock.join('. // ') + './/');
 
         let finalBody = reportSections.join(' ').trim();
-        finalBody = finalBody.replace(/\s+\/\//g, '//').replace(/\/\/\s+/g, '//').replace(/\s*\.\/\//g, '. //').replace(/\. \./g, '.').replace(/\. \./g, '.');
+        finalBody = finalBody.replace(/\s+\/\//g, '//').replace(/\/\/\s+/g, '//').replace(/\s*\.\/\//g, '. //').replace(/\. \./g, '.');
 
         let line2 = line2Prefix + finalBody;
 
@@ -782,34 +782,30 @@
     function copytext() {
         const reportText = document.getElementById('report-output').innerText;
         if (!reportText) return;
-        const ta = document.createElement('textarea');
-        ta.value = reportText;
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
         const btn = document.getElementById('copy-button');
         const orig = btn.textContent;
-        btn.textContent = 'COPIED!';
-        btn.style.backgroundColor = '#28a745';
-        setTimeout(() => { btn.textContent = orig; btn.style.backgroundColor = ''; }, 2000);
+        navigator.clipboard.writeText(reportText).then(() => {
+            btn.textContent = '✓ COPIED!';
+            btn.style.backgroundColor = '#28a745';
+            setTimeout(() => { btn.textContent = orig; btn.style.backgroundColor = ''; }, 2000);
+        }).catch(() => {
+            alert('Copy failed. Please select and copy the text manually.');
+        });
     }
 
     function copyOnHoldText() {
         let holdText = document.getElementById('on-hold-output').innerText;
         if (!holdText) return;
         holdText = holdText.replace(/^ON HOLD – PENDING\n/, '').replace(/^Waiting Warranty Part from OEM\n/, '');
-        const ta = document.createElement('textarea');
-        ta.value = holdText;
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
         const btn = document.getElementById('copy-onhold-button');
         const orig = btn.textContent;
-        btn.textContent = 'COPIED!';
-        btn.style.backgroundColor = '#28a745';
-        setTimeout(() => { btn.textContent = orig; btn.style.backgroundColor = ''; }, 2000);
+        navigator.clipboard.writeText(holdText).then(() => {
+            btn.textContent = '✓ COPIED!';
+            btn.style.backgroundColor = '#28a745';
+            setTimeout(() => { btn.textContent = orig; btn.style.backgroundColor = ''; }, 2000);
+        }).catch(() => {
+            alert('Copy failed. Please select and copy the text manually.');
+        });
     }
 
     function toggleMenu() {
@@ -827,7 +823,7 @@
     // =========================================================
     document.addEventListener('DOMContentLoaded', () => {
         buildDropdowns();
-        document.getElementById('misc-1').addEventListener('change', handleIssueChange);
+        document.getElementById('miscellaneous-checkbox').addEventListener('change', handleIssueChange);
         document.getElementById('cannot-verify-checkbox').addEventListener('change', toggleCannotVerifyDescription);
         document.getElementById('initial-comment-checkbox').addEventListener('change', toggleInitialCommentDescription);
         toggleCannotVerifyDescription();

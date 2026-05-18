@@ -126,9 +126,6 @@
             resize: vertical;
         }
 
-        #unit-description.no-issue {
-            color: #dc3545; /* Red text for "No Issue Given." */
-        }
         
         /* New Checkbox Styling for Contract/Verify */
         .contract-options {
@@ -385,7 +382,7 @@
             margin-bottom: 20px; 
         }
 
-        /* Removed the no-issue-text class - we'll handle this with inline styling in JavaScript */
+
 
         /* --- Status Section Formatting --- */
         .status-section {

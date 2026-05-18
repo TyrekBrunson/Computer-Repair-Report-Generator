@@ -384,7 +384,7 @@
 
         <h3>Verbiage Modifiers</h3>
         <div class="repair-options">
-            <div class="verbaige-modifiers">
+            <div class="verbiage-modifiers">
                 <div>
                     <input type="checkbox" id="cannot-verify-checkbox">
                     <label for="cannot-verify-checkbox">Cannot Verify Initial Issue</label>
@@ -481,6 +481,7 @@
         { id: 'battery-oow-checkbox',         text: '' },
         { id: 'richland-imaging-checkbox',    text: '' },
         { id: 'union-needs-os-checkbox',      text: '' },
+        { id: 'reseated-replaced-checkbox',   text: '' },
     ];
 
     // --- Handle part checkbox change: push/remove and re-render badges ---
@@ -672,11 +673,7 @@
                 const rl = reseatedItem || 'COMPONENTS';
                 reportText = `REPAIRS COMPLETED: RESEATED ${rl}. REPLACED ${partsList}. NEEDS OPERATING SYSTEM INSTALLED. OTHER THAN NEEDING OS, THE UNIT IS FULLY FUNCTIONAL.`.trim();
 
-            } else if (batteryOow && allParts.getElementById('battery-checkbox').checked) {
-                alert('Verbiage Modifier Combination not possible!');
-                return;
-            }
-             else {
+            } else {
                 alert('Verbiage Modifier Combination not possible!');
                 return;
             }
