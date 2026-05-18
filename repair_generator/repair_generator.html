@@ -384,7 +384,7 @@
 
         <h3>Verbiage Modifiers</h3>
         <div class="repair-options">
-            <div class="verbiage-modifiers">
+            <div class="verbaige-modifiers">
                 <div>
                     <input type="checkbox" id="cannot-verify-checkbox">
                     <label for="cannot-verify-checkbox">Cannot Verify Initial Issue</label>
@@ -481,7 +481,6 @@
         { id: 'battery-oow-checkbox',         text: '' },
         { id: 'richland-imaging-checkbox',    text: '' },
         { id: 'union-needs-os-checkbox',      text: '' },
-        { id: 'reseated-replaced-checkbox',   text: '' },
     ];
 
     // --- Handle part checkbox change: push/remove and re-render badges ---
@@ -770,7 +769,6 @@
         // Only if Cannot Verify is checked
         if (cannotVerifyForPhotos) {
             photoLines.push('• Cannot Verify Initial Issue (proof)');
-            photoLines.push('• BIOS');
         }
 
         // Only if Battery OOW is checked
