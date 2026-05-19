@@ -368,7 +368,10 @@
                 'DC-IN (Latitude)': [
                     'DC-IN PORT FAILING TO RECOGNIZE AC ADAPTER AND CHARGE UNIT BATTERY.',
                     'DC-IN PORT PHYSICALLY DAMAGED AND NOT SECURING TO DEVICE PALMREST/BOTTOM COVER.'
-                ]
+                ],
+                'EDP CABLE (Physical Damage)': [
+			        'EDP CABLE DAMAGED OR FRAYED.'
+		        ]
             },
             NON_ADP: {
                 'LATITUDE MOBO': [
@@ -458,6 +461,7 @@
         if (first === 'PALMREST') return 'PALMREST';
         if (first === 'BOTTOM') return 'BOTTOM COVER';
         if (first === 'KEYBOARD') return 'KEYBOARD';
+        if (first === 'EDP') return 'EDP CABLE';
         if (stripped.startsWith('LEFT HINGE')) return 'LEFT HINGE';
         if (stripped.startsWith('RIGHT HINGE')) return 'RIGHT HINGE';
         if (stripped.startsWith('BOTH HINGES')) return 'LEFT HINGE AND RIGHT HINGE';
