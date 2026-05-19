@@ -54,15 +54,17 @@
             <div class="doa-option">
                 <input type="checkbox" id="doa-checkbox">
                 <label for="doa-checkbox">DOA Part</label>
-            </div>  
-            <div id="initial-comment-description-container" style="display:none;">
-                <label for="initial-comment-description">Initial Comment Description:</label>
-                <textarea id="initial-comment-description" placeholder="e.g., RESEATED CAMERA CABLE RESOLVING THE ISSUE."></textarea>
             </div>
-            <div class="intentional-option">
-                <input type="checkbox" id="intentional-checkbox">
-                <label for="intentional-checkbox">Intentional Damage</label>
-            </div>  
+        </div>
+        
+        <div id="initial-comment-description-container" style="display:none;">
+            <label for="initial-comment-description">Initial Comment Description:</label>
+            <textarea id="initial-comment-description" placeholder="e.g., RESEATED CAMERA CABLE RESOLVING THE ISSUE."></textarea>
+        </div>
+
+        <div id="cannot-verify-description-container" style="display:none;">
+            <label for="cannot-verify-description">Cannot Verify Issue Description:</label>
+            <textarea id="cannot-verify-description" placeholder="e.g., CURSOR DISPLAYED ON INITIAL DIAGNOSTICS AND CONTINUED FUNCTIONING THROUGH ADVANCED DIAGNOSTICS."></textarea>
         </div>
     </div>
 
@@ -442,55 +444,56 @@
             }
         }
     };
-// =========================================================
+
+    // =========================================================
     // PART NAME EXTRACTION
     // =========================================================
-    function extractPartName(issueValue, issueType, categoryKey) {
-        if (issueType === 'MISCELLANEOUS') return 'MISCELLANEOUS PART';
+   function extractPartName(issueValue, issueType, categoryKey) {
+    if (issueType === 'MISCELLANEOUS') return 'MISCELLANEOUS PART';
 
-        if (issueType === 'ADP') {
-            const stripped = issueValue.replace(/^\([^)]+\):\s*/, '');
-            if (stripped.startsWith('MOTHERBOARD')) return 'MOTHERBOARD';
-            const first = stripped.split(' ')[0];
-            if (first === 'LCD') return 'LCD SCREEN';
-            if (first === 'BEZEL') return 'BEZEL';
-            if (first === 'TOP') return 'TOP COVER';
-            if (first === 'PALMREST') return 'PALMREST';
-            if (first === 'BOTTOM') return 'BOTTOM COVER';
-            if (first === 'KEYBOARD') return 'KEYBOARD';
-            if (first === 'EDP') return 'EDP CABLE';
-            if (stripped.startsWith('LEFT HINGE')) return 'LEFT HINGE';
-            if (stripped.startsWith('RIGHT HINGE')) return 'RIGHT HINGE';
-            if (stripped.startsWith('BOTH HINGES')) return 'LEFT HINGE AND RIGHT HINGE';
-            if (stripped.startsWith('DC-IN')) return 'DC-IN PORT';
-            return 'PART';
-        }
-
-        if (issueType === 'NON-ADP') {
-            if (!categoryKey) return 'NON-ADP PART';
-            const k = categoryKey.toUpperCase();
-            if (k.includes('MOBO') || k.includes('MOTHERBOARD')) return 'MOTHERBOARD';
-            if (k.includes('LCD SCREEN')) return 'LCD SCREEN';
-            if (k.includes('DABO') || k.includes('DAUGHTERBOARD')) return 'DAUGHTERBOARD';
-            if (k.includes('EDP CABLE') || k.includes('LCD CABLE')) return 'LCD CABLE';
-            if (k.includes('KEYBOARD')) return 'KEYBOARD';
-            if (k.includes('WEBCAM')) return 'WEBCAM';
-            if (k.includes('PALMREST')) return 'PALMREST';
-            if (k.includes('BATTERY CABLE') || k.includes('BATT CABLE')) return 'BATTERY CABLE';
-            if (k.includes('BATTERY')) return 'BATTERY';
-            if (k.includes('RAM')) return 'RAM';
-            if (k.includes('DC-IN PORT')) return 'DC-IN PORT';
-            if (k.includes('TOP COVER')) return 'TOP COVER';
-            if (k.includes('AUDIO BOARD')) return 'AUDIO BOARD';
-            if (k.includes('SSD') || k.includes('HDD')) return 'SSD';
-            if (k.includes('CPU FAN')) return 'CPU FAN';
-            if (k.includes('SPEAKERS')) return 'SPEAKERS';
-            if (k.includes('WIFI CARD')) return 'WIFI CARD';
-            return 'PART';
-        }
-
+    if (issueType === 'ADP') {
+        const stripped = issueValue.replace(/^\([^)]+\):\s*/, '');
+        if (stripped.startsWith('MOTHERBOARD')) return 'MOTHERBOARD';
+        const first = stripped.split(' ')[0];
+        if (first === 'LCD') return 'LCD SCREEN';
+        if (first === 'BEZEL') return 'BEZEL';
+        if (first === 'TOP') return 'TOP COVER';
+        if (first === 'PALMREST') return 'PALMREST';
+        if (first === 'BOTTOM') return 'BOTTOM COVER';
+        if (first === 'KEYBOARD') return 'KEYBOARD';
+        if (first === 'EDP') return 'EDP CABLE';
+        if (stripped.startsWith('LEFT HINGE')) return 'LEFT HINGE';
+        if (stripped.startsWith('RIGHT HINGE')) return 'RIGHT HINGE';
+        if (stripped.startsWith('BOTH HINGES')) return 'LEFT HINGE AND RIGHT HINGE';
+        if (stripped.startsWith('DC-IN')) return 'DC-IN PORT';
         return 'PART';
     }
+
+    if (issueType === 'NON-ADP') {
+        if (!categoryKey) return 'NON-ADP PART';
+        const k = categoryKey.toUpperCase();
+        if (k.includes('MOBO') || k.includes('MOTHERBOARD')) return 'MOTHERBOARD';
+        if (k.includes('LCD SCREEN')) return 'LCD SCREEN';
+        if (k.includes('DABO') || k.includes('DAUGHTERBOARD')) return 'DAUGHTERBOARD';
+        if (k.includes('EDP CABLE') || k.includes('LCD CABLE')) return 'LCD CABLE';
+        if (k.includes('KEYBOARD')) return 'KEYBOARD';
+        if (k.includes('WEBCAM')) return 'WEBCAM';
+        if (k.includes('PALMREST')) return 'PALMREST';
+        if (k.includes('BATTERY CABLE') || k.includes('BATT CABLE')) return 'BATTERY CABLE';
+        if (k.includes('BATTERY')) return 'BATTERY';
+        if (k.includes('RAM')) return 'RAM';
+        if (k.includes('DC-IN PORT')) return 'DC-IN PORT';
+        if (k.includes('TOP COVER')) return 'TOP COVER';
+        if (k.includes('AUDIO BOARD')) return 'AUDIO BOARD';
+        if (k.includes('SSD') || k.includes('HDD')) return 'SSD';
+        if (k.includes('CPU FAN')) return 'CPU FAN';
+        if (k.includes('SPEAKERS')) return 'SPEAKERS';
+        if (k.includes('WIFI CARD')) return 'WIFI CARD';
+        return 'PART';
+    }
+
+    return 'PART';
+}
 
     // =========================================================
     // CHECKBOX EVENT HANDLER
@@ -652,7 +655,6 @@
         document.getElementById('initial-comment-description-container').style.display = 'none';
         document.getElementById('ber-checkbox').checked = false;
         document.getElementById('doa-checkbox').checked = false;
-        document.getElementById('intentional-checkbox').checked = false;
         document.getElementById('miscellaneous-checkbox').checked = false;
         document.getElementById('miscellaneous-comment-area').value = '';
         document.getElementById('miscellaneous-description-container').style.display = 'none';
@@ -669,7 +671,7 @@
     }
 
     // =========================================================
-    // REPORT GENERATION
+    // REPORT GENERATION (logic unchanged from original)
     // =========================================================
     function cleanIssueDescription(issue) {
         let cleaned = issue.replace(/^\([^)]+\):\s*/, '').trim();
@@ -683,7 +685,6 @@
         const reportOutput = document.getElementById('report-output');
         const berChecked = document.getElementById('ber-checkbox').checked;
         const doaChecked = document.getElementById('doa-checkbox').checked;
-        const intentionalChecked = document.getElementById('intentional-checkbox').checked;
 
         // =========================================================
         // BER PATH — overrides everything; no issue selections needed
@@ -725,39 +726,9 @@
             const doaBlocks = nonAdpIssues.map(issue => {
                 const partName = issue.part;
                 const verbiage = cleanIssueDescription(issue.value);
-                return `//THE ${partName} IS DEAD ON ARRIVAL WHEN INSTALLED. ${verbiage}.//`;
+                return `THE ${partName} IS DEAD ON ARRIVAL WHEN INSTALLED. ${verbiage}.`;
             });
             reportOutput.textContent = doaBlocks.join('\n') + '\nPPID:';
-            document.getElementById('on-hold-output').textContent = '';
-            document.getElementById('required-photos-output').textContent = '';
-            return;
-        }
-
-        // =========================================================
-        // INTENTIONAL DAMAGE PATH
-        // =========================================================
-        if (intentionalChecked) {
-            if (hasNoInitialIssue) alert('Please make sure to add an initial issue description!');
-
-            const adpIssues = selectedIssues.filter(i => i.type === 'ADP' || i.type === 'MISCELLANEOUS');
-            let verifiedIssueText = '';
-            if (adpIssues.length > 0) {
-                verifiedIssueText = adpIssues.map(i => i.value.replace(/^\([^)]+\):\s*/, '')).join(' ');
-            }
-
-            const intLine1 = `UNIT PRESENTED WITH DESCRIPTION OF: ${customDescription || 'No Issue Given.'}`;
-            const intLine2 = `UPON ARRIVAL: VERIFIED INITIAL ISSUE: ${verifiedIssueText}`.trimEnd();
-            const intLine3 = `PARTS ORDERED: NO PARTS ORDERED. NO REPAIRS COMPLETED: NON-ACCIDENTAL DAMAGE - Equipment determined to be unrepairable as a result of NON-ACCIDENTAL DAMAGE. FOLLOWING REVIEW, THE DETERMINATION IS THAT THIS INCIDENT IS OUTSIDE THE AGREEMENT FOR ADP AND WARRANTY SUPPORT. UNIT IS NOT FULLY FUNCTIONAL.`;
-
-            const intText = [intLine1, intLine2, intLine3].join('\n');
-
-            if (hasNoInitialIssue) {
-                reportOutput.innerHTML = intText
-                    .replace('No Issue Given.', '<span style="color: #dc3545;">No Issue Given.</span>')
-                    .replace(/\n/g, '<br>');
-            } else {
-                reportOutput.textContent = intText;
-            }
             document.getElementById('on-hold-output').textContent = '';
             document.getElementById('required-photos-output').textContent = '';
             return;
@@ -923,6 +894,7 @@
     document.addEventListener('DOMContentLoaded', () => {
         buildDropdowns();
 
+        // Miscellaneous — show/hide textarea and keep selectedIssues in sync
         const miscCheckbox  = document.getElementById('miscellaneous-checkbox');
         const miscContainer = document.getElementById('miscellaneous-description-container');
         const miscTextarea  = document.getElementById('miscellaneous-comment-area');
