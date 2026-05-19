@@ -214,6 +214,17 @@
             align-items: center;
             gap: 10px;
         }
+        .intentional-option {
+            border: 1px solid #000000;
+            background-color: #555050;
+            color:#f7f7f7;
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
         #cannot-verify-description-container {
             margin-top: 10px;
