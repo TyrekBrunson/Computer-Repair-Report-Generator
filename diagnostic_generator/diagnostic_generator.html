@@ -372,7 +372,11 @@
                 ],
                 'EDP CABLE (Physical Damage)': [
 			        'EDP CABLE DAMAGED OR FRAYED.'
-		        ]
+		        ],
+                'HALL SENSOR (Physical Damage)': [
+                    'HALL SENSOR PHYSICALLY DAMAGED.',
+                    'HALL SENSOR CONNECTIONS PHYSICALLY DAMAGED.'
+                ]
             },
             NON_ADP: {
                 'LATITUDE MOBO': [
@@ -463,6 +467,7 @@
         if (first === 'BOTTOM') return 'BOTTOM COVER';
         if (first === 'KEYBOARD') return 'KEYBOARD';
         if (first === 'EDP') return 'EDP CABLE';
+        if (first === 'HALL') return 'HALL SENSOR';
         if (stripped.startsWith('LEFT HINGE')) return 'LEFT HINGE';
         if (stripped.startsWith('RIGHT HINGE')) return 'RIGHT HINGE';
         if (stripped.startsWith('BOTH HINGES')) return 'LEFT HINGE AND RIGHT HINGE';
