@@ -338,6 +338,9 @@
                     'PALMREST CHIPPED AT BOTTOM RIGHT CORNER.',
                     'PALMREST CHIPPED AT BOTTOM LEFT CORNER.'
                 ],
+                'TOUCHPAD': [
+                    'TOUCHPAD DAMAGED AT RIBBON CABLE CONNECTION'
+                ],
                 'BOTTOM COVER': [
                     'BOTTOM COVER DAMAGED IN MULTIPLE PLACES.',
                     'BOTTOM COVER CRACKED AT TOP LEFT CORNER.',
@@ -470,6 +473,7 @@
         if (first === 'KEYBOARD') return 'KEYBOARD';
         if (first === 'EDP') return 'EDP CABLE';
         if (first === 'HALL') return 'HALL SENSOR';
+        if (first === 'TOUCHPAD') return 'TOUCHPAD';
         if (stripped.startsWith('LEFT HINGE')) return 'LEFT HINGE';
         if (stripped.startsWith('RIGHT HINGE')) return 'RIGHT HINGE';
         if (stripped.startsWith('BOTH HINGES')) return 'LEFT HINGE AND RIGHT HINGE';
