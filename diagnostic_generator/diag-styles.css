@@ -358,7 +358,7 @@
             transition: background-color 0.3s;
             min-width: 150px;
             width: 150px; /* Fixed width to match other buttons */
-            margin-top: 10px;
+            /* margin-top: 10px; REMOVED FROM HERE AND ADDED TO THE INDIVIDUAL BUTTONS WHEN NEEDED. CAUSED RESIZING ISSUES WHEN PAGE IS RESIZED.*/
             display: inline-block;
         }
 
