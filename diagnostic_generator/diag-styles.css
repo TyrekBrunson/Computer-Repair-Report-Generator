@@ -20,7 +20,14 @@
         h1 {
             color: #0056b3;
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 10px;
+        }
+
+        .auto-refresh-note {
+            text-align: center;
+            color: #555;
+            font-size: 0.75em;
+            margin-bottom: 25px;
         }
 
         /* Hamburger Menu Styling */
@@ -214,7 +221,7 @@
             align-items: center;
             gap: 10px;
         }
-<<<<<<< HEAD
+
         .intentional-option {
             border: 1px solid #000000;
             background-color: #777171;
@@ -226,8 +233,6 @@
             align-items: center;
             gap: 10px;
         }
-=======
->>>>>>> parent of 9cf88bc (Added intentional button)
 
         #cannot-verify-description-container {
             margin-top: 10px;

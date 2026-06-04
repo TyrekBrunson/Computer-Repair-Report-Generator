@@ -26,6 +26,11 @@
     </div>
 
     <h1>💻 Computer Diagnostic Report Generator</h1>
+    <p class="auto-refresh-note" id="refresh-note">
+        Last refreshed at: <span id="last-refresh-time">--:--</span><br>
+        Auto refreshes at: <span id="next-refresh-time">--:--</span><br>
+        Love ya guys, keep up the great work! 💺
+    </p>
 
     <div class="input-section">
         <h2>Report Details</h2>
@@ -111,6 +116,7 @@
 <script>
     // Global array to track the order of selected issues
     let selectedIssues = [];
+    const REFRESH_HOURS = [7, 18];
 
     // =========================================================
     // DATA — organized by device type, then ADP vs NON-ADP
@@ -421,7 +427,7 @@
                 'PALMREST (System Failure)': [
                     '(Incorrect registered keystrokes): PALMREST INTEGRATED KEYBOARD INCORRECTLY RESPONDING TO VARIOUS KEYSTROKE COMMANDS; CAUSING CERTAIN COMMANDS TO BE UNRECOGNIZED AND CAUSING OTHER COMMANDS TO INPUT MULTIPLE KEYSTROKES. CONDUCTED INTERNAL INSPECTION AND RESEATED KEYBOARD RIBBON CABLE; ISSUE PERSISTED. TESTED DEVICE WITH EXTERNAL KEYBOARD VIA USB PORT; KEYBOARD DID NOT HAVE ISSUES WITH INCORRECT REGISTRY. ENTERED EPSA DIAG FOR KEYBOARD, USING PALMREST INTEGRATED KEYBOARD, INCORRECTLY REGISTERED KEY PRESSES WERE NOTED. TRIED OS RESTORATION, ISSUE PERSISTS. TRIED KNOWN GOOD KEYBOARD AND ISSUE WAS RESOLVED. TRIED KNOWN GOOD PALMREST; ISSUE RESOLVED. NO VISUAL DAMAGES.',
                     '(Unresponsive): KEYBOARD UNRESPONSIVE TO ALL KEYSTROKES AFTER SEVERAL RESEATING OF KEYBOARD RIBBON CABLE ON MOTHERBOARD. CONDUCTED INTERNAL INSPECTION, NO BREAKS IN CABLING OR INTERNAL DAMAGE ON KEYBOARD. SWAPPED KEYBOARD WITH KNOWN GOOD KEYBOARD AND UNIT; ORIGINAL KEYBOARD DID NOT RESPOND TO ANY KEYSTROKES IN KNOWN GOOD UNIT, AND KNOWN GOOD KEYBOARD RESPONDED IN ORIGINAL UNIT. UNABLE TO ACCESS UNIT BIOS WITH ORIGINAL KEYBOARD, USED EXTERNAL KEYBOARD TO ENTER BIOS BY REPEATEDLY STRIKING F2. VERIFIED EXTERNAL KEYBOARD DOES NOT HAVE UNRESPONSIVE ISSUE. PERFORMED HARD RESET; PALMREST INTEGRATED KEYBOARD ISSUE OF UNRESPONSIVE TO ALL KEYSTROKES PERSISTS.  NO VISUAL DAMAGES.',
-                    '(TOUCHPAD): TOUCHPAD FAILING TO DISPLAY CURSOR ON LCD SCREEN AND UNRESPONSIVE TO INPUTS. RESEATED TOUCHPAD CABLE ON TOUCHPAD AND MOTHERBOARD SEVERAL TIMES; ISSUE PERSISTED. SWAPPED DEVICE TOUCHPADS WITH KNOWN GOOD UNIT; KNOWN GOOD TOUCHPAD WORKED IN ORIGINAL DEVICE AND ORIGINAL TOUCHPAD CONTINUED TO FAIL PRODUCING A CURSOR IN KNOWN GOOD UNIT. NO VISUAL DAMAGES. WITH ORIGINAL TOUCHPAD INSTALLED; RAN EPSA DIAGNOSTICS. NO ISSUES DETECTED IN SYSTEM DIAGNOSTIC SCAN, BUT TOUCHPAD IS FAILING TO YIELD CURSOR IN BOOT MENU, EPSA DIAGNOSTICS, AND BOOTED INTO WINDOWS DESPITE VERIFIED SEATING ON MOTHERBOARD.'
+                    '(TOUCHPAD): TOUCHPAD FAILING TO DISPLAY CURSOR ON LCD SCREEN AND UNRESPONSIVE TO INPUTS. RESEATED TOUCHPAD CABLE ON TOUCHPAD AND MOTHERBOARD SEVERAL TIMES; ISSUE PERSISTED. SWAPPED DEVICE TOUCHPAD WITH KNOWN GOOD UNIT; KNOWN GOOD TOUCHPAD WORKED IN ORIGINAL DEVICE AND ORIGINAL TOUCHPAD CONTINUED TO FAIL PRODUCING A CURSOR IN KNOWN GOOD UNIT. NO VISUAL DAMAGES. WITH ORIGINAL TOUCHPAD INSTALLED; RAN EPSA DIAGNOSTICS. NO ISSUES DETECTED IN SYSTEM DIAGNOSTIC SCAN, BUT TOUCHPAD IS FAILING TO YIELD CURSOR IN BOOT MENU, EPSA DIAGNOSTICS, AND BOOTED INTO WINDOWS DESPITE VERIFIED SEATING ON MOTHERBOARD.'
                 ],
                     'WEBCAM': [
                     '(Webcam): WEBCAM IS FAILING TO DISPLAY A CLEAR IMAGE. CONDUCTED AN INTERNAL INSPECTION AND CHECKED FOR IMPROPER CONNECTION AND SEATING. RESEATED MULTIPLE TIMES AND REINSTALLED OPERATING SYSTEM (OS) AND STILL RECEIVED THE SAME RESULT OF NO IMAGE BEING DISPLAYED FROM DEVICE WEBCAM. TESTED DEVICE WITH A KNOWN GOOD WEBCAM AND WEBCAM DISPLAYED A CLEAR IMAGE AND PRODUCED AUDIO PLAYBACK.'
@@ -921,6 +927,48 @@
         });
     }
 
+    function formatTime(date) {
+        let hours = date.getHours();
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        const period = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12;
+        if (hours === 0) hours = 12;
+        return `${hours}:${minutes} ${period}`;
+    }
+
+    function getNextRefreshTime(now = new Date()) {
+        const current = new Date(now);
+        current.setSeconds(0, 0);
+
+        for (const hour of REFRESH_HOURS) {
+            const candidate = new Date(current);
+            candidate.setHours(hour, 0, 0, 0);
+            if (candidate > now) return candidate;
+        }
+
+        const tomorrow = new Date(current);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        tomorrow.setHours(REFRESH_HOURS[0], 0, 0, 0);
+        return tomorrow;
+    }
+
+    function updateRefreshCountdown() {
+        const nextRefresh = getNextRefreshTime();
+        const remainingSeconds = Math.max(0, Math.ceil((nextRefresh - new Date()) / 1000));
+        const minutes = Math.floor(remainingSeconds / 60).toString().padStart(2, '0');
+        const seconds = (remainingSeconds % 60).toString().padStart(2, '0');
+        const countdownElement = document.getElementById('refresh-countdown');
+        if (countdownElement) countdownElement.textContent = `${minutes}:${seconds}`;
+        const nextRefreshElement = document.getElementById('next-refresh-time');
+        if (nextRefreshElement) nextRefreshElement.textContent = formatTime(nextRefresh);
+    }
+
+    function updateRefreshStatus() {
+        const lastRefreshElement = document.getElementById('last-refresh-time');
+        if (lastRefreshElement) lastRefreshElement.textContent = formatTime(new Date());
+        updateRefreshCountdown();
+    }
+
     function toggleMenu() {
         document.getElementById('menu-dropdown').classList.toggle('show');
     }
@@ -968,9 +1016,22 @@
         document.getElementById('initial-comment-checkbox').addEventListener('change', toggleInitialCommentDescription);
         toggleCannotVerifyDescription();
         toggleInitialCommentDescription();
+        updateRefreshStatus();
         window.clearAllIssues = clearAllIssues;
         window.generateReport = generateReport;
     });
+
+    setInterval(function() {
+        updateRefreshCountdown();
+        const now = new Date();
+        const nextRefresh = getNextRefreshTime(now);
+        if (now >= nextRefresh) {
+            window.location.reload();
+        }
+    }, 1000);
 </script>
+<p class="auto-refresh-note">
+    Man I shouldn't have access to this but here we are.
+</p>
 </body>
 </html>

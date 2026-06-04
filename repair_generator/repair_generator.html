@@ -90,7 +90,13 @@
         h1 {
             color: #0056b3;
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 10px;
+        }
+        .auto-refresh-note {
+            text-align: center;
+            color: #555;
+            font-size: 0.75em;
+            margin-bottom: 25px;
         }
         .repair-options {
             padding: 20px;
@@ -240,6 +246,12 @@
     </div>
 
     <h1>Computer Repair Report Generator 🛠️</h1>
+    <p class="auto-refresh-note" id="refresh-note">
+        Last refreshed at: <span id="last-refresh-time">--:--</span><br>
+        Auto refreshes at: <span id="next-refresh-time">--:--</span><br>
+        They're always watching. Good luck. <br>
+        👁️
+    </p>
 
     <div class="input-section">
         <h2>What did you repair?</h2>
@@ -447,6 +459,7 @@
 <script>
     // --- Order tracking array (mirrors the diagnostic tool's selectedIssues pattern) ---
     let selectedParts = []; // Each entry: { id, name }
+    const REFRESH_HOURS = [7, 18];
 
     // Map checkbox IDs to display names
     const allParts = [
@@ -543,7 +556,50 @@
         // Reset the tracking array and badges
         selectedParts = [];
         updateOrderBadges();
+        updateRefreshStatus();
     });
+
+    function formatTime(date) {
+        let hours = date.getHours();
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        const period = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12;
+        if (hours === 0) hours = 12;
+        return `${hours}:${minutes} ${period}`;
+    }
+
+    function getNextRefreshTime(now = new Date()) {
+        const current = new Date(now);
+        current.setSeconds(0, 0);
+
+        for (const hour of REFRESH_HOURS) {
+            const candidate = new Date(current);
+            candidate.setHours(hour, 0, 0, 0);
+            if (candidate > now) return candidate;
+        }
+
+        const tomorrow = new Date(current);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        tomorrow.setHours(REFRESH_HOURS[0], 0, 0, 0);
+        return tomorrow;
+    }
+
+    function updateRefreshCountdown() {
+        const nextRefresh = getNextRefreshTime();
+        const remainingSeconds = Math.max(0, Math.ceil((nextRefresh - new Date()) / 1000));
+        const minutes = Math.floor(remainingSeconds / 60).toString().padStart(2, '0');
+        const seconds = (remainingSeconds % 60).toString().padStart(2, '0');
+        const countdownElement = document.getElementById('refresh-countdown');
+        if (countdownElement) countdownElement.textContent = `${minutes}:${seconds}`;
+        const nextRefreshElement = document.getElementById('next-refresh-time');
+        if (nextRefreshElement) nextRefreshElement.textContent = formatTime(nextRefresh);
+    }
+
+    function updateRefreshStatus() {
+        const lastRefreshElement = document.getElementById('last-refresh-time');
+        if (lastRefreshElement) lastRefreshElement.textContent = formatTime(new Date());
+        updateRefreshCountdown();
+    }
 
     // Show/hide reseated & replaced input
     document.getElementById('reseated-replaced-checkbox').addEventListener('change', function () {
@@ -866,6 +922,19 @@
             dropdown.classList.remove('show');
         }
     });
-</script>
+
+    // Automatically refresh the page at local 7:00 and 18:00 daily.
+    setInterval(function() {
+        updateRefreshCountdown();
+        const now = new Date();
+        const nextRefresh = getNextRefreshTime(now);
+        if (now >= nextRefresh) {
+            window.location.reload();
+        }
+    }, 1000);
+</script> 
+    <button class="btn btn-primary" onclick="location.href='https://gist.githubusercontent.com/MattIPv4/045239bc27b16b2bcf7a3a9a4648c08a/raw/2411e31293a35f3e565f61e7490a806d4720ea7e/bee%2520movie%2520script'">
+    Get Hacked
+</button>
 </body>
 </html>
