@@ -28,7 +28,7 @@
     <h1>💻 Computer Diagnostic Report Generator</h1>
     <p class="auto-refresh-note" id="refresh-note">
         Last refreshed at: <span id="last-refresh-time">--:--</span><br>
-        Auto refreshes at 7:00 AM, Noon, and 6:00 PM daily<br>
+        Auto refreshes at 7:00 AM and 6:00 PM daily<br>
         Next refresh at: <span id="next-refresh-time">--:--</span><br>
         Love ya guys, keep up the great work! 💺
     </p>
@@ -117,7 +117,7 @@
 <script>
     // Global array to track the order of selected issues
     let selectedIssues = [];
-    const REFRESH_HOURS = [7, 12, 18];
+    const REFRESH_HOURS = [7, 18];
 
     // =========================================================
     // DATA — organized by device type, then ADP vs NON-ADP
