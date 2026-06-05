@@ -248,7 +248,7 @@
     <h1>Computer Repair Report Generator 🛠️</h1>
     <p class="auto-refresh-note" id="refresh-note">
         Last refreshed at: <span id="last-refresh-time">--:--</span><br>
-        Auto refreshes at 7:00 AM and 6:00 PM daily<br>
+        Auto refreshes at 7:00 AM, Noon, and 6:00 PM daily<br>
         Next refresh at: <span id="next-refresh-time">--:--</span><br>
         They're always watching. Good luck. <br>
         👁️
@@ -569,20 +569,47 @@
         return `${hours}:${minutes} ${period}`;
     }
 
+    function getHourMinute(value) {
+        const hour = Math.floor(value);
+        const minute = Math.round((value - hour) * 60);
+        return { hour, minute };
+    }
+
     function getNextRefreshTime(now = new Date()) {
         const current = new Date(now);
         current.setSeconds(0, 0);
 
-        for (const hour of REFRESH_HOURS) {
+        for (const value of REFRESH_HOURS) {
+            const { hour, minute } = getHourMinute(value);
             const candidate = new Date(current);
-            candidate.setHours(hour, 0, 0, 0);
-            if (candidate > now) return candidate;
+            candidate.setHours(hour, minute, 0, 0);
+            if (candidate >= now) return candidate;
         }
 
         const tomorrow = new Date(current);
         tomorrow.setDate(tomorrow.getDate() + 1);
-        tomorrow.setHours(REFRESH_HOURS[0], 0, 0, 0);
+        const { hour, minute } = getHourMinute(REFRESH_HOURS[0]);
+        tomorrow.setHours(hour, minute, 0, 0);
         return tomorrow;
+    }
+
+    function getPreviousRefreshTime(now = new Date()) {
+        const current = new Date(now);
+        current.setSeconds(0, 0);
+
+        for (let i = REFRESH_HOURS.length - 1; i >= 0; i--) {
+            const { hour, minute } = getHourMinute(REFRESH_HOURS[i]);
+            const candidate = new Date(current);
+            candidate.setHours(hour, minute, 0, 0);
+            if (candidate <= now) return candidate;
+        }
+
+        const yesterday = new Date(current);
+        yesterday.setDate(yesterday.getDate() - 1);
+        const lastValue = REFRESH_HOURS[REFRESH_HOURS.length - 1];
+        const lastTime = getHourMinute(lastValue);
+        yesterday.setHours(lastTime.hour, lastTime.minute, 0, 0);
+        return yesterday;
     }
 
     function updateRefreshCountdown() {
@@ -929,10 +956,12 @@
         updateRefreshCountdown();
         const now = new Date();
         const nextRefresh = getNextRefreshTime(now);
-        if (now >= nextRefresh) {
+        const prevRefresh = getPreviousRefreshTime(now);
+        const justPassedRefresh = now >= prevRefresh && now - prevRefresh < 5000;
+        if (now >= nextRefresh || justPassedRefresh) {
             window.location.reload();
         }
-    }, 1000);
+    }, 250);
 </script> 
     <button class="btn btn-primary" onclick="location.href='https://gist.githubusercontent.com/MattIPv4/045239bc27b16b2bcf7a3a9a4648c08a/raw/2411e31293a35f3e565f61e7490a806d4720ea7e/bee%2520movie%2520script'">
     Get Hacked
