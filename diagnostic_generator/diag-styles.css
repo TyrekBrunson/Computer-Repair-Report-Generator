@@ -395,10 +395,9 @@
             font-size: 1.0em;
             min-height: 150px;
             line-height: 1.4;
-            font-family: Arial, sans-serif; 
+            font-family: Arial, sans-serif;
             white-space: pre-wrap;
             word-wrap: break-word;
-            margin-bottom: 20px; 
         }
 
 
@@ -488,3 +487,70 @@
         .contract-group-inner-pad .issue-dropdown {
             margin-bottom: 8px;
         }
+        /* --- Two-column results layout --- */
+        .results-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            align-items: start;   /* keeps columns from stretching to equal height */
+        }
+
+        .results-column {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Zero out the top margin on each column's first box so the two
+        column tops line up (status-section normally has margin-top: 20px) */
+        .results-column > *:first-child {
+            margin-top: 0;
+        }
+
+        /* Collapse to a single column on narrow screens / tablets */
+        @media (max-width: 768px) {
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        /* --- Parts List table --- */
+#parts-list-output {
+    background-color: #fff;
+    padding: 15px;
+    border: 1px solid #0056b3;
+    border-radius: 4px;
+    min-height: 50px;
+}
+
+.parts-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+    font-size: 0.95em;
+}
+
+.parts-table th,
+.parts-table td {
+    padding: 8px 10px;
+    text-align: left;
+    border: 1px solid #d4d9de;   /* full grid lines (vertical + horizontal) */
+}
+
+.parts-table th {
+    color: #0056b3;
+    border-bottom: 2px solid #0056b3;
+    font-weight: bold;
+    background-color: #f4f7f9;
+}
+
+/* Third column reserves room for the copy button, even when empty */
+.parts-table th:last-child,
+.parts-table td:last-child {
+    width: 90px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* Empty placeholder rows keep a consistent height */
+.parts-table tbody td {
+    height: 34px;
+}

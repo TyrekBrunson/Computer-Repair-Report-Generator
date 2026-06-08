@@ -10,7 +10,7 @@
 <body>
 <div class="container">
     <!-- Hamburger Menu -->
-    <div class="hamburger-menu">
+   <div class="hamburger-menu">
         <div class="hamburger-icon" onclick="toggleMenu()">
             <span></span>
             <span></span>
@@ -18,10 +18,10 @@
         </div>
         <div class="menu-dropdown" id="menu-dropdown">
             <div class="menu-item">
-                <input type="checkbox" id="dont-close-on-clear" name="dont-close-on-clear">
-                <label for="dont-close-on-clear">Close Dropdowns on Clear</label>
+                <input type="checkbox" id="close-on-clear" name="close-on-clear">
+                <label for="close-on-clear">Close Dropdowns on Clear</label>
             </div>
-             <a href="../repair_generator/repair_generator.html" id="repair-link">Repair Generator 🛠️</a>
+            <a href="../repair_generator/repair_generator.html" id="repair-link">Repair Generator 🛠️</a>
         </div>
     </div>
 
@@ -34,6 +34,55 @@
     </p>
 
     <div class="input-section">
+        <h2>Device Selection</h2>
+            <h3>Chromebook</h3>
+            <div class="CB3110-option">
+                <input type="checkbox" id="CB3110-checkbox">
+                <label for="CB3110-checkbox">Chromebook 3110</label>
+            </div>
+            <div class="CB3120-option">
+                <input type="checkbox" id="CB3120-checkbox">
+                <label for="CB3120-checkbox">Chromebook 3120</label>
+            </div>
+            <div class="CB3110-2in1-option">
+                <input type="checkbox" id="CB3110-2in1-checkbox">
+                <label for="CB3110-2in1-checkbox">Chromebook 3110 2-in-1</label>
+            </div>  
+            <div class="CB3120-2in1-option">
+                <input type="checkbox" id="CB3120-2in1-checkbox">
+                <label for="CB3120-2in1-checkbox">Chromebook 3120 2-in-1</label>
+            </div>
+            <h3>Latitude</h3>
+            <div class="Lat3120-option">
+                <input type="checkbox" id="Lat3120-checkbox">
+                <label for="Lat3120-checkbox">Latitude 3120</label>
+            </div>
+            <div class="Lat3140-option">
+                <input type="checkbox" id="Lat3140-checkbox">
+                <label for="Lat3140-checkbox">Latitude 3140</label>
+            </div>
+            <div class="Lat3120-2in1-option">
+                <input type="checkbox" id="Lat3120-2in1-checkbox">
+                <label for="Lat3120-2in1-checkbox">Latitude 3120 2-in-1</label>
+            </div>
+            <div class="Lat3140-2in1-option">
+                <input type="checkbox" id="Lat3140-2in1-checkbox">
+                <label for="Lat3140-2in1-checkbox">Latitude 3140 2-in-1</label>
+            </div>
+            <div class="Lat3310-2in1-option">
+                <input type="checkbox" id="Lat3310-2in1-checkbox">
+                <label for="Lat3310-2in1-checkbox">Latitude 3310 2-in-1</label>
+            </div>
+            <h3>Pro</h3>
+            <div class="DP11-option">
+                <input type="checkbox" id="DP11-checkbox">
+                <label for="DP11-checkbox">Dell Pro 11</label>
+            </div>
+            <div class="DP14-option">
+                <input type="checkbox" id="DP14-checkbox">
+                <label for="DP14-checkbox">Dell Pro 14</label>
+            </div>
+
         <h2>Report Details</h2>
         <label for="unit-description">Unit Presented With Description Of (Custom Input):</label>
         <textarea id="unit-description" placeholder="e.g., Lcd screen cracked"></textarea>
@@ -92,27 +141,58 @@
         </div>
     </div>
 
-    <div class="report-section">
-        <h2>Generated Report</h2>
-        <div class="button-group">
-            <button onclick="generateReport()" id="generate-button">GENERATE REPORT</button>
-            <button onclick="clearAllIssues()" id="clear-button">CLEAR ALL ISSUES</button>
-            <button onclick="copytext()" id="copy-button">COPY TEXT</button>
+<!-- Buttons moved above the columns (Copy moved back down) -->
+    <div class="button-group">
+        <button onclick="generateReport()" id="generate-button">GENERATE REPORT</button>
+        <button onclick="clearAllIssues()" id="clear-button">CLEAR ALL ISSUES</button>
+    </div>
+
+      <div class="results-grid">
+        <!-- LEFT COLUMN -->
+        <div class="results-column">
+            <div class="report-section">
+                <h2>Technician Notes</h2>
+                <div id="report-output"></div>
+                <button onclick="copytext()" id="copy-button" style="margin-top: 10px;">COPY TEXT</button>
+            </div>
+
+            <div class="status-section">
+                <h2>On-Hold Status</h2>
+                <div id="on-hold-output"></div>
+                <button onclick="copyOnHoldText()" id="copy-onhold-button" style="margin-top: 10px;">COPY TEXT</button>
+            </div>
         </div>
-        <div id="report-output"></div>
+
+        <!-- RIGHT COLUMN -->
+        <div class="results-column">
+            <div class="status-section">
+                <h2>Parts List</h2>
+                <div id="parts-list-output">
+                    <table class="parts-table">
+                        <thead>
+                            <tr>
+                                <th>Part</th>
+                                <th>Part Number</th>
+                                <th>Copy</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>&nbsp;</td><td>&nbsp;</td><td></td></tr>
+                            <tr><td>&nbsp;</td><td>&nbsp;</td><td></td></tr>
+                            <tr><td>&nbsp;</td><td>&nbsp;</td><td></td></tr>
+                            <tr><td>&nbsp;</td><td>&nbsp;</td><td></td></tr>
+                            <tr><td>&nbsp;</td><td>&nbsp;</td><td></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="status-section">
+                <h2>Required Photos</h2>
+                <div id="required-photos-output"></div>
+            </div>
+        </div>
     </div>
-    
-    <div class="status-section">
-        <h2>ON HOLD STATUS</h2>
-        <div id="on-hold-output"></div>
-        <button onclick="copyOnHoldText()" id="copy-onhold-button" style="margin-top: 10px;">COPY TEXT</button>
-    </div>
-    
-    <div class="status-section">
-        <h2>REQUIRED PHOTOS</h2>
-        <div id="required-photos-output"></div>
-    </div>
-</div>
 
 <script>
     // Global array to track the order of selected issues
@@ -685,8 +765,8 @@
         document.getElementById('on-hold-output').textContent = '';
         document.getElementById('required-photos-output').textContent = '';
 
-        const dontClose = document.getElementById('dont-close-on-clear').checked;
-        if (dontClose) {
+       const shouldClose = document.getElementById('close-on-clear').checked;
+        if (shouldClose) {
             document.querySelectorAll('.contract-group, .issue-dropdown').forEach(d => {
                 d.open = false;
             });
@@ -870,8 +950,6 @@
         const hasLcdCable = allSelectedParts.includes('LCD CABLE');
         const hasNonAdpKeyboard = selectedIssues.some(i => i.part.toUpperCase() === 'KEYBOARD' && i.type === 'NON-ADP');
         const hasNonAdpPalmrest = selectedIssues.some(i => i.part.toUpperCase() === 'PALMREST' && i.type === 'NON-ADP');
-        const hasNonAdpLatitudeKeyboard = selectedIssues.some(i => i.part.toUpperCase() === 'KEYBOARD' && i.type === 'NON-ADP' && i.device === 'Latitude');
-        const hasNonAdpLatitudePalmrest = selectedIssues.some(i => i.part.toUpperCase() === 'PALMREST' && i.type === 'NON-ADP' && i.device === 'Latitude');
         const isNonAdpLatitude = selectedIssues.some(i => i.type === 'NON-ADP' && i.device === 'Latitude');
 
         let photoLines = [];
