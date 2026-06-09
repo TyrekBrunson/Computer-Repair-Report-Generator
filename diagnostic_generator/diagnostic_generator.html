@@ -873,6 +873,7 @@
         const hasNonAdpLatitudeKeyboard = selectedIssues.some(i => i.part.toUpperCase() === 'KEYBOARD' && i.type === 'NON-ADP' && i.device === 'Latitude');
         const hasNonAdpLatitudePalmrest = selectedIssues.some(i => i.part.toUpperCase() === 'PALMREST' && i.type === 'NON-ADP' && i.device === 'Latitude');
         const isNonAdpLatitude = selectedIssues.some(i => i.type === 'NON-ADP' && i.device === 'Latitude');
+		const isNonAdpChromebook = selectedIssues.some(i => i.type === 'NON-ADP' && i.device === 'Chromebook');
 
         let photoLines = [];
         if (hasMotherboard) photoLines.push('  • Motherboard Part Number');
@@ -880,6 +881,7 @@
         if (hasNonAdpKeyboard || hasNonAdpPalmrest) photoLines.push('  • Entire Palmrest');
         if ((hasNonAdpKeyboard || hasNonAdpPalmrest) && isNonAdpLatitude) photoLines.push('  • BIOS with Service Tag Visible');
         if ((hasNonAdpKeyboard || hasNonAdpPalmrest) && isNonAdpLatitude) photoLines.push('  • EPSA Diagnostic Results (Pass or Fail)');
+		if ((hasNonAdpKeyboard || hasNonAdpPalmrest) && isNonAdpChromebook) photoLines.push('  • LCD Screen with Service Tag Visible (alt-v)');
         if (cannotVerifyChecked) photoLines.push('  • Cannot Verify Initial Issue (proof)');
         document.getElementById('required-photos-output').textContent = 'REQUIRED PHOTOS:\n' + photoLines.join('\n');
     }
