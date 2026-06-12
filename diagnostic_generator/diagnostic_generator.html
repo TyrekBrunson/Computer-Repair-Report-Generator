@@ -773,7 +773,7 @@
             const doaBlocks = nonAdpIssues.map(issue => {
                 const partName = issue.part;
                 const verbiage = cleanIssueDescription(issue.value);
-                return `THE ${partName} IS DEAD ON ARRIVAL WHEN INSTALLED. ${verbiage}.`;
+                return `THE ${partName} IS DEAD ON ARRIVAL WHEN INSTALLED. //${verbiage}.//`;
             });
             reportOutput.textContent = doaBlocks.join('\n') + '\nPPID:';
             document.getElementById('on-hold-output').textContent = '';
