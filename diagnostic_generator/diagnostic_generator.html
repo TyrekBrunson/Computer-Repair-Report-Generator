@@ -380,8 +380,8 @@
                     'DC-IN PORT FAILING TO RECOGNIZE AC ADAPTER AND CHARGE UNIT BATTERY.',
                     'DC-IN PORT PHYSICALLY DAMAGED AND NOT SECURING TO DEVICE PALMREST/BOTTOM COVER.'
                 ],
-                'EDP CABLE (Physical Damage)': [
-			        'EDP CABLE DAMAGED OR FRAYED.'
+                'LCD CABLE (Physical Damage)': [
+			        'LCD CABLE DAMAGED OR FRAYED.'
 		        ],
                 'HALL SENSOR (Physical Damage)': [
                     'HALL SENSOR PHYSICALLY DAMAGED.',
@@ -474,13 +474,13 @@
         const stripped = issueValue.replace(/^\([^)]+\):\s*/, '');
         if (stripped.startsWith('MOTHERBOARD')) return 'MOTHERBOARD';
         const first = stripped.split(' ')[0];
-        if (first === 'LCD') return 'LCD SCREEN';
+        if (stripped.startsWith('LCD SCREEN')) return 'LCD SCREEN';
         if (first === 'BEZEL') return 'BEZEL';
         if (first === 'TOP') return 'TOP COVER';
         if (first === 'PALMREST') return 'PALMREST';
         if (first === 'BOTTOM') return 'BOTTOM COVER';
         if (first === 'KEYBOARD') return 'KEYBOARD';
-        if (first === 'EDP') return 'EDP CABLE';
+        if (stripped.startsWith('LCD CABLE')) return 'LCD CABLE';
         if (first === 'HALL') return 'HALL SENSOR';
         if (first === 'TOUCHPAD') return 'TOUCHPAD';
         if (stripped.startsWith('LEFT HINGE')) return 'LEFT HINGE';
