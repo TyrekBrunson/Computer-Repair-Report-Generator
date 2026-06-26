@@ -251,6 +251,13 @@
             resize: vertical;
             margin-top: 5px;
         }
+		#misc-heading {
+			font-family: inherit;
+			font-size: 1.25em;
+			margin-top: 5px;
+			margin-bottom: 14px;
+			color: #4b3f2b;
+		}
         #miscellaneous-description-container {
             width: 100%;
             margin-top: 8px;
@@ -262,10 +269,38 @@
             border: 1px solid #fcd34d;
             border-radius: 6px;
             font-family: inherit;
-            font-size: 0.9em;
+            font-size: 1em;
             resize: vertical;
             box-sizing: border-box;
         }
+		#miscellaneous-checkbox {
+			font-family: inherit;
+			font-size: 1em;
+			margin-bottom: 15px;
+			color: #4b3f2b;
+			
+		}
+		#reimage-description-container {
+            width: 100%;
+            margin-top: 8px;
+        }
+        #reimage-comment-area {
+            width: 100%;
+            min-height: 60px;
+            padding: 8px;
+            border: 1px solid #fcd34d;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 1em;
+            resize: vertical;
+            box-sizing: border-box;
+        }
+		#reimage-checkbox {
+			font-family: inherit;
+			font-size: 1em;
+			margin-bottom: 15px;
+			color: #4b3f2b;
+		}
 
 
         /* Dropdown/Checkbox Styling */

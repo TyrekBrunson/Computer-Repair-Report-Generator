@@ -81,13 +81,20 @@
 
         <!-- Miscellaneous always standalone -->
         <div class="category-group">
-            <h3>Miscellaneous Issues</h3>
+            <h3 id="misc-heading">Miscellaneous Issues</h3>
             <div>
                 <input type="checkbox" id="miscellaneous-checkbox">
-                <label for="miscellaneous-checkbox">Miscellaneous Issue - Dropbox</label>
+                <label id="miscellaneous-checkbox" for="miscellaneous-checkbox"><strong>Miscellaneous Issue</strong> - Dropbox</label>
             </div>
             <div id="miscellaneous-description-container" style="display:none;">
                 <textarea id="miscellaneous-comment-area" placeholder="Enter miscellaneous part here."></textarea>
+            </div>
+			<div>
+                <input type="checkbox" id="reimage-checkbox">
+                <label id="reimage-checkbox" for="reimage-checkbox"><strong>Needs Reimage</strong> - Dropbox</label>
+            </div>
+            <div id="reimage-description-container" style="display:none;">
+                <textarea id="reimage-comment-area" placeholder="Explain why device needs reimage (ex. WINDOWS FILE IS CORRUPTED, DEVICE NEEDS REIMAGING.)"></textarea>
             </div>
         </div>
     </div>
@@ -684,6 +691,9 @@
         document.getElementById('miscellaneous-checkbox').checked = false;
         document.getElementById('miscellaneous-comment-area').value = '';
         document.getElementById('miscellaneous-description-container').style.display = 'none';
+		document.getElementById('reimage-checkbox').checked = false;
+        document.getElementById('reimage-comment-area').value = '';
+        document.getElementById('reimage-description-container').style.display = 'none';
         document.getElementById('report-output').textContent = '';
         document.getElementById('on-hold-output').textContent = '';
         document.getElementById('required-photos-output').textContent = '';
@@ -1041,6 +1051,32 @@
         });
 
         miscTextarea.addEventListener('input', function () {
+            const idx = selectedIssues.findIndex(i => i.type === 'MISCELLANEOUS');
+            if (idx !== -1) {
+                const val = this.value.trim().toUpperCase();
+                selectedIssues[idx].value = val || 'MISCELLANEOUS PART';
+                selectedIssues[idx].part  = val || 'MISCELLANEOUS PART';
+            }
+        });
+		// Reimage — show/hide textarea and keep selectedIssues in sync
+        const reimgCheckbox  = document.getElementById('reimage-checkbox');
+        const reimgContainer = document.getElementById('reimage-description-container');
+        const reimgTextarea  = document.getElementById('reimage-comment-area');
+
+        reimgCheckbox.addEventListener('change', function () {
+            reimgContainer.style.display = this.checked ? 'block' : 'none';
+            if (this.checked) {
+                reimgTextarea.focus();
+                if (!selectedIssues.some(i => i.type === 'MISCELLANEOUS')) {
+                    selectedIssues.push({ value: 'MISCELLANEOUS PART', type: 'MISCELLANEOUS', part: 'MISCELLANEOUS PART' });
+                }
+            } else {
+                reimgTextarea.value = '';
+                selectedIssues = selectedIssues.filter(i => i.type !== 'MISCELLANEOUS');
+            }
+        });
+
+        reimgTextarea.addEventListener('input', function () {
             const idx = selectedIssues.findIndex(i => i.type === 'MISCELLANEOUS');
             if (idx !== -1) {
                 const val = this.value.trim().toUpperCase();
