@@ -832,8 +832,12 @@
         }
 
         let nonAdpBlock = [];
+        const reimageIssue = selectedIssues.find(issue => issue.type === 'REIMAGE');
         selectedIssues.forEach(issue => {
             const isNonAdp = issue.type === 'NON-ADP';
+            if (issue.type === 'REIMAGE') {
+                return;
+            }
             if (isNonAdp) {
                 nonAdpBlock.push(cleanIssueDescription(issue.value));
             } else {
@@ -844,6 +848,12 @@
                reportSections.push(issue.value.replace(/^\([^)]+\):\s*/, ''));
             }
         });
+        if (reimageIssue) {
+            const reimageText = reimageIssue.value && reimageIssue.value !== 'REIMAGE'
+                ? reimageIssue.value
+                : 'DEVICE NEEDS REIMAGING';
+            reportSections.push(reimageText);
+        }
         if (nonAdpBlock.length > 0) reportSections.push('//' + nonAdpBlock.join('. // ') + './/');
 
         let finalBody = reportSections.join(' ').trim();
@@ -851,7 +861,7 @@
 
         let line2 = line2Prefix + finalBody;
 
-        const parts = [...new Set(selectedIssues.filter(i => i.type !== 'MISCELLANEOUS').map(i => i.part))];
+        const parts = [...new Set(selectedIssues.filter(i => i.type !== 'MISCELLANEOUS' && i.type !== 'REIMAGE').map(i => i.part))];
         const combinedHingeIdx = parts.indexOf('LEFT HINGE AND RIGHT HINGE');
         if (combinedHingeIdx !== -1 && parts.length > 1) parts.splice(combinedHingeIdx, 1, 'LEFT HINGE', 'RIGHT HINGE');
 
@@ -1067,21 +1077,22 @@
             reimgContainer.style.display = this.checked ? 'block' : 'none';
             if (this.checked) {
                 reimgTextarea.focus();
-                if (!selectedIssues.some(i => i.type === 'MISCELLANEOUS')) {
-                    selectedIssues.push({ value: 'MISCELLANEOUS PART', type: 'MISCELLANEOUS', part: 'MISCELLANEOUS PART' });
+                const existingIndex = selectedIssues.findIndex(i => i.type === 'REIMAGE');
+                if (existingIndex === -1) {
+                    selectedIssues.push({ value: 'REIMAGE', type: 'REIMAGE', part: 'REIMAGE', device: null });
                 }
             } else {
                 reimgTextarea.value = '';
-                selectedIssues = selectedIssues.filter(i => i.type !== 'MISCELLANEOUS');
+                selectedIssues = selectedIssues.filter(i => i.type !== 'REIMAGE');
             }
         });
 
         reimgTextarea.addEventListener('input', function () {
-            const idx = selectedIssues.findIndex(i => i.type === 'MISCELLANEOUS');
+            const idx = selectedIssues.findIndex(i => i.type === 'REIMAGE');
             if (idx !== -1) {
                 const val = this.value.trim().toUpperCase();
-                selectedIssues[idx].value = val || 'MISCELLANEOUS PART';
-                selectedIssues[idx].part  = val || 'MISCELLANEOUS PART';
+                selectedIssues[idx].value = val || 'REIMAGE';
+                selectedIssues[idx].part  = 'REIMAGE';
             }
         });
 
