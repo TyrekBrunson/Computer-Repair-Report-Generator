@@ -8,6 +8,13 @@
     <link rel="stylesheet" href="diag-styles.css">
 </head>
 <body>
+<div id="staleness-overlay" class="staleness-overlay" aria-hidden="true"></div>
+<div id="refresh-required-modal" class="refresh-required-modal" role="dialog" aria-modal="true" aria-live="assertive">
+    <div class="refresh-required-modal__content">
+        <h2>Refresh Required</h2>
+        <p>This page has not been refreshed for 1 minute. Please refresh the page now.</p>
+    </div>
+</div>
 <div class="container">
     <!-- Hamburger Menu -->
     <div class="hamburger-menu">
@@ -947,6 +954,56 @@
     // =========================================================
     // AUTO-REFRESH COUNTDOWN
     // =========================================================
+    const REFRESH_STALE_START_HOURS = 5;
+    const REFRESH_STALE_FULL_HOURS = 16;
+    const REFRESH_STALE_KEY = 'diagnostic-page-last-refresh';
+
+    function markPageRefreshed() {
+        sessionStorage.setItem(REFRESH_STALE_KEY, Date.now().toString());
+        updateStalenessOverlay();
+    }
+
+    function getRefreshAgeMs() {
+        const storedValue = sessionStorage.getItem(REFRESH_STALE_KEY);
+        if (!storedValue) {
+            markPageRefreshed();
+            return 0;
+        }
+
+        const storedTime = Number(storedValue);
+        if (Number.isNaN(storedTime)) {
+            markPageRefreshed();
+            return 0;
+        }
+
+        return Date.now() - storedTime;
+    }
+
+    function updateStalenessOverlay() {
+        const overlay = document.getElementById('staleness-overlay');
+        if (!overlay) return;
+
+        const ageMs = getRefreshAgeMs();
+        const startMs = REFRESH_STALE_START_HOURS * 60 * 60 * 1000;
+        const fullMs = REFRESH_STALE_FULL_HOURS * 60 * 60 * 1000;
+
+        const refreshModal = document.getElementById('refresh-required-modal');
+
+        if (ageMs < startMs) {
+            overlay.style.backgroundColor = 'rgba(255, 0, 0, 0)';
+            if (refreshModal) refreshModal.classList.remove('show');
+            return;
+        }
+
+        const progress = Math.min(1, (ageMs - startMs) / (fullMs - startMs));
+        const alpha = 0.08 + progress * 0.5;
+        overlay.style.backgroundColor = `rgba(255, 0, 0, ${alpha.toFixed(3)})`;
+
+        if (refreshModal) {
+            refreshModal.classList.toggle('show', ageMs >= fullMs);
+        }
+    }
+
     function formatTime(date) {
         let hours = date.getHours();
         const minutes = date.getMinutes().toString().padStart(2, '0');
@@ -1089,6 +1146,7 @@
         document.getElementById('initial-comment-checkbox').addEventListener('change', toggleInitialCommentDescription);
         toggleCannotVerifyDescription();
         toggleInitialCommentDescription();
+        markPageRefreshed();
         updateRefreshStatus();
         window.clearAllIssues = clearAllIssues;
         window.generateReport = generateReport;
@@ -1096,6 +1154,7 @@
 
     setInterval(function() {
         updateRefreshCountdown();
+        updateStalenessOverlay();
         const now = new Date();
         const nextRefresh = getNextRefreshTime(now);
         const prevRefresh = getPreviousRefreshTime(now);
