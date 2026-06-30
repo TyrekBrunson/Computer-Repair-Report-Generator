@@ -24,41 +24,44 @@
             margin-bottom: 20px;
             font-size: 20px;
             display: flex;
-            flex-direction: row;
-            gap: 50px;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
             justify-content: center;
+        }
+        nav a /*button styling*/ {
+            box-sizing: border-box;
+            width: 267px;
+            height: 87px;
+            text-decoration: none;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center; 
+            gap: 10px;
+            padding: 10px;
+            border-radius: 4px;
         }
         #diag-link {
             color: rgb(255, 255, 255);
-            text-decoration: none;
             border: 1px solid #bb741d;
             background-color: #e2af70;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px;
-            border-radius: 4px;
         }
         #repair-link {
             color: rgb(255, 255, 255);
-            text-decoration: none;
             border: 1px solid #07850f;
             background-color: #0c922b;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px;
-            border-radius: 4px;
         }
         #paylocity-link {
-
-            background-image: url('/images/paylocity.ico');
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px;
-            border-radius: 4px;
+            color: #d3d3d3;
+            border: 1px solid #d3d3d3;
+            background-color: #fafbfc;
         }
+        #ref-docs-link {
+            color: rgb(255, 255, 255);
+            border: 1px solid #0d61a7;
+            background-color: #5084d3;
+         }
     </style>
 </head>
 <body>
@@ -68,11 +71,17 @@
         <h1>Columbia Web Center</h1>
     </header>
     <nav>
+        <div style="display: flex; justify-content: center; align-items: center; gap: 50px; flex-wrap: wrap;">
         <a href="diagnostic_generator/diagnostic_generator.html" id="diag-link">Diagnostic Generator 💻</a>
         <a href="repair_generator/repair_generator.html" id="repair-link">Repair Generator 🛠️</a>
-        <a href="https://access.paylocity.com/" id="paylocity-link" style="display: inline-flex; align-items: center; gap: 8px; border: 1px solid #d3d3d3; border-radius: 4px; padding: 6px 12px; color: #d3d3d3; text-decoration: none; font-weight: bold; font-family: sans-serif; background-color: #fafbfc;">
-			<img src="images/PaylocitylogoTransparentICO.png" alt="Paylocity Icon" width="247" height="67">
-		</a>
+        <a href="https://access.paylocity.com/" id="paylocity-link">
+            <img src="images/PaylocitylogoTransparentICO.png" alt="Paylocity Icon" width="247" height="67">
+        </a>
+        </div>
+        <div style="display: flex; justify-content: center;">
+        <a href="https://ebryitinc-my.sharepoint.com/:f:/r/personal/apickard_ebryit_com/Documents/Reference%20Documents?csf=1&web=1&e=e6mgaV" id="ref-docs-link">Reference Documents 📂</a>
+        </div>
+    </nav>
 </body>
 </html>
   <link rel="icon" type="image/x-icon" href="../images/laptopICO.ico">
