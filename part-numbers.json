@@ -1,0 +1,2609 @@
+{
+  "Chromebook 3100 - Touch": {
+    "worthProvided": [
+      {
+        "partNumber": "16DPH",
+        "description": "Battery",
+        "category": "NON",
+        "notes": "PHOTO (% + PHYSICAL)",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "7PR30",
+        "description": "Battery Cable",
+        "category": "NON",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "2RY30",
+        "description": "Bottom Cover",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "TWY13",
+        "description": "Embedded Display Port Cable",
+        "category": "NON",
+        "notes": "PHOTO (Screen)",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "0D2DT",
+        "description": "Keyboard",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "H06WJ",
+        "description": "Keyboard",
+        "category": "NON",
+        "notes": "PHOTO (Whole Palm); model note: *Chromebook 3100*",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "6C2J6",
+        "description": "LCD Bezel",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "2G5VN",
+        "description": "LCD Screen",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "TM6C0",
+        "description": "LCD Screen",
+        "category": "NON",
+        "notes": "PHOTO (Screen)",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "JTKWX",
+        "description": "Left & Right Hinges",
+        "category": "NON",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "R5KHK",
+        "description": "Left Hinge",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "28T1W",
+        "description": "Palmrest (For Touchpad)",
+        "category": "NON",
+        "notes": "PHOTO (Whole Palm)",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "TK87M",
+        "description": "Palmrest - 2 USB",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "8PKK7",
+        "description": "Right Hinge",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "MFX68",
+        "description": "Speakers",
+        "category": "NON",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "P99NW",
+        "description": "Top Cover",
+        "category": "NON",
+        "notes": "PHOTO (Whole Top)",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "34YFY",
+        "description": "Top Cover",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "RJR6J-S",
+        "description": "Touchpad",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "G61M2",
+        "description": "USB Daughter Board",
+        "category": "NON",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "F4N98",
+        "description": "USB Type C Power Cable",
+        "category": "NON",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "G4JK9",
+        "description": "Webcam",
+        "category": "NON",
+        "source": "FieldPower"
+      }
+    ],
+    "warranty": [],
+    "motherboards": [
+      {
+        "partNumber": "N95V6",
+        "description": "Motherboard",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "M78MY",
+        "description": "Motherboard 4 GB RAM - Celeron N4120 1.1 GHz Quad Core - 32GB Storage",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "H9PRR",
+        "description": "Motherboard 4 GB RAM - Celeron N4020 1.1 Ghz Dual Core - 32GB Storage",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "0N983V-S",
+        "description": "Salvaged Motherboard - 1.1GHz Dual Core Celeron N4020 - 32GB Storage",
+        "source": "FieldPower"
+      }
+    ]
+  },
+  "Chromebook 3100": {
+    "worthProvided": [
+      {
+        "partNumber": "277M9",
+        "description": "AC Power Adapter",
+        "category": "NON",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "K260C",
+        "description": "AC Power Cord",
+        "category": "NON",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "GJJYR",
+        "description": "Base Unit",
+        "category": "NON",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "FY8XM",
+        "description": "Battery",
+        "category": "NON",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "16DPH",
+        "description": "Battery",
+        "category": "NON",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "9MJG6",
+        "description": "Battery Cable",
+        "category": "NON",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "7PR30",
+        "description": "Battery Cable",
+        "category": "NON",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "2RY30",
+        "description": "Bottom Cover",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "D2D9P",
+        "description": "Daughterboard Cable",
+        "category": "NON",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "V11RY",
+        "description": "Embedded Display Port Cable",
+        "category": "NON",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "TWY13",
+        "description": "Embedded Display Port Cable",
+        "category": "NON",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "XVRN2",
+        "description": "Front Facing Camera",
+        "category": "NON",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "H06WJ",
+        "description": "Keyboard",
+        "category": "NON",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "0D2DT",
+        "description": "Keyboard",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "Y0G0C",
+        "description": "LCD Assembly",
+        "category": "NON",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "MFX94",
+        "description": "LCD Bezel",
+        "category": "NON",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "6C2J6",
+        "description": "LCD Bezel",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "TWY16",
+        "description": "LCD Cable 5M",
+        "category": "NON",
+        "notes": "Part Type: New",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "34YFY",
+        "description": "LCD Cover",
+        "category": "NON",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "FGF20",
+        "description": "LCD Screen",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "FHMWH",
+        "description": "LCD Screen",
+        "category": "NON",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "JTKWX",
+        "description": "Left & Right Hinges",
+        "category": "NON",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "R5KHK",
+        "description": "Left Hinge",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "34Y6Y",
+        "description": "Palmrest",
+        "category": "NON",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "C0GYX",
+        "description": "Palmrest",
+        "category": "NON",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "9X8D7",
+        "description": "Palmrest - Richland 2",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "TK87M",
+        "description": "Palmrest With Touch",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "TYHCF",
+        "description": "Palmrest With Touch",
+        "category": "NON",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "YNRFG",
+        "description": "Right Hinge",
+        "category": "NON",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "8PKK7",
+        "description": "Right Hinge",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "MFX68",
+        "description": "Speakers",
+        "category": "NON",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "34YFY",
+        "description": "Top Cover",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "2G5VN",
+        "description": "Touch LCD Screen",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "RJR6J",
+        "description": "Touchpad",
+        "category": "NON",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "G61M2",
+        "description": "USB Daughter Board",
+        "category": "NON",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "F4N98",
+        "description": "USB Type C Power Cable",
+        "category": "NON",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "G4JK9",
+        "description": "Webcam",
+        "category": "NON",
+        "source": "FieldPower"
+      }
+    ],
+    "warranty": [],
+    "motherboards": [
+      {
+        "partNumber": "H9PRR",
+        "description": "Motherboard (4 GB)",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "W1C7C",
+        "description": "Motherboard With Daughterboard",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "GD6HC",
+        "description": "Motherboard Without Daughterboard",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "0N983V",
+        "description": "Motherboard - 1.1GHz Dual Core Celeron N4020 - 32GB Storage",
+        "source": "FieldPower"
+      }
+    ],
+    "notes": "Sheet header: 'YOU SHOULD PROBABLY BE USING THE (3100 - TOUCH) SHEET'"
+  },
+  "Chromebook 3100 2-in-1": {
+    "worthProvided": [
+      {
+        "partNumber": "277M9",
+        "description": "AC Adapter",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "FY8XM",
+        "description": "Battery",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "7PR30",
+        "description": "Battery Cable",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "9MJG6",
+        "description": "Battery Cable",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "PPWP2",
+        "description": "Bottom Base Cover",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "2RY30",
+        "description": "Bottom Cover",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "D2D9P",
+        "description": "Daughterboard Cable",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "TYHCF",
+        "description": "Embedded Display Port Cable",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "RJ2NM",
+        "description": "I/O Daughter Board",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "H06WJ",
+        "description": "Keyboard",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "0D2DT",
+        "description": "Keyboard",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "279W8",
+        "description": "LCD Back Cover",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "6C2J6",
+        "description": "LCD Bezel",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "V11RY",
+        "description": "LCD Cable",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "GKXD1",
+        "description": "LCD Cover",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "45GHC",
+        "description": "LCD Screen",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "9MH3J",
+        "description": "LCD Touch Screen",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "3M03V",
+        "description": "Left & Right Hinges",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "R5KMT",
+        "description": "Left Hinge",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "R5KHK",
+        "description": "Left Hinge",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "R2K1H",
+        "description": "Motherboard",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "9X8D7",
+        "description": "Palmrest",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "34Y6Y",
+        "description": "Palmrest",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "1WNRV",
+        "description": "Palmrest - Anderson 3",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "WFYT5",
+        "description": "Palmrest With Camera",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "YNRFG",
+        "description": "Right Hinge",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "8PKK7",
+        "description": "Right Hinge",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "MFX68",
+        "description": "Speakers",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "P99NW",
+        "description": "Top Cover",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "G4JK9",
+        "description": "Webcam",
+        "category": "UADP",
+        "source": "FieldPower"
+      }
+    ],
+    "warranty": [],
+    "motherboards": []
+  },
+  "Chromebook 3110": {
+    "worthProvided": [
+      {
+        "partNumber": "0YT39X",
+        "description": "Battery",
+        "category": "NON",
+        "notes": "PHOTO (% + PHYSICAL)",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "YT39X",
+        "description": "Battery",
+        "category": "NON",
+        "notes": "PHOTO (% + PHYSICAL)",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "07T73H",
+        "description": "Battery Cable",
+        "category": "NON",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "7T73H",
+        "description": "Battery Cable",
+        "category": "NON",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "0W5W31",
+        "description": "Bezel",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "0KT6XH",
+        "description": "Bottom Cover",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "KT6XH",
+        "description": "Bottom Cover",
+        "category": "NON",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "XYXJ2",
+        "description": "Camera",
+        "category": "NON",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "3G0H0",
+        "description": "Keyboard",
+        "category": "NON",
+        "notes": "PHOTO (Whole Palm)",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "03G0H0",
+        "description": "Keyboard",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "W5W31",
+        "description": "LCD Bezel",
+        "category": "NON",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "0RT4GY",
+        "description": "LCD Cable",
+        "category": "NON",
+        "notes": "PHOTO (Screen)",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "NF6YY",
+        "description": "LCD Cable - Touch Screen",
+        "category": "NON",
+        "notes": "PHOTO (Screen)",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "1197G",
+        "description": "LCD Cover (TOP COVER)",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "1JCKW",
+        "description": "LCD Touch Screen",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "0MWDNF",
+        "description": "LCD Screen (*NON TOUCH*)",
+        "category": "UADP AND NON ADP",
+        "notes": "USE THIS FOR BOTH ADP AND NON-ADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "RCCDP",
+        "description": "Left and Right Hinges",
+        "category": "NON",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "0R5KMT",
+        "description": "Left Hinge",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "00H7CN",
+        "description": "Palmrest - 2 USB",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "0YNRFG",
+        "description": "Right Hinge",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "0MFX68",
+        "description": "Speakers",
+        "category": "NON",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "MFX68",
+        "description": "Speakers",
+        "category": "NON",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "0M05K0",
+        "description": "Webcam",
+        "category": "NON",
+        "source": "FieldPower"
+      }
+    ],
+    "warranty": [],
+    "motherboards": [
+      {
+        "partNumber": "0VY37V",
+        "description": "Motherboard",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "137C3",
+        "description": "Motherboard",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "0H28M4",
+        "description": "Motherboard",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "0M1DGT",
+        "description": "Motherboard",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "V8TP1",
+        "description": "Motherboard",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "05M6T5",
+        "description": "Motherboard - 4 GB RAM - 1.1 GHz Dual Core Celeron N4500 - 64 GB Storage",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "006H2T",
+        "description": "Motherboard - 1.10 GHz dual core Intel N100 Quad Core CPU, 2.8 Ghz Burst, 4GB RAM, 32GB Hard Drive",
+        "source": "FieldPower"
+      }
+    ]
+  },
+  "Chromebook 3110 2-in-1": {
+    "worthProvided": [
+      {
+        "partNumber": "YT39X",
+        "description": "Battery",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "7T73H",
+        "description": "Battery Cable",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "GW93P",
+        "description": "Bottom Cover",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "W-0K07PR",
+        "description": "Heatsink",
+        "category": "UADP",
+        "notes": "Why is a worth Part here? Who knows. Dont pick it unless you want to get smacked",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "3M03V",
+        "description": "Hinge Set",
+        "category": "UADP",
+        "notes": "ORDER FOR INDIVIDUAL HINGES, SPECIFY ON THE PAPER WHICH HINGE IS NEEDED",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "RFXCF",
+        "description": "Keyboard",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "Y21WR",
+        "description": "LCD Cable",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "X1M23",
+        "description": "LCD - 11.6\" Touchscreen WXGAHD LCD LED Widescreen",
+        "category": "NON",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "17M7M",
+        "description": "LCD Screen - Touch",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "7HRRT",
+        "description": "Motherboard",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "7J75H",
+        "description": "Palmrest",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "K07W7",
+        "description": "Palmrest (w/o WFC)",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "MFX68",
+        "description": "Speakers",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "KX8T2",
+        "description": "Top Cover",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "NYJPR",
+        "description": "Webcam",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "GVCKW",
+        "description": "WFC Cable",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "Y7N24",
+        "description": "World Facing Camera",
+        "category": "UADP",
+        "source": "FieldPower"
+      }
+    ],
+    "warranty": [],
+    "motherboards": []
+  },
+  "Chromebook 3120": {
+    "worthProvided": [
+      {
+        "partNumber": "7K4PW",
+        "description": "Screen - Touch (*USE FOR BOTH ADP AND NON-ADP*)",
+        "category": "UADP",
+        "notes": "PHOTO (Screen)",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "W5W31",
+        "description": "LCD Bezel",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "1197G",
+        "description": "Top Cover",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "1YVFX",
+        "description": "Bottom Cover",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "NT57R",
+        "description": "Palmrest with 2 USB Ports",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "3G0H0",
+        "description": "Keyboard",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "RCCDP",
+        "description": "Left or Right Hinge",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "X9T75",
+        "description": "Daughterboard",
+        "category": "NON",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "YT39X",
+        "description": "Battery",
+        "category": "NON",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "7T73H",
+        "description": "Battery Cable",
+        "category": "NON",
+        "notes": "PHOTO (% + PHYSICAL)",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "NF6YY",
+        "description": "LCD Cable",
+        "category": "NON",
+        "notes": "PHOTO (Screen)",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "XYXJ2",
+        "description": "Webcam",
+        "category": "NON",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "MFX68",
+        "description": "Speakers",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "0t2t93",
+        "description": "UPPER I/O BRAKET",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "JDB10-L-B",
+        "description": "LOWER I/O BRACKET",
+        "source": "FieldPower"
+      }
+    ],
+    "warranty": [],
+    "motherboards": [
+      {
+        "partNumber": "JK75Y",
+        "description": "Motherboard",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "868GG",
+        "description": "Motherboard, Intel N100 Quad Core Processor, 4GB RAM, 64GB EMMC Drive",
+        "source": "FieldPower"
+      }
+    ]
+  },
+  "Chromebook 3120 2-in-1": {
+    "worthProvided": [
+      {
+        "partNumber": "YT39X",
+        "description": "Battery",
+        "category": "Consumables",
+        "notes": "Vendor: Dell",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "7T73H",
+        "description": "Battery Cable",
+        "category": "Consumables",
+        "notes": "Vendor: Dell",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "0T4JW",
+        "description": "Bottom Cover",
+        "category": "Consumables",
+        "notes": "Vendor: Dell",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "RM09H",
+        "description": "Camera",
+        "category": "Consumables",
+        "notes": "Vendor: Dell",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "YYNTM",
+        "description": "Daughterboard I/O",
+        "category": "Consumables",
+        "notes": "Vendor: Dell",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "92PD7",
+        "description": "Embedded Display Port Cable",
+        "category": "Consumables",
+        "notes": "Vendor: Dell",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "RFXCF",
+        "description": "Keyboard",
+        "category": "Consumables",
+        "notes": "Vendor: Dell",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "R5KMT",
+        "description": "Left Hinge",
+        "category": "Consumables",
+        "notes": "Vendor: Dell",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "4CK8F",
+        "description": "Palmrest w/WFC",
+        "category": "Consumables",
+        "notes": "Vendor: Dell",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "YNRFG",
+        "description": "Right Hinge",
+        "category": "Consumables",
+        "notes": "Vendor: Dell",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "MFX68",
+        "description": "Speakers",
+        "category": "Consumables",
+        "notes": "Vendor: Dell",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "G3C2R",
+        "description": "Top Cover",
+        "category": "Consumables",
+        "notes": "Vendor: Dell",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "689C0",
+        "description": "Touch Screen - Touch",
+        "category": "Consumables",
+        "notes": "Vendor: Dell",
+        "source": "FieldPower"
+      }
+    ],
+    "warranty": [],
+    "motherboards": [
+      {
+        "partNumber": "28FDG",
+        "description": "Motherboard, Intel N100, 8GB",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "TH4R1",
+        "description": "Motherboard, Intel N100, 8GB",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "0TH4R1",
+        "description": "OEM Motherboard - 8GB RAM - 3.4 GHz Intel N100 - 64 GB Storage",
+        "source": "FieldPower"
+      }
+    ]
+  },
+  "Latitude 3120": {
+    "worthProvided": [
+      {
+        "partNumber": "R1060",
+        "description": "Bezel",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "R0577",
+        "description": "Bottom Cover (NO USC-C)",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "T0587",
+        "description": "DC-in",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "R4910",
+        "description": "Palm Rest",
+        "notes": "SAME PART FOR ADP AND NON ADP; shared with Latitude 3120 2-in-1",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "WCDNH",
+        "description": "LCD",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "0R6877",
+        "description": "Left Hinge",
+        "category": "UADP",
+        "notes": "*CHOOSE THE CORRECT MODEL*",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "0R6416",
+        "description": "Right Hinge",
+        "category": "UADP",
+        "notes": "*CHOOSE THE CORRECT MODEL*",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "R1047",
+        "description": "Top Cover",
+        "category": "UADP",
+        "source": "FieldPower"
+      }
+    ],
+    "warranty": [
+      {
+        "partNumber": "0N2309",
+        "description": "Audio Board",
+        "category": "Normal",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "0T0767",
+        "description": "Audio Board Cable",
+        "category": "Normal",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "0TXD03",
+        "description": "Battery",
+        "category": "Normal",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "0T0768",
+        "description": "Battery Cable",
+        "category": "Normal",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "T0587",
+        "description": "DC-In Jack",
+        "category": "Normal",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "0YPG7G",
+        "description": "LCD (NO TOUCH)",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "0T0431",
+        "description": "LCD Cable",
+        "category": "Normal",
+        "notes": "PHOTO (Whole Screen)",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "0TN2CC",
+        "description": "Solid State Hard Drive",
+        "category": "Normal",
+        "notes": "PHOTO (Failure)",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "0T0462",
+        "description": "Wireless Cable",
+        "category": "Normal",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "0ND233",
+        "description": "Speakers",
+        "category": "Normal",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "R4910",
+        "description": "Palmrest",
+        "category": "Normal",
+        "notes": "***SAME AS ADP PART*** PHOTO (Whole Palm); shared with Latitude 3120 2-in-1",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "M05K0",
+        "description": "Webcam",
+        "category": "Normal",
+        "notes": "shared with Latitude 3120 2-in-1",
+        "source": "FieldPower"
+      }
+    ],
+    "motherboards": [
+      {
+        "partNumber": "0MY091",
+        "description": "Dell OEM Latitude 3120 Motherboard System Board Intel Celeron Quad Core 1.1GHz CPU - 4GB",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "0MY090",
+        "description": "Dell Latitude 3120 Motherboard System Board Celeron Quad Core 1.1GHz - 64GB EMMC - 4GB - MY090",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "M1374",
+        "description": "Motherboard 8GB - LPDDR4 - Intel Core Pentium Silver N6000 - 3.30 GHz",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "0M0DGG",
+        "description": "Motherboard - 4 GB RAM - 1.1 GHz Celeron Quad Core - 64 GB Storage",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "0MY093",
+        "description": "Motherboard - 8 GB RAM - 1.1 GHz N6000 CPU - Removable MSATA Storage",
+        "source": "FieldPower"
+      }
+    ]
+  },
+  "Latitude 3120 2-in-1": {
+    "worthProvided": [
+      {
+        "partNumber": "T0587",
+        "description": "DC-in",
+        "category": "UADP",
+        "notes": "Shared with Latitude 3120 (DC-in/Palmrest interchangeable)",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "R4910",
+        "description": "Palm Rest",
+        "category": "UADP",
+        "notes": "Shared with Latitude 3120 (DC-in/Palmrest interchangeable)",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "R0577",
+        "description": "Bottom Cover (NO USB-C)",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "R0759",
+        "description": "Bottom Cover ***WITH TYPE C CHARGER SLOT***",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "YPG7G",
+        "description": "LCD 2-in-1",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "0P8795",
+        "description": "Top Cover 2-in-1",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "PF108",
+        "description": "Left Hinge",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "PF110",
+        "description": "Right Hinge",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "W-FWJTG",
+        "description": "256 GB M.2 Solid State Hard Drive",
+        "category": "WORTH-PROVIDED",
+        "price": 41.94,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-N2309",
+        "description": "Audio Daughterboard",
+        "category": "WORTH-PROVIDED",
+        "price": 20.34,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-H5CKD",
+        "description": "Battery",
+        "category": "WORTH-PROVIDED",
+        "price": 131.9,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-T0768",
+        "description": "Battery Cable",
+        "category": "WORTH-PROVIDED",
+        "price": 15.95,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-0R0759",
+        "description": "Bottom Cover With Optional USB-C Port",
+        "category": "WORTH-PROVIDED",
+        "price": 29.94,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-0T0587",
+        "description": "DC Jack/Charging Port",
+        "category": "WORTH-PROVIDED",
+        "price": 29.96,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-PF108",
+        "description": "Hinge (Left)",
+        "category": "WORTH-PROVIDED",
+        "price": 29.94,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-PN110",
+        "description": "Hinge (Right)",
+        "category": "WORTH-PROVIDED",
+        "price": 29.94,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-P8795",
+        "description": "LCD Back Cover (TOP COVER)",
+        "category": "WORTH-PROVIDED",
+        "price": 35.94,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-T0431",
+        "description": "LCD Ribbon Cable",
+        "category": "WORTH-PROVIDED",
+        "price": 29.94,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-ND233",
+        "description": "Left and Right Speakers",
+        "category": "WORTH-PROVIDED",
+        "price": 20.34,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-WC794",
+        "description": "Palmrest/Keyboard Assembly (Backlit)",
+        "category": "WORTH-PROVIDED",
+        "price": 53.94,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-T0462",
+        "description": "Sensor Board (HALL SENSOR)",
+        "category": "WORTH-PROVIDED",
+        "price": 13.95,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-U3062",
+        "description": "Touch LCD with Bezel (LCD SCREEN)",
+        "category": "WORTH-PROVIDED",
+        "price": 101.9,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-R6675",
+        "description": "Touchpad",
+        "category": "WORTH-PROVIDED",
+        "price": 23.94,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-0M05K0",
+        "description": "Web Camera",
+        "category": "WORTH-PROVIDED",
+        "price": 23.94,
+        "source": "Richland-WorthProvided"
+      }
+    ],
+    "warranty": [
+      {
+        "partNumber": "RWDY5",
+        "description": "LCD 2-IN-1",
+        "category": "Normal",
+        "notes": "PHOTO (Whole Screen)",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "NX9FY",
+        "description": "Top Cover (Wi-fi cable / Hall Sensor)",
+        "category": "Normal",
+        "notes": "IF ORDERING A HALL SENSOR OR WIFI CABLE - USE THE VERBIAGE FOR THAT SPECIFIC PART IN FIELD POWER. PHOTO (Whole Top)",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "R4910",
+        "description": "Palmrest",
+        "category": "Normal",
+        "notes": "***SAME AS ADP PART*** PHOTO (Whole Palm); shared with Latitude 3120",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "M05K0",
+        "description": "Webcam",
+        "category": "Normal",
+        "notes": "shared with Latitude 3120",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "0ND233",
+        "description": "Speakers",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "P8795",
+        "description": "Top Cover",
+        "notes": "PHOTO (Whole Top Assembly)",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "YPG7G",
+        "description": "LCD",
+        "notes": "PHOTO (Whole Screen)",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "R4910",
+        "description": "Keyboard With Palmrest",
+        "notes": "PHOTO (Whole Palmrest)",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "0T0431",
+        "description": "LCD Cable",
+        "notes": "PHOTO (Whole Screen)",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "0TN2CC",
+        "description": "Solid State Hard Drive",
+        "notes": "PHOTO (Failure QR Code)",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "M05K0",
+        "description": "Webcam",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "0TXD03",
+        "description": "Battery",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "0T0767",
+        "description": "Audio Board Cable",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "0T0768",
+        "description": "Battery Cable",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "T0587",
+        "description": "DC-In Jack",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "0T0462",
+        "description": "Wireless Cable",
+        "source": "Richland-WorthProvided"
+      }
+    ],
+    "motherboards": [
+      {
+        "partNumber": "W-0MY093",
+        "description": "8GB Motherboard",
+        "category": "WORTH-PROVIDED",
+        "notes": "USE THIS MOBO FOR DIAG",
+        "price": 161.9,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "F3Y5N",
+        "description": "Motherboard - 8 GB RAM - 1.1 GHz Quad Core CPU",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "0MY093",
+        "description": "Motherboard - 8 GB RAM - 1.1 GHz N6000 CPU - Removable MSATA Storage",
+        "source": "Richland-WorthProvided"
+      }
+    ]
+  },
+  "Latitude 3140": {
+    "worthProvided": [
+      {
+        "partNumber": "55C45",
+        "description": "Bezel",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "5816G",
+        "description": "Bottom Cover (2-CELL)",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "587N9",
+        "description": "Bottom Cover (3-CELL)",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "T0587",
+        "description": "DC-in",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "0R6416",
+        "description": "Right Hinge",
+        "category": "UADP",
+        "notes": "*CHOOSE THE CORRECT MODEL*",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "0R6877",
+        "description": "Left Hinge",
+        "category": "UADP",
+        "notes": "*CHOOSE THE CORRECT MODEL*",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "8NYG0",
+        "description": "LCD",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "DGFJ9",
+        "description": "Palmrest",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "DC8CD",
+        "description": "Top Cover",
+        "category": "UADP",
+        "source": "FieldPower"
+      }
+    ],
+    "warranty": [
+      {
+        "partNumber": "TRDFV",
+        "description": "256 GB Solid State Hard Drive",
+        "category": "NORMAL",
+        "notes": "PHOTO (Failure)",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "8N7Y1",
+        "description": "Audio Daughterboard With Cable",
+        "category": "NORMAL",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "TXD03",
+        "description": "Battery",
+        "category": "NORMAL",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "T0768",
+        "description": "Battery Cable",
+        "category": "NORMAL",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "T0587",
+        "description": "DC Power Input Jack",
+        "category": "NORMAL",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "Y9P1M",
+        "description": "11.6\" WXGAHD LCD LED Widescreen Matte *LCD NON TOUCH SCREEN*",
+        "category": "NORMAL",
+        "notes": "PHOTO (Whole Screen)",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "6P80N",
+        "description": "*LCD TOUCH SCREEN*",
+        "category": "NORMAL",
+        "notes": "PHOTO (Whole Screen)",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "50D69",
+        "description": "LCD Cable",
+        "category": "NORMAL",
+        "notes": "PHOTO (Whole Screen)",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "R4910",
+        "description": "Palmrest",
+        "category": "NORMAL",
+        "notes": "PHOTO (Whole Palm)",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "ND233",
+        "description": "Speakers",
+        "category": "NORMAL",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "P8795",
+        "description": "Top Cover (Wi-fi cable / Hall Sensor)",
+        "category": "NORMAL",
+        "notes": "PHOTO (Whole Top)",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "D8J87",
+        "description": "Webcam",
+        "category": "NORMAL",
+        "source": "FieldPower"
+      }
+    ],
+    "motherboards": [
+      {
+        "partNumber": "PNKFT",
+        "description": "Motherboard",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "0J2D4P",
+        "description": "Motherboard - 4 GB RAM - 3.4 GHZ N100",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "P70C3",
+        "description": "Motherboard LA-M501P - 3.4 Ghz, N100 Processor, 4GB RAM",
+        "source": "FieldPower"
+      }
+    ]
+  },
+  "Latitude 3140 2-in-1": {
+    "worthProvided": [
+      {
+        "partNumber": "9C2PM",
+        "description": "LCD - 2-in-1",
+        "category": "UADP",
+        "notes": "Other parts for 2-in-1 have same Part# - Interchangeable Again",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "DCWWV",
+        "description": "Top Cover 2-in-1",
+        "category": "UADP",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "PF108",
+        "description": "Left Hinge",
+        "category": "UADP",
+        "notes": "*CHOOSE THE CORRECT MODEL*",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "PF110",
+        "description": "Right Hinge",
+        "category": "UADP",
+        "notes": "*CHOOSE THE CORRECT MODEL*",
+        "source": "FieldPower"
+      },
+      {
+        "partNumber": "W-FWJTG",
+        "description": "256 GB M.2 Solid State Hard Drive",
+        "category": "WORTH-PROVIDED",
+        "price": 41.94,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-H5CKD",
+        "description": "Battery",
+        "category": "WORTH-PROVIDED",
+        "price": 131.9,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-T0768",
+        "description": "Battery Cable",
+        "category": "WORTH-PROVIDED",
+        "price": 15.95,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-05816G",
+        "description": "Bottom Cover With USB-C Port",
+        "category": "WORTH-PROVIDED",
+        "price": 47.98,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-0T0587",
+        "description": "DC Jack/Charging Port",
+        "category": "WORTH-PROVIDED",
+        "price": 29.96,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-UP485",
+        "description": "Hinge Set",
+        "category": "WORTH-PROVIDED",
+        "price": 47.98,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-4T28H",
+        "description": "Keyboard Palmrest Touchpad Assembly",
+        "category": "WORTH-PROVIDED",
+        "price": 53.94,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-50D69",
+        "description": "LCD Cable",
+        "category": "WORTH-PROVIDED",
+        "price": 41.02,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-4GGNY",
+        "description": "LCD Housing - Touch (Top Cover)",
+        "category": "WORTH-PROVIDED",
+        "price": 47.98,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-PF108",
+        "description": "Left Hinge",
+        "category": "WORTH-PROVIDED",
+        "price": 29.94,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-PN110",
+        "description": "Right Hinge",
+        "category": "WORTH-PROVIDED",
+        "price": 29.94,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-51MHY",
+        "description": "Right Side Circuit Board (Head Phone Daughterboard)",
+        "category": "WORTH-PROVIDED",
+        "price": 23.94,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-T0462",
+        "description": "Sensor Board (Hall Sensor)",
+        "category": "WORTH-PROVIDED",
+        "price": 13.95,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-806R4",
+        "description": "Touch Screen With Bezel (LCD SCREEN)",
+        "category": "WORTH-PROVIDED",
+        "price": 125.9,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-R6675",
+        "description": "Touchpad",
+        "category": "WORTH-PROVIDED",
+        "price": 23.94,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-0M05K0",
+        "description": "Web Camera",
+        "category": "WORTH-PROVIDED",
+        "price": 23.94,
+        "source": "Richland-WorthProvided"
+      }
+    ],
+    "warranty": [
+      {
+        "partNumber": "TRDFV",
+        "description": "256 GB Solid State Hard Drive",
+        "notes": "PHOTO (Failure QR Code)",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "8N7Y1",
+        "description": "Audio Daughterboard With Cable",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "TXD03",
+        "description": "Battery",
+        "notes": "PHOTO (Failure QR Code)",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "R4910",
+        "description": "Keyboard With Palmrest",
+        "notes": "PHOTO (Whole Palmrest)",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "9C2PM",
+        "description": "LCD",
+        "notes": "PHOTO (Whole Screen)",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "50D69",
+        "description": "LCD Cable",
+        "notes": "PHOTO (Whole Screen)",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "ND233",
+        "description": "Speakers",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "DCWWV",
+        "description": "Top Cover",
+        "notes": "PHOTO (Whole Top Assembly)",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "D8J87",
+        "description": "WebCam",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "T0587",
+        "description": "DC Jack",
+        "source": "Richland-WorthProvided"
+      }
+    ],
+    "motherboards": [
+      {
+        "partNumber": "W-PNKFT",
+        "description": "8 GB Motherboard (NVMe SSD)",
+        "category": "WORTH-PROVIDED",
+        "price": 227.9,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-0PHVVR",
+        "description": "Motherboard - 8GB RAM - N200, 128GB Storage (Integrated SSD)",
+        "category": "WORTH-PROVIDED",
+        "price": 337.9,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "PNKFT",
+        "description": "Motherboard - 8GB (NVMe SSD)",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "PHVVR",
+        "description": "Motherboard - 8 GB RAM - 3.7 Quad Core N200 - 128 GB SSD (Integrated SSD)",
+        "notes": "WARRANTY IS GOOD",
+        "source": "Richland-WorthProvided"
+      }
+    ]
+  },
+  "Latitude 3310 2-in-1": {
+    "worthProvided": [
+      {
+        "partNumber": "W-P8MR0",
+        "description": "13.3\" FHD Touch TrueLife LCD With Bezel (LCD SCREEN)",
+        "category": "WORTH-PROVIDED",
+        "price": 134.4,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-1CXP8",
+        "description": "16GB Memory",
+        "category": "WORTH-PROVIDED",
+        "price": 56.4,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-FWJTG",
+        "description": "256 GB M.2 Solid State Hard Drive",
+        "category": "WORTH-PROVIDED",
+        "price": 41.94,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-YN0F7",
+        "description": "Audio Daughterboard",
+        "category": "WORTH-PROVIDED",
+        "price": 29.94,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-YRDD6",
+        "description": "Battery",
+        "category": "WORTH-PROVIDED",
+        "price": 119.9,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-CYNK0",
+        "description": "Battery Cable",
+        "category": "WORTH-PROVIDED",
+        "price": 0,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-V6GPD",
+        "description": "Bottom Cover/Base Cover",
+        "category": "WORTH-PROVIDED",
+        "price": 40.8,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-0WH7XP",
+        "description": "CPU Cooling Fan",
+        "category": "WORTH-PROVIDED",
+        "price": 27.54,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-0Y0YV",
+        "description": "DC Jack",
+        "category": "WORTH-PROVIDED",
+        "price": 29.94,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-0K07PR",
+        "description": "Heatsink",
+        "category": "WORTH-PROVIDED",
+        "price": 23.94,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-PGYY9",
+        "description": "Keyboard Cable",
+        "category": "WORTH-PROVIDED",
+        "price": 15.95,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-06X862",
+        "description": "LCD Cable",
+        "category": "WORTH-PROVIDED",
+        "price": 28.74,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-1H539",
+        "description": "LCD Housing - Silver (TOP COVER)",
+        "category": "WORTH-PROVIDED",
+        "price": 64.95,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-07J380",
+        "description": "Left Hinge",
+        "category": "WORTH-PROVIDED",
+        "price": 29.94,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-7M374",
+        "description": "Palmrest With Webcam",
+        "category": "WORTH-PROVIDED",
+        "price": 71.94,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-7DVT7",
+        "description": "Ribbon Cable For Touchpad",
+        "category": "WORTH-PROVIDED",
+        "price": 13.95,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-07F429",
+        "description": "Right Hinge",
+        "category": "WORTH-PROVIDED",
+        "price": 29.94,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-0V976R",
+        "description": "Web Camera",
+        "category": "WORTH-PROVIDED",
+        "price": 24,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-CR02R",
+        "description": "Webcam Cable",
+        "category": "WORTH-PROVIDED",
+        "price": 18.95,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-T0HRM",
+        "description": "Wireless Network Card",
+        "category": "WORTH-PROVIDED",
+        "price": 35.94,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-0XVRN2",
+        "description": "World Facing Camera",
+        "category": "WORTH-PROVIDED",
+        "price": 18.95,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-06YWWH",
+        "description": "Junction Circuit Board for Keyboard Palmrest",
+        "category": "WORTH-PROVIDED",
+        "price": 25,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-VWM4H",
+        "description": "Trackpad / Touchpad",
+        "category": "WORTH-PROVIDED",
+        "price": 29.94,
+        "source": "Richland-WorthProvided"
+      }
+    ],
+    "warranty": [
+      {
+        "partNumber": "0FWJTG",
+        "description": "256 GB Solid State Hard Drive",
+        "notes": "PHOTO (Failure QR Code)",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "0YN0F7",
+        "description": "Audio Daughterboard",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "0CYNK0",
+        "description": "Battery",
+        "notes": "PHOTO (Failure QR Code)",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "0CR02R",
+        "description": "Camera",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "0WH7XP",
+        "description": "Fan CPU",
+        "notes": "PHOTO (Failure QR Code)",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "7K022",
+        "description": "LCD SCREEN",
+        "notes": "PHOTO (Whole Screen)",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "06Y390",
+        "description": "LCD Cable",
+        "notes": "PHOTO (Whole Screen)",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "0PHYXPX",
+        "description": "Memory",
+        "notes": "PHOTO (Failure QR Code)",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "6GP8Y",
+        "description": "Palmrest",
+        "notes": "PHOTO (Whole Palmrest)",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "04H49C",
+        "description": "Speakers",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "0T0HRM",
+        "description": "Wireless Card",
+        "notes": "PHOTO (Of the Card)",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "0Y0YV",
+        "description": "DC-In Jack",
+        "source": "Richland-WorthProvided"
+      }
+    ],
+    "motherboards": [
+      {
+        "partNumber": "W-06F881",
+        "description": "Motherboard with i5 1.6 ghz Quad-Core Processor",
+        "category": "WORTH-PROVIDED",
+        "price": 188.05,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "06F881",
+        "description": "Motherboard",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "06YWWH",
+        "description": "Motherboard",
+        "source": "Richland-WorthProvided"
+      }
+    ]
+  },
+  "Latitude 3330 2-in-1": {
+    "worthProvided": [
+      {
+        "partNumber": "W-07C0FY",
+        "description": "Left and Right Speakers/WLAN Antennas",
+        "category": "WORTH-PROVIDED",
+        "price": 27.54,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-0NWVD3",
+        "description": "DC Jack/Port/Charging Port",
+        "category": "WORTH-PROVIDED",
+        "price": 29.94,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-0P05WP",
+        "description": "Keyboard Palmrest Assembly",
+        "category": "WORTH-PROVIDED",
+        "price": 53.94,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-133FF",
+        "description": "Bottom Cover",
+        "category": "WORTH-PROVIDED",
+        "price": 29.94,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-FWJTG",
+        "description": "256 GB M.2 Solid State Hard Drive",
+        "category": "WORTH-PROVIDED",
+        "price": 41.94,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-0VTFX1",
+        "description": "USB Port SD Card Audio Power Button Board",
+        "category": "WORTH-PROVIDED",
+        "price": 23.94,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-G91J0",
+        "description": "Battery",
+        "category": "WORTH-PROVIDED",
+        "price": 101.9,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-MN3NW",
+        "description": "Touchpad",
+        "category": "WORTH-PROVIDED",
+        "price": 34.2,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-YPPXV",
+        "description": "Fan",
+        "category": "WORTH-PROVIDED",
+        "source": "Richland-WorthProvided"
+      }
+    ],
+    "warranty": [
+      {
+        "partNumber": "098F8",
+        "description": "256 GB NVMe Solid State Hard Drive",
+        "notes": "PHOTO (Failure QR Code)",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "55NWG",
+        "description": "Battery, 41WHR, 3 Cell, Lithium Ion, (Primary)",
+        "notes": "PHOTO (Failure QR Code)",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "PPXV",
+        "description": "Fan",
+        "notes": "PHOTO (Failure QR Code)",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "VD768",
+        "description": "Heatsink",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "2Y80X",
+        "description": "LCD, HUD, Touch Screen",
+        "notes": "PHOTO (Whole Screen)",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "7C0FY",
+        "description": "Speakers",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "XVV0P",
+        "description": "Wireless Card",
+        "notes": "PHOTO (Of the Card)",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W2FFR",
+        "description": "Palm Rest with Keyboard",
+        "notes": "PHOTO (Whole Palmrest)",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "MN3NW",
+        "description": "Touchpad",
+        "notes": "PHOTO (Whole Palmrest)",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "0VTFX1",
+        "description": "USB / Audio Board",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "NWVD3",
+        "description": "DC-In",
+        "source": "Richland-WorthProvided"
+      }
+    ],
+    "motherboards": [
+      {
+        "partNumber": "W-08RJ93",
+        "description": "Motherboard - 16 GB RAM - 2.6 GHz Quad Core I5-1145G7",
+        "category": "WORTH-PROVIDED",
+        "price": 300,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "T9VR3",
+        "description": "Motherboard",
+        "source": "Richland-WorthProvided"
+      }
+    ]
+  },
+  "Latitude 3340": {
+    "worthProvided": [
+      {
+        "partNumber": "W-00RDT",
+        "description": "Bottom Base Cover Assembly - Silver",
+        "category": "WORTH-PROVIDED",
+        "price": 28.74,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-40V0P",
+        "description": "Keyboard Palmrest Assembly",
+        "category": "WORTH-PROVIDED",
+        "price": 67.14,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-6CVCT",
+        "description": "Battery Cable",
+        "category": "WORTH-PROVIDED",
+        "price": 15.95,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-89MTT",
+        "description": "RGB IR Infrared Web Camera Replacement Module",
+        "category": "WORTH-PROVIDED",
+        "price": 35.94,
+        "source": "Richland-WorthProvided"
+      }
+    ],
+    "warranty": [
+      {
+        "partNumber": "D3G8M",
+        "description": "LCD Screen Assembly - 13.3-inch Antiglare Touch",
+        "source": "Richland-WorthProvided"
+      }
+    ],
+    "motherboards": [],
+    "notes": "SEVERAL PARTS ARE MISSING - MANY TBD AND ADDED"
+  },
+  "Dell Pro 14 PC14250": {
+    "worthProvided": [
+      {
+        "partNumber": "W-06G9K1",
+        "description": "14\" FHD Touch LCD",
+        "category": "WORTH-PROVIDED",
+        "price": 68.75,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-W1KKY",
+        "description": "16GB 5600MHz DDR5 RAM",
+        "category": "WORTH-PROVIDED",
+        "price": 350,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-4FC3J",
+        "description": "45Wh 3-cell Laptop Battery",
+        "category": "WORTH-PROVIDED",
+        "price": 193.6,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-2XYM2",
+        "description": "Battery Cable",
+        "category": "WORTH-PROVIDED",
+        "price": 31.18,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-GPR8R",
+        "description": "Bottom Cover (Black)",
+        "category": "WORTH-PROVIDED",
+        "price": 25,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-N5Y5H",
+        "description": "Bottom Cover (Black)",
+        "category": "WORTH-PROVIDED",
+        "price": 56.18,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-38G5F",
+        "description": "Charging Port DC Power Input Jack with Cable",
+        "category": "WORTH-PROVIDED",
+        "price": 37.43,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-T1NNF",
+        "description": "CPU Cooling Fan",
+        "category": "WORTH-PROVIDED",
+        "price": 31.18,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-4K95G",
+        "description": "CPU Heatsink Assembly",
+        "category": "WORTH-PROVIDED",
+        "price": 35,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-GVVWK",
+        "description": "Front Facing Camera",
+        "category": "WORTH-PROVIDED",
+        "price": 22.5,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-G83J7",
+        "description": "Intel AX211 Wireless Tri Band WLAN WiFi 802.11ax Bluetooth 5.2 M.2 Card",
+        "category": "WORTH-PROVIDED",
+        "price": 49.93,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-3RX17",
+        "description": "Keyboard",
+        "category": "WORTH-PROVIDED",
+        "price": 19,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-52V7C",
+        "description": "Laptop USB-C Board",
+        "category": "WORTH-PROVIDED",
+        "price": 62.5,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-X4RG7",
+        "description": "LCD Bezel",
+        "category": "WORTH-PROVIDED",
+        "price": 27.5,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-WCPMG",
+        "description": "Palmrest",
+        "category": "WORTH-PROVIDED",
+        "price": 72.5,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-MTJ14",
+        "description": "Right-side IO Circuit Board with USB/RJ45 Port/Power Button Circuit",
+        "category": "WORTH-PROVIDED",
+        "price": 56.25,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-KX2VX",
+        "description": "SK Hynix 256GB NVMe PCIE Gen 4 x4 SSD Hard Drive M.2 2230 Card",
+        "category": "WORTH-PROVIDED",
+        "price": 61.25,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-2P0KT",
+        "description": "Speakers Left and Right",
+        "category": "WORTH-PROVIDED",
+        "price": 24.93,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-NM1FY",
+        "description": "Top Case LCD Back Cover w/Antenna",
+        "category": "WORTH-PROVIDED",
+        "price": 31.25,
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "W-G4CV4",
+        "description": "Touch LCD Cable",
+        "category": "WORTH-PROVIDED",
+        "price": 16,
+        "source": "Richland-WorthProvided"
+      }
+    ],
+    "warranty": [
+      {
+        "partNumber": "W1KKY",
+        "description": "16 GB RAM",
+        "notes": "PHOTO",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "KX2VX",
+        "description": "256 GB Solid State Hard Drive",
+        "notes": "PHOTO",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "4FC3J",
+        "description": "Battery",
+        "notes": "PHOTO",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "2XYM2",
+        "description": "Battery Cable",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "52V7C",
+        "description": "USB-C Board",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "3RX17",
+        "description": "Keyboard",
+        "notes": "PHOTO",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "3KKXR",
+        "description": "LCD Assembly",
+        "notes": "PHOTO",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "2P0KT",
+        "description": "Speakers",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "G83J7",
+        "description": "Wireless Network Card",
+        "notes": "PHOTO",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "G4CV4",
+        "description": "EDP Cable",
+        "notes": "PHOTO",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "NM1FY",
+        "description": "Top Cover",
+        "notes": "PHOTO",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "T1NNF",
+        "description": "Fan",
+        "notes": "PHOTO",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "38G5F",
+        "description": "DC Input",
+        "source": "Richland-WorthProvided"
+      }
+    ],
+    "motherboards": [
+      {
+        "partNumber": "CXJXR",
+        "description": "Motherboard",
+        "source": "Richland-WorthProvided"
+      },
+      {
+        "partNumber": "H7NTT",
+        "description": "Motherboard",
+        "source": "Richland-WorthProvided"
+      }
+    ]
+  }
+}
