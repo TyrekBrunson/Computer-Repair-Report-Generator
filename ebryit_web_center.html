@@ -88,12 +88,23 @@
             right: 10px;
             z-index: 1000;
         }
-
         .settings-fab img {
             display: block;
             border-radius: 50%;
             border: 2px solid #757a80;
         }
+        .left-fab {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            z-index: 1000;
+        }
+        .left-fab img {
+            display: block;
+            border-radius: 50%;
+            border: 2px solid #757a80;
+        }
+
     </style>
 </head>
 <body>
@@ -137,6 +148,9 @@
     </nav>
 </body>
 <footer>
+     <a href="home.html" id="left-link" class="left-fab">
+        <img src="images/Suggestions_box.png" alt="home-tools" width="50" height="50" style="background-color: #fafbfc;">
+    </a>
     <a href="admin.html" target="_blank" id="admin-link" class="settings-fab">
         <img src="images/settings.png" alt="admin-tools" width="50" height="50" style="background-color: #fafbfc;">
     </a>
