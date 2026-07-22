@@ -752,6 +752,12 @@
         const berChecked = document.getElementById('ber-checkbox').checked;
         const doaChecked = document.getElementById('doa-checkbox').checked;
 
+		// Checks if Initial Issue field has input. If not, it does not generate the report until the field is populated.
+        if (customDescription === "") {
+            alert("You must fill out the 'Unit Presented With Description Of' field before generating a report.");
+            return;
+        }
+
         // =========================================================
         // BER PATH — overrides everything; no issue selections needed
         // =========================================================
