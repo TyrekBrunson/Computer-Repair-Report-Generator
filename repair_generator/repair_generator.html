@@ -75,7 +75,23 @@
         .menu-item:last-child {
             border-bottom: none;
         }
-
+        .part-checkbox {
+            width: 15px;
+            height: 15px;
+            margin-top: 4px;
+        }
+        #miscellaneous-checkbox,
+        #cannot-verify-checkbox,
+        #fixed-without-parts-checkbox,
+        #reseated-replaced-checkbox,
+        #battery-oow-checkbox,
+        #richland-imaging-checkbox,
+        #union-needs-os-checkbox {
+            width: 16px;
+            height: 16px;
+            margin-left: 28px;
+            margin-top: 6px;
+        }
         #diag-link {
             color: rgb(255, 255, 255);
             text-decoration: none;
@@ -107,6 +123,7 @@
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
+            align-items: start;
         }
         h2 {
             color: #333;
@@ -201,12 +218,13 @@
         .verbiage-modifiers {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 16px;
+            margin-top: 4px;
         }
         .verbiage-modifiers div {
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
         }
 
         /* Order badge on part checkboxes */
@@ -214,6 +232,11 @@
             display: flex;
             align-items: center;
             gap: 4px;
+            min-width: 0;
+        }
+        .repair-options label {
+            font-weight: 500;
+            white-space: nowrap;
         }
         .part-order {
             display: inline-flex;
@@ -229,6 +252,12 @@
             visibility: hidden;
             flex-shrink: 0;
             order: -1; /* Move badge to the far left */
+        }
+        #Internals {
+            color: #cc6600;
+        }
+        #Bottom-End {
+            color: #0056b3;
         }
     </style>
 </head>
@@ -262,47 +291,47 @@
             <div>
                 <input type="checkbox" id="top-cover-checkbox" class="part-checkbox">
                 <span class="part-order"></span>
-                <label for="top-cover-checkbox">Top Cover</label>
+                <label for="top-cover-checkbox" style="color: #0056b3;">Top Cover</label>
             </div>
             <div>
                 <input type="checkbox" id="screen-checkbox" class="part-checkbox">
                 <span class="part-order"></span>
-                <label for="screen-checkbox">LCD Screen</label>
+                <label for="screen-checkbox" style="color: #0056b3;">LCD Screen</label>
             </div>
             <div>
                 <input type="checkbox" id="bezel-checkbox" class="part-checkbox">
                 <span class="part-order"></span>
-                <label for="bezel-checkbox">Bezel</label>
+                <label for="bezel-checkbox" style="color: #0056b3;">Bezel</label>
             </div>
             <div>
                 <input type="checkbox" id="left-hinge-checkbox" class="part-checkbox">
                 <span class="part-order"></span>
-                <label for="left-hinge-checkbox">Left Hinge</label>
+                <label for="left-hinge-checkbox" style="color: #0056b3;">Left Hinge</label>
             </div>
             <div>
                 <input type="checkbox" id="right-hinge-checkbox" class="part-checkbox">
                 <span class="part-order"></span>
-                <label for="right-hinge-checkbox">Right Hinge</label>
+                <label for="right-hinge-checkbox" style="color: #0056b3;">Right Hinge</label>
             </div>
             <div>
                 <input type="checkbox" id="lcd-cable-checkbox" class="part-checkbox">
                 <span class="part-order"></span>
-                <label for="lcd-cable-checkbox">LCD Cable</label>
+                <label for="lcd-cable-checkbox" style="color: #cc6600;">LCD Cable</label>
             </div>
             <div>
                 <input type="checkbox" id="webcam-checkbox" class="part-checkbox">
                 <span class="part-order"></span>
-                <label for="webcam-checkbox">Webcam</label>
+                <label for="webcam-checkbox" style="color: #cc6600;">Webcam</label>
             </div>
             <div>
                 <input type="checkbox" id="hall-sensor-checkbox" class="part-checkbox">
                 <span class="part-order"></span>
-                <label for="hall-sensor-checkbox">Hall Sensor</label>
+                <label for="hall-sensor-checkbox" style="color: #cc6600;">Hall Sensor</label>
             </div>
         </div>
 
         <h3>Bottom End</h3>
-        <div class="repair-options">
+        <div class="repair-options" id="Bottom-End">
             <div>
                 <input type="checkbox" id="palm-rest-checkbox" class="part-checkbox">
                 <span class="part-order"></span>
@@ -326,7 +355,7 @@
         </div>
 
         <h3>Internals</h3>
-        <div class="repair-options">
+        <div class="repair-options" id="Internals">
             <div>
                 <input type="checkbox" id="motherboard-checkbox" class="part-checkbox">
                 <span class="part-order"></span>
@@ -343,31 +372,6 @@
                 <label for="audio-board-checkbox">Audio Board</label>
             </div>
             <div>
-                <input type="checkbox" id="ram-checkbox" class="part-checkbox">
-                <span class="part-order"></span>
-                <label for="ram-checkbox">RAM</label>
-            </div>
-            <div>
-                <input type="checkbox" id="ssd-checkbox" class="part-checkbox">
-                <span class="part-order"></span>
-                <label for="ssd-checkbox">SSD</label>
-            </div>
-            <div>
-                <input type="checkbox" id="nic-checkbox" class="part-checkbox">
-                <span class="part-order"></span>
-                <label for="nic-checkbox">NIC</label>
-            </div>
-            <div>
-                <input type="checkbox" id="dc-in-port-checkbox" class="part-checkbox">
-                <span class="part-order"></span>
-                <label for="dc-in-port-checkbox">DC-In Port</label>
-            </div>
-            <div>
-                <input type="checkbox" id="cpu-fan-checkbox" class="part-checkbox">
-                <span class="part-order"></span>
-                <label for="cpu-fan-checkbox">CPU Fan</label>
-            </div>
-            <div>
                 <input type="checkbox" id="battery-checkbox" class="part-checkbox">
                 <span class="part-order"></span>
                 <label for="battery-checkbox">Battery</label>
@@ -378,9 +382,34 @@
                 <label for="battery-cable-checkbox">Battery Cable</label>
             </div>
             <div>
+                <input type="checkbox" id="dc-in-port-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="dc-in-port-checkbox">DC-In Port</label>
+            </div>
+            <div>
                 <input type="checkbox" id="speakers-checkbox" class="part-checkbox">
                 <span class="part-order"></span>
-                <label for="speakers-checkbox">Speakers</label>
+                <label for="speakers-checkbox">Speakers</label><span style="opacity: 0;">HH..</span>
+            </div>
+                <div>
+                <input type="checkbox" id="cpu-fan-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="cpu-fan-checkbox">CPU Fan</label><span style="opacity: 0;">HHHH</span>
+            </div>
+            <div>
+                <input type="checkbox" id="ram-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="ram-checkbox">RAM</label><span style="opacity: 0;">HHHhh</span>
+            </div>
+            <div>
+                <input type="checkbox" id="ssd-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="ssd-checkbox">SSD</label><span style="opacity: 0;">H..</span>
+            </div>
+            <div>
+                <input type="checkbox" id="nic-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="nic-checkbox">NIC</label>
             </div>
         </div>
 
@@ -416,7 +445,7 @@
                 </div>
                 <div>
                     <input type="checkbox" id="richland-imaging-checkbox">
-                    <label for="richland-imaging-checkbox">Richland 1 Imaging</label>
+                    <label for="richland-imaging-checkbox">Richland 1 Imaging</label><span style="opacity: 0;">HHh..</span>
                 </div>
                 <div>
                     <input type="checkbox" id="union-needs-os-checkbox">
