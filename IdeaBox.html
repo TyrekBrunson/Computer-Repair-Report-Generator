@@ -43,6 +43,17 @@
                 align-self: stretch;
                 height: 400px;
             }
+            textarea {
+                width: 320px;
+                height: 180px;
+                padding: 10px;
+                border: 1px solid #a5a3a0;
+                border-radius: 6px;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                font-size: 15px;
+                box-sizing: border-box;
+                resize: vertical;
+            }
             .submit-button-verbiage, .submit-button-parts {
                 margin-top: 20px;
                 padding: 10px 20px;
@@ -59,12 +70,12 @@
         </style>
     </head>
 <body>
-    <h1>💡Idea Box (Not yet functional)💡</h1>
+    <h1>💡 Idea Box 💡</h1>
     <div class="column-container">
         <div class="verbiage-editor-column">
             <h2>Suggestions</h2>
             <form id="suggestions-form">
-                <textarea id="suggestion-text" placeholder="Not Functional Yet"></textarea>
+                <textarea id="suggestion-text" placeholder="Share an idea or feature request..."></textarea>
                 <div class="submit-button-container">
                     <button type="submit" id="submit-button-verbiage" class="submit-button-verbiage">Submit</button>
                 </div>
@@ -73,9 +84,9 @@
     <div class="line"></div>
         <div class="parts-list-updater">
             <h2>Bug Report</h2>
-            <form id=-bugreport-text">
+            <form id="bugreport-form">
                 <label for="bugreport-text"></label>
-                <textarea id="bugreport-text" placeholder="Not Functional Yet"></textarea>
+                <textarea id="bugreport-text" placeholder="Describe a bug you ran into..."></textarea>
                 <div class="submit-button-container">
                     <button type="submit" id="submit-button-parts" class="submit-button-parts">Submit</button>
                 </div>
@@ -83,7 +94,50 @@
         </div>
     </div>
     <script>
+    const SUGGESTIONS_KEY = 'ebryit_suggestions_v1';
 
+    function saveEntry(type, text) {
+        let list = [];
+        try { list = JSON.parse(localStorage.getItem(SUGGESTIONS_KEY) || '[]'); } catch (e) {}
+        list.unshift({
+            type: type,
+            text: text,
+            when: new Date().toLocaleString()
+        });
+        // Keep the most recent 200 entries
+        if (list.length > 200) list = list.slice(0, 200);
+        localStorage.setItem(SUGGESTIONS_KEY, JSON.stringify(list));
+    }
+
+    function flash(button, message) {
+        const original = button.textContent;
+        button.textContent = message;
+        button.style.backgroundColor = '#28a745';
+        setTimeout(() => {
+            button.textContent = original;
+            button.style.backgroundColor = '#0056b3';
+        }, 1800);
+    }
+
+    document.getElementById('suggestions-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        const ta = document.getElementById('suggestion-text');
+        const val = ta.value.trim();
+        if (!val) return;
+        saveEntry('Suggestion', val);
+        ta.value = '';
+        flash(document.getElementById('submit-button-verbiage'), '✓ Sent!');
+    });
+
+    document.getElementById('bugreport-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        const ta = document.getElementById('bugreport-text');
+        const val = ta.value.trim();
+        if (!val) return;
+        saveEntry('Bug Report', val);
+        ta.value = '';
+        flash(document.getElementById('submit-button-parts'), '✓ Sent!');
+    });
     </script>
 </body>
 <footer>
