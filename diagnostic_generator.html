@@ -340,17 +340,35 @@
 
         if (candidates.length === 0) return null;
 
-        // Preference order:
-        // 1) Worth-Provided parts (part number starts with "W-") — these are the parts to order.
-        //    If a W- part exists for this canonical, a non-W- part is NEVER recommended.
-        // 2) Otherwise, parts flagged Worth/UADP/Consumable by category.
-        // 3) Otherwise, the first available candidate.
         const isWorth = p => /^w-/i.test((p.partNumber || '').trim());
         const worthParts = candidates.filter(isWorth);
-        if (worthParts.length) return worthParts[0];
+        const nonWorthParts = candidates.filter(p => !isWorth(p));
 
-        const worthCat = candidates.filter(p => /WORTH|UADP|Consumable/i.test(p.category || ''));
-        return worthCat[0] || candidates[0];
+        if (isAdp) {
+            // ADP / Worth repair: order the Worth-Provided (W-) part.
+            // If a W- part exists, a non-W- part is NEVER recommended.
+            if (worthParts.length) return worthParts[0];
+            const worthCat = candidates.filter(p => /WORTH|UADP|Consumable/i.test(p.category || ''));
+            return worthCat[0] || candidates[0];
+        }
+
+        // NON-ADP / Dell warranty (OEM) repair: use the WARRANTY / NORMAL (non-W-) part number.
+        // Never recommend a W- Worth part for a warranty order if any non-W- option exists.
+        if (nonWorthParts.length) {
+            // 1) Parts explicitly flagged for non-ADP / NORMAL / NON use.
+            const normalFirst = nonWorthParts.filter(p =>
+                p.adp === 'NON_ADP' || /^(NON|NORMAL)$/i.test((p.category || '').trim()));
+            if (normalFirst.length) return normalFirst[0];
+            // 2) The plain warranty listing (category WORTH-PROVIDED but not a W- part) —
+            //    this is the "WARRANTY ONLY / NORMAL" number from the sheet.
+            const plainWarranty = nonWorthParts.filter(p => /WORTH-PROVIDED/i.test(p.category || ''));
+            if (plainWarranty.length) return plainWarranty[0];
+            // 3) Parts usable for both (UADP/BOTH), then anything non-W-.
+            const both = nonWorthParts.filter(p => p.adp === 'BOTH' || /UADP/i.test(p.category || ''));
+            return both[0] || nonWorthParts[0];
+        }
+        // No non-W- option exists — fall back to whatever is available.
+        return candidates[0];
     }
 
     // =========================================================
@@ -395,23 +413,27 @@
                 const pn = match ? match.partNumber : '—';
                 const notFound = !match;
                 const priceTag = (match && match.price != null) ? ` <span class="pn-price">$${match.price.toFixed(2)}</span>` : '';
+                const typeLabel = wp.isAdp
+                    ? '<span class="pn-type worth">Worth/ADP</span>'
+                    : '<span class="pn-type warranty">Warranty</span>';
                 const copyBtn = match
                     ? `<button class="pn-copy" onclick="copyPartNumber('${match.partNumber.replace(/'/g, "\\'")}', this)">Copy</button>`
                     : '';
                 bodyRows += `<tr class="${notFound ? 'pn-missing' : ''}">
                     <td>${wp.name}</td>
+                    <td>${typeLabel}</td>
                     <td>${pn}${priceTag}</td>
                     <td>${copyBtn}</td>
                 </tr>`;
             });
             for (let i = wantParts.length; i < 6; i++) {
-                bodyRows += '<tr><td>&nbsp;</td><td>&nbsp;</td><td></td></tr>';
+                bodyRows += '<tr><td>&nbsp;</td><td></td><td>&nbsp;</td><td></td></tr>';
             }
         }
 
         container.innerHTML = `${modelNote}
             <table class="parts-table">
-                <thead><tr><th>Part</th><th>Part Number</th><th>Copy</th></tr></thead>
+                <thead><tr><th>Part</th><th>Type</th><th>Part Number</th><th>Copy</th></tr></thead>
                 <tbody>${bodyRows}</tbody>
             </table>`;
     }
