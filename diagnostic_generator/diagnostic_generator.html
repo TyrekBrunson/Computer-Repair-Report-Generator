@@ -344,6 +344,14 @@
         const worthParts = candidates.filter(isWorth);
         const nonWorthParts = candidates.filter(p => !isWorth(p));
 
+        // Parts that are ALWAYS ordered as the Worth-Provided part when one exists,
+        // regardless of whether the issue is ADP or NON-ADP/warranty.
+        // (Motherboards are diagnosed under NON-ADP system-failure categories, but the
+        //  physical part is always the Worth "USE THIS MOBO FOR DIAG" number.)
+        // To add more, just include the canonical name here.
+        const ALWAYS_WORTH = ['MOTHERBOARD'];
+        if (ALWAYS_WORTH.includes(target) && worthParts.length) return worthParts[0];
+
         if (isAdp) {
             // ADP / Worth repair: order the Worth-Provided (W-) part.
             // If a W- part exists, a non-W- part is NEVER recommended.
@@ -413,9 +421,11 @@
                 const pn = match ? match.partNumber : '—';
                 const notFound = !match;
                 const priceTag = (match && match.price != null) ? ` <span class="pn-price">$${match.price.toFixed(2)}</span>` : '';
-                const typeLabel = wp.isAdp
+                // The Type reflects the ACTUAL part chosen: a W- part is Worth/ADP, otherwise Warranty.
+                const isWorthPart = match && /^w-/i.test((match.partNumber || '').trim());
+                const typeLabel = isWorthPart
                     ? '<span class="pn-type worth">Worth/ADP</span>'
-                    : '<span class="pn-type warranty">Warranty</span>';
+                    : (match ? '<span class="pn-type warranty">Warranty</span>' : '');
                 const copyBtn = match
                     ? `<button class="pn-copy" onclick="copyPartNumber('${match.partNumber.replace(/'/g, "\\'")}', this)">Copy</button>`
                     : '';
