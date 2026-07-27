@@ -25,7 +25,7 @@
         .dropzone { border: 2px dashed #0056b3; border-radius: 8px; padding: 40px 20px; text-align: center; color: #0056b3; background: #eef4fb; cursor: pointer; transition: background 0.15s; }
         .dropzone.dragover { background: #d6e6f7; }
         .dropzone .icon { font-size: 2.5em; }
-        button.action { padding: 10px 18px; background-color: #0056b3; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; margin: 4px; }
+        button.action { box-sizing: border-box; padding: 10px 18px; background-color: #0056b3; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; margin: 4px; white-space: nowrap; transition: background-color 0.4s ease; }
         button.action:hover { background-color: #003d80; }
         button.danger { background-color: #b71c1c; }
         button.danger:hover { background-color: #8e1414; }
@@ -412,11 +412,12 @@
         dz.addEventListener('dragleave', () => dz.classList.remove('dragover'));
         dz.addEventListener('drop', e => { e.preventDefault(); dz.classList.remove('dragover'); if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]); });
         fileInput.addEventListener('change', e => { if (e.target.files.length) handleFile(e.target.files[0]); });
-        document.getElementById('apply-import').addEventListener('click', () => {
+        document.getElementById('apply-import').addEventListener('click', (e) => {
             if (!importedDB) return;
             localStorage.setItem(PARTS_DB_KEY, JSON.stringify(importedDB)); activeDB = importedDB;
             setStatus('import-status', 'ok', 'Saved. All Web Center tools will now use this parts database.');
             renderDBSummary(activeDB, 'active-db-summary', 'active-db-status');
+            flashSaved(e.currentTarget);
         });
         document.getElementById('download-import').addEventListener('click', () => { if (importedDB) downloadJSON(importedDB, 'part-numbers.json'); });
     }
@@ -442,11 +443,12 @@
     function initEditor() {
         document.getElementById('load-active-json').addEventListener('click', loadActiveIntoEditor);
         document.getElementById('validate-json').addEventListener('click', () => { const r = validateEditor(); if (r.ok) setStatus('editor-status', 'ok', 'Valid JSON &middot; ' + Object.keys(r.db.models||{}).length + ' models.'); });
-        document.getElementById('save-json').addEventListener('click', () => {
+        document.getElementById('save-json').addEventListener('click', (e) => {
             const r = validateEditor(); if (!r.ok) return;
             localStorage.setItem(PARTS_DB_KEY, JSON.stringify(r.db)); activeDB = r.db;
             setStatus('editor-status', 'ok', 'Saved to Web Center. Tools will use this database.');
             renderDBSummary(activeDB, 'active-db-summary', 'active-db-status');
+            flashSaved(e.currentTarget);
         });
         document.getElementById('download-json').addEventListener('click', () => { const r = validateEditor(); if (r.ok) downloadJSON(r.db, 'part-numbers.json'); });
     }
@@ -732,9 +734,10 @@
             vbRenderLines();
         });
 
-        document.getElementById('vb-save').addEventListener('click', () => {
+        document.getElementById('vb-save').addEventListener('click', (e) => {
             localStorage.setItem(VERBIAGE_KEY, JSON.stringify(verbiageData));
             setStatus('verbiage-status', 'ok', 'Saved. The Diagnostic Generator will use this verbiage.');
+            flashSaved(e.currentTarget);
         });
         document.getElementById('vb-download').addEventListener('click', () => downloadJSON(verbiageData, 'verbiage.json'));
         document.getElementById('vb-reload').addEventListener('click', async () => {
@@ -765,6 +768,23 @@
         else if (src === 'file') setStatus('verbiage-status', 'ok', 'Loaded verbiage.json.');
     }
     function setStatus(id, kind, msg) { document.getElementById(id).innerHTML = '<div class="status-line status-' + kind + '">' + msg + '</div>'; }
+    function flashSaved(btn) {
+        if (btn.dataset.savedTimeout) clearTimeout(Number(btn.dataset.savedTimeout));
+        if (!('originalText' in btn.dataset)) btn.dataset.originalText = btn.textContent;
+        if (!('originalBg' in btn.dataset)) btn.dataset.originalBg = btn.style.backgroundColor || '';
+        if (!btn.style.width) {
+            const rect = btn.getBoundingClientRect();
+            btn.style.width = Math.ceil(rect.width) + 'px';
+            btn.style.height = Math.ceil(rect.height) + 'px';
+        }
+        btn.textContent = '✔ Saved!';
+        btn.style.backgroundColor = '#28a745';
+        btn.dataset.savedTimeout = setTimeout(() => {
+            btn.textContent = btn.dataset.originalText;
+            btn.style.backgroundColor = btn.dataset.originalBg;
+            delete btn.dataset.savedTimeout;
+        }, 3000);
+    }
     function downloadJSON(obj, filename) { const blob = new Blob([JSON.stringify(obj, null, 2)], { type: 'application/json' }); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = filename; a.click(); URL.revokeObjectURL(a.href); }
     // =====================================================================
     // REAL-TIME PARTS EDITOR
@@ -820,12 +840,13 @@
             activeDB.models[model].parts.push({ partNumber:'', description:'', canonical:'OTHER', category:'WORTH-PROVIDED', price:null, source:'Manual', notes:'' });
             peRenderTable();
         });
-        document.getElementById('pe-save').addEventListener('click', () => {
+        document.getElementById('pe-save').addEventListener('click', (e) => {
             if (!activeDB) return;
             if (activeDB.meta) activeDB.meta.generatedAt = new Date().toISOString();
             localStorage.setItem(PARTS_DB_KEY, JSON.stringify(activeDB));
             renderDBSummary(activeDB, 'active-db-summary', 'active-db-status');
             setStatus('parts-edit-status', 'ok', 'Saved. The generators now use these part numbers.');
+            flashSaved(e.currentTarget);
         });
         document.getElementById('pe-delete-all').addEventListener('click', () => {
             const pw = prompt('This permanently deletes the saved parts override.\nEnter the admin password to confirm:');
