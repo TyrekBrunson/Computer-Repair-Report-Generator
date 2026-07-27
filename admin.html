@@ -458,6 +458,7 @@
     }
     function lookupPartNumber(db, modelKey, canonicalPart, isAdp) {
         if (!db || !modelKey) return null; const model = db.models[modelKey]; if (!model) return null;
+        const MOBO_WORTH_MODELS = ['Latitude 3120 2-in-1','Latitude 3140 2-in-1','Latitude 3310 2-in-1','Dell Pro 11','Dell Pro 14 PC14250'];
         const fix = { 'EDP CABLE':'LCD CABLE','AUDIO BOARD':'DAUGHTERBOARD','LEFT HINGE AND RIGHT HINGE':'HINGE SET' };
         const target = (fix[canonicalPart] || canonicalPart).toUpperCase();
         let c = model.parts.filter(p => (p.canonical||'').toUpperCase() === target);
@@ -471,6 +472,8 @@
         const isWorth = p => /^w-/i.test((p.partNumber||'').trim());
         const worthParts = c.filter(isWorth);
         const nonWorthParts = c.filter(p => !isWorth(p));
+        // MOTHERBOARD uses the Worth part only on approved Worth-contract models.
+        if (target === 'MOTHERBOARD' && MOBO_WORTH_MODELS.includes(modelKey) && worthParts.length) return worthParts[0];
         if (isAdp) {
             if (worthParts.length) return worthParts[0];
             const worthCat = c.filter(p => /WORTH|UADP|Consumable/i.test(p.category||''));
