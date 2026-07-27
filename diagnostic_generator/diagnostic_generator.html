@@ -303,7 +303,7 @@
     }
 
     // (model, canonical part, isAdp) -> best part-number match
-    function lookupPartNumber(canonicalPart, isAdp) {
+    function lookupPartNumber(canonicalPart, isAdp, allowMoboWorth) {
         if (!PARTS_DB || !selectedModelKey) return null;
         const model = PARTS_DB.models[selectedModelKey];
         if (!model) return null;
@@ -344,13 +344,11 @@
         const worthParts = candidates.filter(isWorth);
         const nonWorthParts = candidates.filter(p => !isWorth(p));
 
-        // Parts that are ALWAYS ordered as the Worth-Provided part when one exists,
-        // regardless of whether the issue is ADP or NON-ADP/warranty.
-        // (Motherboards are diagnosed under NON-ADP system-failure categories, but the
-        //  physical part is always the Worth "USE THIS MOBO FOR DIAG" number.)
-        // To add more, just include the canonical name here.
-        const ALWAYS_WORTH = ['MOTHERBOARD'];
-        if (ALWAYS_WORTH.includes(target) && worthParts.length) return worthParts[0];
+        // MOTHERBOARD Worth override: only when the caller enables it (Richland/Worth contract
+        // is checked AND the model is one of the approved Worth-motherboard models). Motherboards
+        // are diagnosed under NON-ADP system-failure categories, but on those contracts the
+        // physical part is the Worth "USE THIS MOBO FOR DIAG" number.
+        if (allowMoboWorth && target === 'MOTHERBOARD' && worthParts.length) return worthParts[0];
 
         if (isAdp) {
             // ADP / Worth repair: order the Worth-Provided (W-) part.
@@ -396,6 +394,21 @@
             ? `<div class="parts-model-note">Model: <strong>${selectedModelKey}</strong></div>`
             : '<div class="parts-model-note warn">Select a device to auto-assign part numbers.</div>';
 
+        // Motherboard-Worth override applies ONLY when the Richland/Worth contract is checked
+        // AND the model is one of the approved Worth-motherboard models.
+        const MOBO_WORTH_MODELS = [
+            'Latitude 3120 2-in-1',
+            'Latitude 3140 2-in-1',
+            'Latitude 3310 2-in-1',
+            'Dell Pro 11',
+            'Dell Pro 14 PC14250'
+        ];
+        const contractChecked = (() => {
+            const cb = document.getElementById('richland-worth-checkbox');
+            return !!(cb && cb.checked);
+        })();
+        const allowMoboWorth = contractChecked && MOBO_WORTH_MODELS.includes(selectedModelKey);
+
         // Unique canonical parts from current selection (skip miscellaneous)
         const wantParts = [];
         const seen = new Set();
@@ -417,7 +430,7 @@
             bodyRows = emptyRows();
         } else {
             wantParts.forEach(wp => {
-                const match = lookupPartNumber(wp.name, wp.isAdp);
+                const match = lookupPartNumber(wp.name, wp.isAdp, allowMoboWorth);
                 const pn = match ? match.partNumber : '—';
                 const notFound = !match;
                 const priceTag = (match && match.price != null) ? ` <span class="pn-price">$${match.price.toFixed(2)}</span>` : '';
@@ -1445,6 +1458,11 @@
                 renderPartsList();
             });
         });
+
+        // Re-render parts table when the Richland/Worth contract checkbox is toggled
+        // (it controls the motherboard Worth-part override).
+        const rwCb = document.getElementById('richland-worth-checkbox');
+        if (rwCb) rwCb.addEventListener('change', () => renderPartsList());
         renderPartsList();
 
         // Miscellaneous — show/hide textarea and keep selectedIssues in sync
