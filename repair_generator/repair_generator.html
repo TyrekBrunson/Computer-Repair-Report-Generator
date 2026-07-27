@@ -75,7 +75,23 @@
         .menu-item:last-child {
             border-bottom: none;
         }
-
+        .part-checkbox {
+            width: 15px;
+            height: 15px;
+            margin-top: 4px;
+        }
+        #miscellaneous-checkbox,
+        #cannot-verify-checkbox,
+        #fixed-without-parts-checkbox,
+        #reseated-replaced-checkbox,
+        #battery-oow-checkbox,
+        #richland-imaging-checkbox,
+        #union-needs-os-checkbox {
+            width: 16px;
+            height: 16px;
+            margin-left: 28px;
+            margin-top: 6px;
+        }
         #diag-link {
             color: rgb(255, 255, 255);
             text-decoration: none;
@@ -107,6 +123,7 @@
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
+            align-items: start;
         }
         h2 {
             color: #333;
@@ -201,12 +218,13 @@
         .verbiage-modifiers {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 16px;
+            margin-top: 4px;
         }
         .verbiage-modifiers div {
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
         }
 
         /* Order badge on part checkboxes */
@@ -214,6 +232,11 @@
             display: flex;
             align-items: center;
             gap: 4px;
+            min-width: 0;
+        }
+        .repair-options label {
+            font-weight: 500;
+            white-space: nowrap;
         }
         .part-order {
             display: inline-flex;
@@ -229,6 +252,12 @@
             visibility: hidden;
             flex-shrink: 0;
             order: -1; /* Move badge to the far left */
+        }
+        #Internals {
+            color: #cc6600;
+        }
+        #Bottom-End {
+            color: #0056b3;
         }
     </style>
 </head>
@@ -262,47 +291,47 @@
             <div>
                 <input type="checkbox" id="top-cover-checkbox" class="part-checkbox">
                 <span class="part-order"></span>
-                <label for="top-cover-checkbox">Top Cover</label>
+                <label for="top-cover-checkbox" style="color: #0056b3;">Top Cover</label>
             </div>
             <div>
                 <input type="checkbox" id="screen-checkbox" class="part-checkbox">
                 <span class="part-order"></span>
-                <label for="screen-checkbox">LCD Screen</label>
+                <label for="screen-checkbox" style="color: #0056b3;">LCD Screen</label>
             </div>
             <div>
                 <input type="checkbox" id="bezel-checkbox" class="part-checkbox">
                 <span class="part-order"></span>
-                <label for="bezel-checkbox">Bezel</label>
+                <label for="bezel-checkbox" style="color: #0056b3;">Bezel</label>
             </div>
             <div>
                 <input type="checkbox" id="left-hinge-checkbox" class="part-checkbox">
                 <span class="part-order"></span>
-                <label for="left-hinge-checkbox">Left Hinge</label>
+                <label for="left-hinge-checkbox" style="color: #0056b3;">Left Hinge</label>
             </div>
             <div>
                 <input type="checkbox" id="right-hinge-checkbox" class="part-checkbox">
                 <span class="part-order"></span>
-                <label for="right-hinge-checkbox">Right Hinge</label>
+                <label for="right-hinge-checkbox" style="color: #0056b3;">Right Hinge</label>
             </div>
             <div>
                 <input type="checkbox" id="lcd-cable-checkbox" class="part-checkbox">
                 <span class="part-order"></span>
-                <label for="lcd-cable-checkbox">LCD Cable</label>
+                <label for="lcd-cable-checkbox" style="color: #cc6600;">LCD Cable</label>
             </div>
             <div>
                 <input type="checkbox" id="webcam-checkbox" class="part-checkbox">
                 <span class="part-order"></span>
-                <label for="webcam-checkbox">Webcam</label>
+                <label for="webcam-checkbox" style="color: #cc6600;">Webcam</label>
             </div>
             <div>
                 <input type="checkbox" id="hall-sensor-checkbox" class="part-checkbox">
                 <span class="part-order"></span>
-                <label for="hall-sensor-checkbox">Hall Sensor</label>
+                <label for="hall-sensor-checkbox" style="color: #cc6600;">Hall Sensor</label>
             </div>
         </div>
 
         <h3>Bottom End</h3>
-        <div class="repair-options">
+        <div class="repair-options" id="Bottom-End">
             <div>
                 <input type="checkbox" id="palm-rest-checkbox" class="part-checkbox">
                 <span class="part-order"></span>
@@ -326,7 +355,7 @@
         </div>
 
         <h3>Internals</h3>
-        <div class="repair-options">
+        <div class="repair-options" id="Internals">
             <div>
                 <input type="checkbox" id="motherboard-checkbox" class="part-checkbox">
                 <span class="part-order"></span>
@@ -343,31 +372,6 @@
                 <label for="audio-board-checkbox">Audio Board</label>
             </div>
             <div>
-                <input type="checkbox" id="ram-checkbox" class="part-checkbox">
-                <span class="part-order"></span>
-                <label for="ram-checkbox">RAM</label>
-            </div>
-            <div>
-                <input type="checkbox" id="ssd-checkbox" class="part-checkbox">
-                <span class="part-order"></span>
-                <label for="ssd-checkbox">SSD</label>
-            </div>
-            <div>
-                <input type="checkbox" id="nic-checkbox" class="part-checkbox">
-                <span class="part-order"></span>
-                <label for="nic-checkbox">NIC</label>
-            </div>
-            <div>
-                <input type="checkbox" id="dc-in-port-checkbox" class="part-checkbox">
-                <span class="part-order"></span>
-                <label for="dc-in-port-checkbox">DC-In Port</label>
-            </div>
-            <div>
-                <input type="checkbox" id="cpu-fan-checkbox" class="part-checkbox">
-                <span class="part-order"></span>
-                <label for="cpu-fan-checkbox">CPU Fan</label>
-            </div>
-            <div>
                 <input type="checkbox" id="battery-checkbox" class="part-checkbox">
                 <span class="part-order"></span>
                 <label for="battery-checkbox">Battery</label>
@@ -378,9 +382,34 @@
                 <label for="battery-cable-checkbox">Battery Cable</label>
             </div>
             <div>
+                <input type="checkbox" id="dc-in-port-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="dc-in-port-checkbox">DC-In Port</label>
+            </div>
+            <div>
                 <input type="checkbox" id="speakers-checkbox" class="part-checkbox">
                 <span class="part-order"></span>
-                <label for="speakers-checkbox">Speakers</label>
+                <label for="speakers-checkbox">Speakers</label><span style="opacity: 0;">HH..</span>
+            </div>
+                <div>
+                <input type="checkbox" id="cpu-fan-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="cpu-fan-checkbox">CPU Fan</label><span style="opacity: 0;">HHHH</span>
+            </div>
+            <div>
+                <input type="checkbox" id="ram-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="ram-checkbox">RAM</label><span style="opacity: 0;">HHHhh</span>
+            </div>
+            <div>
+                <input type="checkbox" id="ssd-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="ssd-checkbox">SSD</label><span style="opacity: 0;">H..</span>
+            </div>
+            <div>
+                <input type="checkbox" id="nic-checkbox" class="part-checkbox">
+                <span class="part-order"></span>
+                <label for="nic-checkbox">NIC</label>
             </div>
         </div>
 
@@ -416,7 +445,7 @@
                 </div>
                 <div>
                     <input type="checkbox" id="richland-imaging-checkbox">
-                    <label for="richland-imaging-checkbox">Richland 1 Imaging</label>
+                    <label for="richland-imaging-checkbox">Richland 1 Imaging</label><span style="opacity: 0;">HHh..</span>
                 </div>
                 <div>
                     <input type="checkbox" id="union-needs-os-checkbox">
@@ -425,9 +454,36 @@
             </div>
         </div>
         <div id="reseated-replaced-container" style="display:none; width:100%; margin-top:8px;">
-            <input type="text" id="reseated-replaced-input"
-                placeholder="Enter item(s) that were reseated..."
-                style="width:100%; padding:8px; border:1px solid #fcd34d; border-radius:6px; font-family:inherit; font-size:0.9em; box-sizing:border-box;">
+            <label for="reseated-select" style="font-size:0.85em; font-weight:bold; display:block; margin-bottom:4px;">
+                What was reseated? (select one or more)
+            </label>
+            <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+                <select id="reseated-select"
+                    style="padding:8px; border:1px solid #fcd34d; border-radius:6px; font-family:inherit; font-size:0.9em;">
+                    <option value="">— choose a component —</option>
+                    <option>BATTERY CABLE</option>
+                    <option>LCD CABLE</option>
+                    <option>EDP CABLE</option>
+                    <option>DAUGHTERBOARD CABLE</option>
+                    <option>KEYBOARD CABLE</option>
+                    <option>TOUCHPAD CABLE</option>
+                    <option>WEBCAM CABLE</option>
+                    <option>SPEAKER CABLE</option>
+                    <option>DC-IN CABLE</option>
+                    <option>WIFI ANTENNA</option>
+                    <option>RAM</option>
+                    <option>SSD</option>
+                    <option>WIFI CARD</option>
+                    <option>CMOS BATTERY</option>
+                    <option>ALL INTERNAL CONNECTIONS</option>
+                    <option value="__custom__">Other (type it in)…</option>
+                </select>
+                <input type="text" id="reseated-custom-input" placeholder="Custom component…"
+                    style="display:none; padding:8px; border:1px solid #fcd34d; border-radius:6px; font-family:inherit; font-size:0.9em;">
+                <button type="button" id="reseated-add-btn"
+                    style="padding:8px 14px; background:#0056b3; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:0.85em;">Add</button>
+            </div>
+            <div id="reseated-chips" style="display:flex; gap:6px; flex-wrap:wrap; margin-top:8px;"></div>
         </div>
     </div>
 
@@ -460,6 +516,7 @@
 <script>
     // --- Order tracking array (mirrors the diagnostic tool's selectedIssues pattern) ---
     let selectedParts = []; // Each entry: { id, name }
+    let reseatedSelections = []; // component names that were reseated
     const REFRESH_HOURS = [7, 18];
 
     // Map checkbox IDs to display names
@@ -515,6 +572,28 @@
         }
 
         updateOrderBadges();
+        syncBatteryOowLock();
+    }
+
+    // Battery (replacement) and "Battery OOW" are mutually exclusive:
+    // you can't replace a battery under warranty AND declare it out-of-warranty.
+    function syncBatteryOowLock() {
+        const batteryPart = document.getElementById('battery-checkbox');
+        const batteryOow  = document.getElementById('battery-oow-checkbox');
+        if (!batteryPart || !batteryOow) return;
+
+        const batterySelected = batteryPart.checked;
+        const oowSelected      = batteryOow.checked;
+
+        // If Battery part is selected, lock out Battery OOW (and vice versa).
+        batteryOow.disabled = batterySelected;
+        batteryPart.disabled = oowSelected;
+
+        // Visually dim the locked-out option's label
+        const oowLabel = document.querySelector('label[for="battery-oow-checkbox"]');
+        const batLabel = document.querySelector('label[for="battery-checkbox"]');
+        if (oowLabel) oowLabel.style.opacity = batterySelected ? '0.4' : '1';
+        if (batLabel) batLabel.style.opacity = oowSelected ? '0.4' : '1';
     }
 
     // Re-render all visible order badges based on current selectedParts array
@@ -550,13 +629,15 @@
             const el = document.getElementById(id);
             if (el) el.checked = false;
         });
-        // Hide misc textarea and reseated input
+        // Hide misc textarea and reseated controls
         document.getElementById('miscellaneous-description-container').style.display = 'none';
         document.getElementById('reseated-replaced-container').style.display = 'none';
-        if (document.getElementById('reseated-replaced-input')) document.getElementById('reseated-replaced-input').value = '';
+        reseatedSelections = [];
+        renderReseatedChips();
         // Reset the tracking array and badges
         selectedParts = [];
         updateOrderBadges();
+        syncBatteryOowLock();
         updateRefreshStatus();
     });
 
@@ -632,8 +713,50 @@
     // Show/hide reseated & replaced input
     document.getElementById('reseated-replaced-checkbox').addEventListener('change', function () {
         document.getElementById('reseated-replaced-container').style.display = this.checked ? 'block' : 'none';
-        if (!this.checked) document.getElementById('reseated-replaced-input').value = '';
-        if (this.checked) document.getElementById('reseated-replaced-input').focus();
+        if (this.checked) {
+            renderReseatedChips();
+        } else {
+            reseatedSelections = [];
+        }
+    });
+
+    // Keep the Battery / Battery OOW mutual-exclusion in sync when OOW is toggled
+    document.getElementById('battery-oow-checkbox').addEventListener('change', syncBatteryOowLock);
+
+    // --- Reseated component dropdown + chips ---
+    function renderReseatedChips() {
+        const wrap = document.getElementById('reseated-chips');
+        if (!wrap) return;
+        wrap.innerHTML = reseatedSelections.map((c, i) =>
+            `<span style="background:#eef4fb; border:1px solid #b9d4ef; color:#0056b3; border-radius:14px; padding:3px 10px; font-size:0.82em; display:inline-flex; align-items:center; gap:6px;">
+                ${c}
+                <span style="cursor:pointer; font-weight:bold;" onclick="removeReseated(${i})">×</span>
+            </span>`
+        ).join('');
+    }
+    function removeReseated(i) {
+        reseatedSelections.splice(i, 1);
+        renderReseatedChips();
+    }
+    window.removeReseated = removeReseated;
+
+    document.getElementById('reseated-select').addEventListener('change', function () {
+        const custom = document.getElementById('reseated-custom-input');
+        custom.style.display = this.value === '__custom__' ? 'inline-block' : 'none';
+        if (this.value === '__custom__') custom.focus();
+    });
+
+    document.getElementById('reseated-add-btn').addEventListener('click', function () {
+        const sel = document.getElementById('reseated-select');
+        const custom = document.getElementById('reseated-custom-input');
+        let val = sel.value === '__custom__' ? custom.value.trim().toUpperCase() : sel.value;
+        if (!val || val === '__custom__') return;
+        if (!reseatedSelections.includes(val)) reseatedSelections.push(val);
+        // reset controls
+        sel.value = '';
+        custom.value = '';
+        custom.style.display = 'none';
+        renderReseatedChips();
     });
 
     // Show/hide misc textarea when checkbox is toggled
@@ -675,7 +798,7 @@
         const richlandImaging   = document.getElementById('richland-imaging-checkbox').checked;
         const unionNeedsOs      = document.getElementById('union-needs-os-checkbox').checked;
         const reseatedReplaced  = document.getElementById('reseated-replaced-checkbox').checked;
-        const reseatedItem      = document.getElementById('reseated-replaced-input').value.trim().toUpperCase();
+        const reseatedItem      = formatPartsList(reseatedSelections);
 
         const partsList = formatPartsList(orderedPartNames);
         const hasParts  = orderedPartNames.length > 0;
@@ -891,6 +1014,14 @@
         document.getElementById('miscellaneous-checkbox').checked = false;
         document.getElementById('miscellaneous-comment-area').value = '';
         document.getElementById('miscellaneous-description-container').style.display = 'none';
+
+        // Reset reseated component selections + container
+        reseatedSelections = [];
+        renderReseatedChips();
+        document.getElementById('reseated-replaced-container').style.display = 'none';
+
+        // Restore Battery / Battery OOW availability
+        syncBatteryOowLock();
 
         // Clear outputs
         document.getElementById('repairs-completed-output').textContent = '';
