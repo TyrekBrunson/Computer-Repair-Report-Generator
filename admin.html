@@ -909,7 +909,9 @@
         document.getElementById('pe-add-row').addEventListener('click', () => {
             const model = document.getElementById('pe-model').value;
             if (!activeDB || !activeDB.models[model]) return;
-            activeDB.models[model].parts.push({ partNumber:'', description:'', canonical:'OTHER', category:'WORTH-PROVIDED', price:null, source:'Manual', notes:'' });
+            // New parts default to a NON-Worth (warranty/OEM) category. To make a part Worth,
+            // give its Part # a "W-" prefix. Leaving it blank keeps it a warranty part.
+            activeDB.models[model].parts.push({ partNumber:'', description:'', canonical:'OTHER', category:'Warranty', adp:'NON_ADP', price:null, source:'Manual', notes:'' });
             peRenderTable();
         });
         document.getElementById('pe-save').addEventListener('click', (e) => {
@@ -917,7 +919,8 @@
             if (activeDB.meta) activeDB.meta.generatedAt = new Date().toISOString();
             localStorage.setItem(PARTS_DB_KEY, JSON.stringify(activeDB));
             renderDBSummary(activeDB, 'active-db-summary', 'active-db-status');
-            setStatus('parts-edit-status', 'ok', 'Saved. The generators now use these part numbers.');
+            renderLookupTable();
+            setStatus('parts-edit-status', 'ok', 'Saved. The generators now use these part numbers. Use the Publish tab to push live to all devices.');
             flashSaved(e.currentTarget);
         });
         document.getElementById('pe-delete-all').addEventListener('click', () => {
