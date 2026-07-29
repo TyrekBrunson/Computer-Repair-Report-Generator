@@ -354,8 +354,7 @@
         const worthParts = candidates.filter(isWorth);
         const nonWorthParts = candidates.filter(p => !isWorth(p));
 
-        // Helper: build a result object. When several distinct warranty part numbers exist
-        // for the same canonical part (e.g. two motherboards), join them with " or ".
+        // Build a result; join multiple distinct warranty numbers with " or ".
         const multi = (parts) => {
             const uniq = [];
             parts.forEach(p => { if (!uniq.some(u => u.partNumber === p.partNumber)) uniq.push(p); });
@@ -371,12 +370,6 @@
             };
         };
 
-        // MOTHERBOARD Worth override: only when the caller enables it (Richland/Worth contract
-        // is checked AND the model is one of the approved Worth-motherboard models).
-        if (allowMoboWorth && target === 'MOTHERBOARD' && worthParts.length) {
-            return { ...worthParts[0], isWorthResult: true };
-        }
-
         if (isAdp) {
             // ADP / Worth repair: order the Worth-Provided (W-) part.
             if (worthParts.length) return { ...worthParts[0], isWorthResult: true };
@@ -385,9 +378,8 @@
             return pick ? { ...pick, isWorthResult: /^w-/i.test(pick.partNumber) } : null;
         }
 
-        // NON-ADP / Dell warranty (OEM) repair: use ONLY the WARRANTY / NORMAL (non-W-) part
-        // number(s). NEVER substitute a W- Worth part. If several warranty numbers exist,
-        // return them all joined with " or ". If NO warranty part exists, return nothing.
+        // NON-ADP / Dell warranty (OEM): use ONLY warranty (non-W-) number(s), or nothing.
+        // NEVER substitute a W- Worth part. This applies to the motherboard too.
         if (nonWorthParts.length) return multi(nonWorthParts);
         return null;
     }
