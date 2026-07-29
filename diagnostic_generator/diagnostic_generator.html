@@ -313,7 +313,7 @@
     }
 
     // (model, canonical part, isAdp) -> best part-number match
-    function lookupPartNumber(canonicalPart, isAdp, allowMoboWorth) {
+    function lookupPartNumber(canonicalPart, worthMode) {
         if (!PARTS_DB || !selectedModelKey) return null;
         const model = PARTS_DB.models[selectedModelKey];
         if (!model) return null;
@@ -370,16 +370,17 @@
             };
         };
 
-        if (isAdp) {
-            // ADP / Worth repair: order the Worth-Provided (W-) part.
+        if (worthMode) {
+            // Richland/Worth contract: the WHOLE repair is Worth-Provided.
+            // Use the W- part if this part has one; otherwise fall back to whatever exists
+            // (a part with no W- version just uses its available number).
             if (worthParts.length) return { ...worthParts[0], isWorthResult: true };
-            const worthCat = candidates.filter(p => /WORTH|UADP|Consumable/i.test(p.category || ''));
-            const pick = worthCat[0] || candidates[0];
-            return pick ? { ...pick, isWorthResult: /^w-/i.test(pick.partNumber) } : null;
+            if (nonWorthParts.length) return { ...nonWorthParts[0], isWorthResult: false };
+            return null;
         }
 
-        // NON-ADP / Dell warranty (OEM): use ONLY warranty (non-W-) number(s), or nothing.
-        // NEVER substitute a W- Worth part. This applies to the motherboard too.
+        // No Worth contract → Dell warranty (OEM): use ONLY warranty (non-W-) number(s),
+        // or nothing. NEVER substitute a W- Worth part. Applies to the motherboard too.
         if (nonWorthParts.length) return multi(nonWorthParts);
         return null;
     }
@@ -401,20 +402,13 @@
             ? `<div class="parts-model-note">Model: <strong>${selectedModelKey}</strong></div>`
             : '<div class="parts-model-note warn">Select a device to auto-assign part numbers.</div>';
 
-        // Motherboard-Worth override applies ONLY when the Richland/Worth contract is checked
-        // AND the model is one of the approved Worth-motherboard models.
-        const MOBO_WORTH_MODELS = [
-            'Latitude 3120 2-in-1',
-            'Latitude 3140 2-in-1',
-            'Latitude 3310 2-in-1',
-            'Dell Pro 11',
-            'Dell Pro 14 PC14250'
-        ];
-        const contractChecked = (() => {
+        // The Richland/Worth contract checkbox drives the WHOLE report:
+        //  checked  -> Worth mode: every part uses its W- version when it has one.
+        //  unchecked -> Warranty mode: every part uses its non-W- (OEM) number only.
+        const worthMode = (() => {
             const cb = document.getElementById('richland-worth-checkbox');
             return !!(cb && cb.checked);
         })();
-        const allowMoboWorth = contractChecked && MOBO_WORTH_MODELS.includes(selectedModelKey);
 
         // Unique canonical parts from current selection (skip miscellaneous)
         const wantParts = [];
@@ -425,11 +419,11 @@
             if (!name) return;
             if (name === 'LEFT HINGE AND RIGHT HINGE') {
                 ['LEFT HINGE', 'RIGHT HINGE'].forEach(h => {
-                    if (!seen.has(h)) { seen.add(h); wantParts.push({ name: h, isAdp: issue.type === 'ADP' }); }
+                    if (!seen.has(h)) { seen.add(h); wantParts.push({ name: h }); }
                 });
                 return;
             }
-            if (!seen.has(name)) { seen.add(name); wantParts.push({ name, isAdp: issue.type === 'ADP' }); }
+            if (!seen.has(name)) { seen.add(name); wantParts.push({ name }); }
         });
 
         let bodyRows = '';
@@ -437,7 +431,7 @@
             bodyRows = emptyRows();
         } else {
             wantParts.forEach(wp => {
-                const match = lookupPartNumber(wp.name, wp.isAdp, allowMoboWorth);
+                const match = lookupPartNumber(wp.name, worthMode);
                 const pn = match ? match.partNumber : '—';
                 const notFound = !match;
                 const priceTag = (match && match.price != null) ? ` <span class="pn-price">$${match.price.toFixed(2)}</span>` : '';
