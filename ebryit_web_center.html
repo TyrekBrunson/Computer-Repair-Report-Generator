@@ -105,6 +105,38 @@
             border: 2px solid #757a80;
         }
 
+        .nav-grid {
+            display: inline-grid;
+            grid-template-columns: repeat(3, auto);
+            align-items: start;
+            gap: 20px;
+            justify-content: center;
+            margin: 0 auto;
+            width: fit-content;
+        }
+        .link-column {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            row-gap: 10px;
+            column-gap: 10px;
+            line-height: 0;
+            align-content: start;
+        }
+        .nav-divider {
+            height: 185px;
+            width: 8px;
+        }
+
+        @media (max-width: 700px) {
+            .nav-grid {
+                grid-template-columns: 1fr;
+                justify-items: center;
+            }
+            .nav-divider {
+                display: none;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -114,8 +146,8 @@
         <h1>Columbia Web Center</h1>
     </header>
     <nav>
-        <div style="display: inline-grid; grid-template-columns: repeat(3, auto); align-items: start; gap: 20px; justify-content: center; margin: 0 auto; width: fit-content;">
-            <div style="display: grid; grid-template-columns: repeat(2, 1fr); row-gap: 10px; column-gap: 10px; line-height: 0; align-content: start;">
+        <div class="nav-grid">
+            <div class="link-column">
             <a href="diagnostic_generator/diagnostic_generator.html" target="_blank" id="diag-link">
                 <img src="images/diag-generator-logo.png" alt="Diag Generator Icon" width="247" height="67">
             </a>
@@ -123,14 +155,14 @@
                 <img src="images/repair-generator-logo.png" alt="Repair Generator Icon" width="247" height="67">
             </a>
             <a href="https://ebryitinc-my.sharepoint.com/:f:/r/personal/apickard_ebryit_com/Documents/Reference%20Documents?csf=1&web=1&e=e6mgaV" target="_blank" id="ref-docs-link">
-                <img src="images/Reference_documents_logo.png" alt="Reference Documents Icon" width="247" height="67">
+                <img src="images/reference_documents_logo.png" alt="Reference Documents Icon" width="247" height="67">
             </a>
             <a href="https://ebryitinc-my.sharepoint.com/:f:/r/personal/apickard_ebryit_com/Documents/Reference%20Documents/TECH%20TOTALS?csf=1&web=1&e=nygGY5" target="_blank" id="tech-totals-link">
-                <img src="images/Tech_totals_logo.png" alt="Tech Totals Icon" width="247" height="67">
+                <img src="images/tech_totals_logo.png" alt="Tech Totals Icon" width="247" height="67">
             </a>
             </div>
-          <img src="images/divider.png" alt="Divider" style="height: 185px; width: 8px;">
-            <div style="display: grid; grid-template-columns: repeat(2, 1fr); row-gap: 10px; column-gap: 10px; line-height: 0; align-content: start;">
+          <img src="images/divider.png" alt="Divider" class="nav-divider">
+            <div class="link-column">
             <a href="https://ebryit.fsmgrid.com/home" target="_blank" id="fieldpower-link">
                 <img src="images/fieldpowerlogo.png" alt="FSM Icon" width="247" height="67">
             </a>
@@ -148,11 +180,9 @@
     </nav>
 </body>
 <footer>
-    <!-- 
-    <a href="IdeaBox.html" target="_blank" id="ideabox-link" class="left-fab">
+     <a href="IdeaBox.html" target="_blank" id="ideabox-link" class="left-fab">
         <img src="images/Suggestions_box.png" alt="home-tools" width="50" height="50" style="background-color: #fafbfc;">
-    </a> 
-    -->
+    </a>
     <a href="admin.html" target="_blank" id="admin-link" class="settings-fab">
         <img src="images/settings.png" alt="admin-tools" width="50" height="50" style="background-color: #fafbfc;">
     </a>
