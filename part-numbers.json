@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-07-29T16:45:03.345Z",
+    "generatedAt": "2026-07-29T16:50:19.923Z",
     "source": "admin-import",
     "contract": "Richland1-Worth",
     "schema": 2
@@ -392,6 +392,15 @@
           "adp": "",
           "price": null,
           "source": "FieldPower",
+          "notes": ""
+        },
+        {
+          "partNumber": "0T0431",
+          "description": "LCD Ribbon Cable",
+          "canonical": "LCD CABLE",
+          "category": "FieldPower",
+          "price": null,
+          "source": "Manual",
           "notes": ""
         }
       ]
