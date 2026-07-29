@@ -421,7 +421,7 @@
     let activeDB = null; let importedDB = null;
     async function loadActiveDB() {
         try { const cached = localStorage.getItem(PARTS_DB_KEY); if (cached) { activeDB = JSON.parse(cached); return "override"; } } catch (e) {}
-        try { const res = await fetch('part-numbers.json', { cache: 'no-store' }); if (res.ok) { activeDB = await res.json(); return "file"; } } catch (e) {}
+        try { const res = await fetch('part-numbers.json?v=' + Date.now(), { cache: 'no-store' }); if (res.ok) { activeDB = await res.json(); return "file"; } } catch (e) {}
         if (PARTS_EMBEDDED && PARTS_EMBEDDED.models) { activeDB = JSON.parse(JSON.stringify(PARTS_EMBEDDED)); return "embedded"; }
         activeDB = null; return "none";
     }
@@ -666,7 +666,7 @@
             }
         } catch (e) {}
         try {
-            const res = await fetch('verbiage.json', { cache: 'no-store' });
+            const res = await fetch('verbiage.json?v=' + Date.now(), { cache: 'no-store' });
             if (res.ok) { verbiageData = await res.json(); return 'file'; }
         } catch (e) {}
         // fetch blocked (e.g. file:// origin) or file missing → use the embedded copy
