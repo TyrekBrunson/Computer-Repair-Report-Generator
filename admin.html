@@ -94,7 +94,7 @@
         <div class="tab-bar">
             <button class="tab-btn active" data-tab="parts">Parts List Updater</button>
             <button class="tab-btn" data-tab="editor">JSON Editor</button>
-            <button class="tab-btn" data-tab="lookup">Lookup Tester</button>
+            <button class="tab-btn" data-tab="lookup">Parts Editor</button>
             <button class="tab-btn" data-tab="verbiage">Verbiage Editor</button>
             <button class="tab-btn" data-tab="suggestions">Suggestions Board</button>
             <button class="tab-btn" data-tab="publish">Publish</button>
@@ -126,19 +126,6 @@
                 </div>
             </div>
 
-            <div class="card">
-                <h2>Edit Parts (real-time)</h2>
-                <p class="muted">Pick a model to edit its parts live. Changes save to the Web Center immediately for emergency corrections.
-                   The generators prefer Worth-Provided (<code>W-</code>) part numbers automatically.</p>
-                <div id="parts-edit-status"></div>
-                <div class="row-flex" style="margin-bottom:10px;">
-                    <label>Model: <select id="pe-model"></select></label>
-                    <button class="action secondary" id="pe-add-row">+ Add Part</button>
-                    <button class="action" id="pe-save">💾 Save Changes</button>
-                </div>
-                <div id="pe-table"></div>
-            </div>
-
             <div class="card" style="border-color:#f5b5ae;">
                 <h2 style="color:#b71c1c;">Danger Zone</h2>
                 <p class="muted">Permanently delete <strong>all</strong> parts data — every model and part is removed and the list becomes empty.
@@ -162,12 +149,24 @@
         </div>
         <div class="tab-panel" id="tab-lookup">
             <div class="card">
-                <h2>Lookup Tester</h2>
-                <p class="muted">Confirm which part number a model + part will resolve to in the Diagnostic Generator.</p>
-                <div class="row-flex">
-                    <label>Model: <select id="lookup-model"></select></label>
-                    <input type="text" id="lookup-filter" placeholder="filter parts...">
+                <h2>Parts Editor</h2>
+                <p class="muted">View and edit every part for a model. Fix part numbers, change details, or <strong>add missing parts</strong>
+                   (e.g. a warranty number that isn't listed). Save writes to the Web Center; use the <strong>Publish</strong> tab to push live to all devices.
+                   Worth-Provided (<code>W-</code>) parts are highlighted green.</p>
+                <div id="parts-edit-status"></div>
+                <div class="row-flex" style="margin-bottom:10px;">
+                    <label>Model: <select id="pe-model"></select></label>
+                    <input type="text" id="pe-filter" placeholder="filter parts...">
+                    <button class="action secondary" id="pe-add-row">+ Add Part</button>
+                    <button class="action" id="pe-save">💾 Save Changes</button>
                 </div>
+                <div id="pe-table"></div>
+            </div>
+            <div class="card">
+                <h2>Resolve Preview</h2>
+                <p class="muted">Confirms which number the Diagnostic Generator will pick for each canonical part on this model —
+                   ADP/Worth repairs vs. Warranty (OEM) repairs.</p>
+                <input type="text" id="lookup-filter" placeholder="filter parts...">
                 <div id="lookup-table"></div>
             </div>
         </div>
@@ -440,7 +439,7 @@
                 document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
                 btn.classList.add('active');
                 document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
-                if (btn.dataset.tab === 'lookup') populateLookupModels();
+                if (btn.dataset.tab === 'lookup') { pePopulateModels(); renderLookupTable(); }
                 if (btn.dataset.tab === 'editor') loadActiveIntoEditor();
                 if (btn.dataset.tab === 'verbiage') { ensureVerbiageLoaded(); }
                 if (btn.dataset.tab === 'suggestions') { loadSuggBoard(); renderSuggBoard(); }
@@ -514,27 +513,30 @@
         const isWorth = p => /^w-/i.test((p.partNumber||'').trim());
         const worthParts = c.filter(isWorth);
         const nonWorthParts = c.filter(p => !isWorth(p));
-        // MOTHERBOARD uses the Worth part only on approved Worth-contract models.
-        if (target === 'MOTHERBOARD' && MOBO_WORTH_MODELS.includes(modelKey) && worthParts.length) return worthParts[0];
+        const multi = (parts) => {
+            const uniq = [];
+            parts.forEach(p => { if (!uniq.some(u => u.partNumber === p.partNumber)) uniq.push(p); });
+            if (!uniq.length) return null;
+            const base = uniq[0];
+            return { partNumber: uniq.map(p => p.partNumber).join(' or '), description: base.description, price: uniq.length===1?base.price:null, category: base.category, adp: base.adp, isWorthResult: /^w-/i.test(base.partNumber) };
+        };
         if (isAdp) {
-            if (worthParts.length) return worthParts[0];
+            if (worthParts.length) return { ...worthParts[0], isWorthResult: true };
             const worthCat = c.filter(p => /WORTH|UADP|Consumable/i.test(p.category||''));
-            return worthCat[0] || c[0];
+            const pick = worthCat[0] || c[0];
+            return pick ? { ...pick, isWorthResult: /^w-/i.test(pick.partNumber) } : null;
         }
-        // NON-ADP / warranty: prefer non-W- (NORMAL/NON) parts
-        if (nonWorthParts.length) {
-            const normalFirst = nonWorthParts.filter(p => p.adp === 'NON_ADP' || /^(NON|NORMAL)$/i.test((p.category||'').trim()));
-            if (normalFirst.length) return normalFirst[0];
-            const plainWarranty = nonWorthParts.filter(p => /WORTH-PROVIDED/i.test(p.category||''));
-            if (plainWarranty.length) return plainWarranty[0];
-            const both = nonWorthParts.filter(p => p.adp === 'BOTH' || /UADP/i.test(p.category||''));
-            return both[0] || nonWorthParts[0];
-        }
-        return c[0];
+        // NON-ADP / warranty: ONLY non-W- parts (joined with "or"), or nothing. Never a W- part.
+        if (nonWorthParts.length) return multi(nonWorthParts);
+        return null;
     }
-    function populateLookupModels() { const sel = document.getElementById('lookup-model'); if (!activeDB) return; sel.innerHTML = Object.keys(activeDB.models).map(m => '<option>' + m + '</option>').join(""); renderLookupTable(); }
+    function populateLookupModels() { renderLookupTable(); }
     function renderLookupTable() {
-        const modelKey = document.getElementById('lookup-model').value;
+        const modelSel = document.getElementById('pe-model');
+        const modelKey = modelSel ? modelSel.value : '';
+        const lt = document.getElementById('lookup-table');
+        if (!lt) return;
+        if (!activeDB || !modelKey) { lt.innerHTML = '<p class="muted">No model selected.</p>'; return; }
         const filter = (document.getElementById('lookup-filter').value || '').toUpperCase();
         const rows = CANONICAL_PARTS.filter(p => !filter || p.includes(filter)).map(part => {
             const adpM = lookupPartNumber(activeDB, modelKey, part, true);
@@ -543,9 +545,9 @@
             const anyMissing = !adpM && !warM;
             return '<tr class="' + (anyMissing ? 'missing' : '') + '"><td>' + part + '</td><td>' + cell(adpM) + '</td><td>' + cell(warM) + '</td><td>' + (adpM ? adpM.description : (warM ? warM.description : '<em>not stocked</em>')) + '</td></tr>';
         }).join("");
-        document.getElementById('lookup-table').innerHTML = '<table><thead><tr><th>Canonical Part</th><th>ADP / Worth</th><th>Warranty (OEM)</th><th>Description</th></tr></thead><tbody>' + rows + '</tbody></table>';
+        lt.innerHTML = '<table><thead><tr><th>Canonical Part</th><th>ADP / Worth</th><th>Warranty (OEM)</th><th>Description</th></tr></thead><tbody>' + rows + '</tbody></table>';
     }
-    function initLookup() { document.getElementById('lookup-model').addEventListener('change', renderLookupTable); document.getElementById('lookup-filter').addEventListener('input', renderLookupTable); }
+    function initLookup() { document.getElementById('lookup-filter').addEventListener('input', renderLookupTable); }
     // =====================================================================
     // SUGGESTIONS — Trello-style board
     // =====================================================================
@@ -863,8 +865,12 @@
         const model = document.getElementById('pe-model').value;
         const wrap = document.getElementById('pe-table');
         if (!activeDB || !activeDB.models || !activeDB.models[model]) { wrap.innerHTML = '<div class="vb-empty">No model selected.</div>'; return; }
+        const filterEl = document.getElementById('pe-filter');
+        const filter = (filterEl && filterEl.value || '').toUpperCase();
         const parts = activeDB.models[model].parts;
-        const rows = parts.map((p, i) => {
+        const rows = parts.map((p, i) => ({ p, i }))
+            .filter(({ p }) => !filter || ((p.partNumber||'') + ' ' + (p.description||'') + ' ' + (p.canonical||'')).toUpperCase().includes(filter))
+            .map(({ p, i }) => {
             const isW = /^w-/i.test((p.partNumber || '').trim());
             return `<tr>
                 <td><input class="${isW ? 'worth' : ''}" value="${(p.partNumber||'').replace(/"/g,'&quot;')}" onchange="peEdit(${i},'partNumber',this.value); peRenderTable();" title="${isW ? 'Worth-Provided (preferred)' : ''}"></td>
@@ -878,6 +884,7 @@
         wrap.innerHTML = `<table class="pe-table"><thead><tr>
             <th>Part # <span class="pe-worth-badge">W- = preferred</span></th><th>Description</th><th>Canonical</th><th>Category</th><th>Price</th><th></th>
         </tr></thead><tbody>${rows}</tbody></table>`;
+        if (typeof renderLookupTable === 'function') renderLookupTable();
     }
 
     function peEdit(i, field, val) {
@@ -896,7 +903,9 @@
     window.peRemove = peRemove;
 
     function initPartsEditor() {
-        document.getElementById('pe-model').addEventListener('change', peRenderTable);
+        document.getElementById('pe-model').addEventListener('change', () => { peRenderTable(); renderLookupTable(); });
+        const pf = document.getElementById('pe-filter');
+        if (pf) pf.addEventListener('input', peRenderTable);
         document.getElementById('pe-add-row').addEventListener('click', () => {
             const model = document.getElementById('pe-model').value;
             if (!activeDB || !activeDB.models[model]) return;
