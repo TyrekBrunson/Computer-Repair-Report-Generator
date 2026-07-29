@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-07-29T16:50:19.923Z",
+    "generatedAt": "2026-07-29T18:26:23.944Z",
     "source": "admin-import",
     "contract": "Richland1-Worth",
     "schema": 2
@@ -611,16 +611,6 @@
           "price": null,
           "source": "FieldPower",
           "notes": ""
-        },
-        {
-          "partNumber": "PHVVR",
-          "description": "Motherboard - 8 GB RAM - 3.7 Quad Core N200 - 128 GB SSD (Integrated SSD)",
-          "canonical": "MOTHERBOARD",
-          "category": "FieldPower",
-          "adp": "",
-          "price": null,
-          "source": "FieldPower",
-          "notes": "WARRANTY IS GOOD"
         },
         {
           "partNumber": "TXD03",
