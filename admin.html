@@ -521,12 +521,12 @@
             return { partNumber: uniq.map(p => p.partNumber).join(' or '), description: base.description, price: uniq.length===1?base.price:null, category: base.category, adp: base.adp, isWorthResult: /^w-/i.test(base.partNumber) };
         };
         if (isAdp) {
+            // Worth mode: use W- if available, else whatever exists (part with no W- keeps its OEM number).
             if (worthParts.length) return { ...worthParts[0], isWorthResult: true };
-            const worthCat = c.filter(p => /WORTH|UADP|Consumable/i.test(p.category||''));
-            const pick = worthCat[0] || c[0];
-            return pick ? { ...pick, isWorthResult: /^w-/i.test(pick.partNumber) } : null;
+            if (nonWorthParts.length) return { ...nonWorthParts[0], isWorthResult: false };
+            return null;
         }
-        // NON-ADP / warranty: ONLY non-W- parts (joined with "or"), or nothing. Never a W- part.
+        // Warranty mode: ONLY non-W- parts (joined with "or"), or nothing. Never a W- part.
         if (nonWorthParts.length) return multi(nonWorthParts);
         return null;
     }
