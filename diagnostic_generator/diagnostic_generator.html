@@ -252,22 +252,40 @@
     };
 
     async function loadPartsDB() {
+        // Repo file is the source of truth: always fetch it fresh on every page load so
+        // published changes appear on any device without needing the admin panel.
+        try {
+            const res = await fetch('part-numbers.json?v=' + Date.now(), { cache: 'no-store' });
+            if (res.ok) {
+                const data = await res.json();
+                if (data && data.models) { PARTS_DB = data; return; }
+            }
+        } catch (e) {
+            console.warn('Could not fetch part-numbers.json; falling back.', e);
+        }
+        // Fallbacks only when the fetch fails (offline, or opened via file://):
+        // a local admin override if present, otherwise the built-in embedded copy.
         try {
             const cached = localStorage.getItem(PARTS_DB_KEY);
-            if (cached) { PARTS_DB = JSON.parse(cached); return; }
+            if (cached) { const p = JSON.parse(cached); if (p && p.models) { PARTS_DB = p; return; } }
         } catch (e) { /* ignore */ }
-        try {
-            const res = await fetch('part-numbers.json', { cache: 'no-store' });
-            if (res.ok) { PARTS_DB = await res.json(); return; }
-        } catch (e) {
-            console.warn('Could not load part-numbers.json; using embedded fallback.', e);
-        }
         if (PARTS_EMBEDDED && PARTS_EMBEDDED.models) PARTS_DB = PARTS_EMBEDDED;
     }
 
     // Load issue/verbiage data. Admin override in localStorage wins; then verbiage.json;
     // otherwise keep the hardcoded ISSUE_DATA above as a last-resort fallback.
     async function loadVerbiage() {
+        // Repo file is the source of truth: fetch fresh every load so published verbiage
+        // changes appear on any device. Fall back to local override / built-in only on failure.
+        try {
+            const res = await fetch('verbiage.json?v=' + Date.now(), { cache: 'no-store' });
+            if (res.ok) {
+                const parsed = await res.json();
+                if (parsed && Object.keys(parsed).length) { ISSUE_DATA = parsed; return; }
+            }
+        } catch (e) {
+            console.warn('Could not fetch verbiage.json; falling back.', e);
+        }
         try {
             const cached = localStorage.getItem(VERBIAGE_KEY);
             if (cached) {
@@ -275,15 +293,7 @@
                 if (parsed && Object.keys(parsed).length) { ISSUE_DATA = parsed; return; }
             }
         } catch (e) { /* ignore */ }
-        try {
-            const res = await fetch('verbiage.json', { cache: 'no-store' });
-            if (res.ok) {
-                const parsed = await res.json();
-                if (parsed && Object.keys(parsed).length) ISSUE_DATA = parsed;
-            }
-        } catch (e) {
-            console.warn('Could not load verbiage.json; using built-in fallback.', e);
-        }
+        // else keep the hardcoded ISSUE_DATA fallback already in memory
     }
 
     function modelKeyForAlias(alias) {
@@ -303,7 +313,7 @@
     }
 
     // (model, canonical part, isAdp) -> best part-number match
-    function lookupPartNumber(canonicalPart, isAdp) {
+    function lookupPartNumber(canonicalPart, isAdp, allowMoboWorth) {
         if (!PARTS_DB || !selectedModelKey) return null;
         const model = PARTS_DB.models[selectedModelKey];
         if (!model) return null;
@@ -340,17 +350,41 @@
 
         if (candidates.length === 0) return null;
 
-        // Preference order:
-        // 1) Worth-Provided parts (part number starts with "W-") — these are the parts to order.
-        //    If a W- part exists for this canonical, a non-W- part is NEVER recommended.
-        // 2) Otherwise, parts flagged Worth/UADP/Consumable by category.
-        // 3) Otherwise, the first available candidate.
         const isWorth = p => /^w-/i.test((p.partNumber || '').trim());
         const worthParts = candidates.filter(isWorth);
-        if (worthParts.length) return worthParts[0];
+        const nonWorthParts = candidates.filter(p => !isWorth(p));
 
-        const worthCat = candidates.filter(p => /WORTH|UADP|Consumable/i.test(p.category || ''));
-        return worthCat[0] || candidates[0];
+        // MOTHERBOARD Worth override: only when the caller enables it (Richland/Worth contract
+        // is checked AND the model is one of the approved Worth-motherboard models). Motherboards
+        // are diagnosed under NON-ADP system-failure categories, but on those contracts the
+        // physical part is the Worth "USE THIS MOBO FOR DIAG" number.
+        if (allowMoboWorth && target === 'MOTHERBOARD' && worthParts.length) return worthParts[0];
+
+        if (isAdp) {
+            // ADP / Worth repair: order the Worth-Provided (W-) part.
+            // If a W- part exists, a non-W- part is NEVER recommended.
+            if (worthParts.length) return worthParts[0];
+            const worthCat = candidates.filter(p => /WORTH|UADP|Consumable/i.test(p.category || ''));
+            return worthCat[0] || candidates[0];
+        }
+
+        // NON-ADP / Dell warranty (OEM) repair: use the WARRANTY / NORMAL (non-W-) part number.
+        // Never recommend a W- Worth part for a warranty order if any non-W- option exists.
+        if (nonWorthParts.length) {
+            // 1) Parts explicitly flagged for non-ADP / NORMAL / NON use.
+            const normalFirst = nonWorthParts.filter(p =>
+                p.adp === 'NON_ADP' || /^(NON|NORMAL)$/i.test((p.category || '').trim()));
+            if (normalFirst.length) return normalFirst[0];
+            // 2) The plain warranty listing (category WORTH-PROVIDED but not a W- part) —
+            //    this is the "WARRANTY ONLY / NORMAL" number from the sheet.
+            const plainWarranty = nonWorthParts.filter(p => /WORTH-PROVIDED/i.test(p.category || ''));
+            if (plainWarranty.length) return plainWarranty[0];
+            // 3) Parts usable for both (UADP/BOTH), then anything non-W-.
+            const both = nonWorthParts.filter(p => p.adp === 'BOTH' || /UADP/i.test(p.category || ''));
+            return both[0] || nonWorthParts[0];
+        }
+        // No non-W- option exists — fall back to whatever is available.
+        return candidates[0];
     }
 
     // =========================================================
@@ -369,6 +403,21 @@
         let modelNote = selectedModelKey
             ? `<div class="parts-model-note">Model: <strong>${selectedModelKey}</strong></div>`
             : '<div class="parts-model-note warn">Select a device to auto-assign part numbers.</div>';
+
+        // Motherboard-Worth override applies ONLY when the Richland/Worth contract is checked
+        // AND the model is one of the approved Worth-motherboard models.
+        const MOBO_WORTH_MODELS = [
+            'Latitude 3120 2-in-1',
+            'Latitude 3140 2-in-1',
+            'Latitude 3310 2-in-1',
+            'Dell Pro 11',
+            'Dell Pro 14 PC14250'
+        ];
+        const contractChecked = (() => {
+            const cb = document.getElementById('richland-worth-checkbox');
+            return !!(cb && cb.checked);
+        })();
+        const allowMoboWorth = contractChecked && MOBO_WORTH_MODELS.includes(selectedModelKey);
 
         // Unique canonical parts from current selection (skip miscellaneous)
         const wantParts = [];
@@ -391,27 +440,33 @@
             bodyRows = emptyRows();
         } else {
             wantParts.forEach(wp => {
-                const match = lookupPartNumber(wp.name, wp.isAdp);
+                const match = lookupPartNumber(wp.name, wp.isAdp, allowMoboWorth);
                 const pn = match ? match.partNumber : '—';
                 const notFound = !match;
                 const priceTag = (match && match.price != null) ? ` <span class="pn-price">$${match.price.toFixed(2)}</span>` : '';
+                // The Type reflects the ACTUAL part chosen: a W- part is Worth/ADP, otherwise Warranty.
+                const isWorthPart = match && /^w-/i.test((match.partNumber || '').trim());
+                const typeLabel = isWorthPart
+                    ? '<span class="pn-type worth">Worth/ADP</span>'
+                    : (match ? '<span class="pn-type warranty">Warranty</span>' : '');
                 const copyBtn = match
                     ? `<button class="pn-copy" onclick="copyPartNumber('${match.partNumber.replace(/'/g, "\\'")}', this)">Copy</button>`
                     : '';
                 bodyRows += `<tr class="${notFound ? 'pn-missing' : ''}">
                     <td>${wp.name}</td>
+                    <td>${typeLabel}</td>
                     <td>${pn}${priceTag}</td>
                     <td>${copyBtn}</td>
                 </tr>`;
             });
             for (let i = wantParts.length; i < 6; i++) {
-                bodyRows += '<tr><td>&nbsp;</td><td>&nbsp;</td><td></td></tr>';
+                bodyRows += '<tr><td>&nbsp;</td><td></td><td>&nbsp;</td><td></td></tr>';
             }
         }
 
         container.innerHTML = `${modelNote}
             <table class="parts-table">
-                <thead><tr><th>Part</th><th>Part Number</th><th>Copy</th></tr></thead>
+                <thead><tr><th>Part</th><th>Type</th><th>Part Number</th><th>Copy</th></tr></thead>
                 <tbody>${bodyRows}</tbody>
             </table>`;
     }
@@ -1413,6 +1468,11 @@
                 renderPartsList();
             });
         });
+
+        // Re-render parts table when the Richland/Worth contract checkbox is toggled
+        // (it controls the motherboard Worth-part override).
+        const rwCb = document.getElementById('richland-worth-checkbox');
+        if (rwCb) rwCb.addEventListener('change', () => renderPartsList());
         renderPartsList();
 
         // Miscellaneous — show/hide textarea and keep selectedIssues in sync
