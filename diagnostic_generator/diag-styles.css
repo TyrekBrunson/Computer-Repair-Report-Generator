@@ -682,6 +682,13 @@
 .parts-table tbody td {
     height: 42px;
 }
+
+/* Grand Total row — Worth mode only */
+.parts-table tfoot td {
+    font-weight: bold;
+    background-color: #f4f7f9;
+    border-top: 2px solid #0056b3;
+}
 /* ===== Auto Parts List additions (parts DB integration) ===== */
 .parts-model-note {
     font-size: 0.9em;

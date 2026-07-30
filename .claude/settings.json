@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 .scratch_convert_worth.py)",
+      "Bash(python3 -m json.tool diagnostic_generator/r1_worth_parts.json)",
+      "Bash(git show *)",
+      "Bash(python3 -c ' *)",
+      "Bash(rm -f .orig_diag.html)",
+      "Bash(python3)",
+      "Bash(python3 -m json.tool diagnostic_generator/A5_FM_U_parts.json)",
+      "Bash(rm -f .orig_admin.html)",
+      "Bash(awk '$1>1')",
+      "Bash(python3 -m json.tool diagnostic_generator/verbiage.json)",
+      "Bash(rm -f .orig_check.tmp)",
+      "Bash(git rm *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://127.0.0.1:8000/diagnostic_generator/diagnostic_generator.html)"
+    ]
+  }
+}

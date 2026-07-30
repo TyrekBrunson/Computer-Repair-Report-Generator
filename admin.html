@@ -113,7 +113,7 @@
                 <div id="import-summary"></div>
                 <div class="row-flex" style="margin-top: 14px;">
                     <button class="action" id="apply-import" style="display:none;">&#10004; Save to Web Center</button>
-                    <button class="action secondary" id="download-import" style="display:none;">&#11015; Download part-numbers.json</button>
+                    <button class="action secondary" id="download-import" style="display:none;">&#11015; Download A5_FM_U_parts.json</button>
                 </div>
             </div>
             <div class="card">
@@ -135,7 +135,7 @@
         </div>
         <div class="tab-panel" id="tab-editor">
             <div class="card">
-                <h2>Edit part-numbers.json</h2>
+                <h2>Edit A5_FM_U_parts.json</h2>
                 <p class="muted">Direct edit of the active database. Validate before saving. Saving writes to localStorage, which every Web Center tool reads first.</p>
                 <textarea class="json-area" id="json-editor" spellcheck="false"></textarea>
                 <div id="editor-status"></div>
@@ -281,8 +281,8 @@
     };
     // Every dataset maps to all the file paths in the repo that must stay in sync.
     const GITHUB_TARGETS = {
-        parts: ['part-numbers.json', 'diagnostic_generator/part-numbers.json'],
-        verbiage: ['verbiage.json', 'diagnostic_generator/verbiage.json']
+        parts: ['diagnostic_generator/A5_FM_U_parts.json'],
+        verbiage: ['diagnostic_generator/verbiage.json']
     };
     let githubToken = null; // held in memory only for the session; never stored
     // Embedded fallback so parts tabs work under file:// (fetch blocked).
@@ -325,20 +325,6 @@
         for (const [canon, keys] of ALIAS_RULES) { for (const k of keys) if (d.includes(k)) return canon; }
         return "OTHER";
     }
-    function canonicalModelName(raw) {
-        let r = (raw || "").replace(/\s+/g," ").trim();
-        r = r.split(/\s*-\s*RICHLAND/i)[0].trim();
-        r = r.replace(/\(WORTH[- ]PROVIDED\)/i,"").trim().replace(/-+$/,"").trim();
-        const low = r.toLowerCase();
-        const two = /2-in-1|2 in 1|2in1/.test(low) ? " 2-in-1" : "";
-        const numMatch = low.match(/(\d{3,4})/); const num = numMatch ? numMatch[1] : "";
-        let fam;
-        if (low.includes("chromebook") || low.startsWith("cb")) fam = "Chromebook";
-        else if (low.includes("latitude") || low.startsWith("lat")) fam = "Latitude";
-        else if (low.includes("dell pro") || low.includes("pc142") || low.startsWith("dp")) { return (/pc\s*1425\d?/.test(low) || low.includes("14")) ? "Dell Pro 14 PC14250" : "Dell Pro 11"; }
-        else return r;
-        return (fam + " " + num).trim() + two;
-    }
     function modelAliases(name) {
         const n = name.toLowerCase(); const out = new Set([n]);
         let compact = n.replace("latitude","lat").replace("chromebook","cb").replace("dell pro","dp");
@@ -346,15 +332,23 @@
         const m = n.match(/(\d{3,4})(\s*2-in-1)?/); if (m) out.add((m[1] + (m[2] ? " 2-in-1" : "")).trim());
         return [...out].sort();
     }
-    // Classify a raw category string into ADP applicability for ordering logic.
-    // UADP = under-warranty ADP part; NON = non-ADP; combined = both.
-    function adpFromCategory(cat) {
+    // Classify a raw spreadsheet category string into the app's coverage vocabulary.
+    // NON/NORMAL checked first so a hypothetical "NON-ADP" string doesn't false-match ADP below.
+    function coverageFromCategory(cat) {
         const c = (cat || '').toUpperCase();
-        if (c.includes('UADP') && c.includes('NON')) return 'BOTH';
-        if (/\bUADP\b/.test(c) || c.includes('ADP AND NON') || c.includes('SAME PART FOR ADP')) return 'BOTH';
-        if (c === 'UADP') return 'ADP';
-        if (c === 'NON' || c === 'NON ADP' || c === 'NON-ADP') return 'NON_ADP';
-        return ''; // unknown / consumable / worth
+        if (c.includes('NON') || c.includes('NORMAL')) return 'Dell Warranty';
+        if (c.includes('UADP') || c.includes('ADP')) return 'ADP';
+        return 'Dell Warranty';
+    }
+
+    // Strips boilerplate that's baked into the sheet title cell itself (e.g. "Latitude 3120
+    // 2-in-1 - RICHLAND 1 (WORTH PROVIDED)" -> "Latitude 3120 2-in-1") WITHOUT rebuilding or
+    // merging the name — no-op for titles that don't contain this boilerplate.
+    function stripTitleBoilerplate(raw) {
+        let r = (raw || "").replace(/\s+/g," ").trim();
+        r = r.split(/\s*-\s*RICHLAND/i)[0].trim();
+        r = r.replace(/\(WORTH[- ]PROVIDED\)/i,"").trim().replace(/-+$/,"").trim();
+        return r;
     }
 
     function buildFromWorkbook(wb) {
@@ -367,21 +361,21 @@
             if (!rows.length) return;
             let titleCell = rows[0] && rows[0][0];
             let modelName = (titleCell && String(titleCell).trim()) ? String(titleCell).trim() : sheetName.trim();
-            modelName = canonicalModelName(modelName);
+            modelName = stripTitleBoilerplate(modelName);
             const parts = []; const seen = new Set();
             rows.forEach(cells => {
                 if (!cells) return;
                 // Worth-Provided layout: Part#, Desc, Price(number), Category
-                // Only claim the row here if col 2 looks like a price OR the part number is W- prefixed.
+                // Only claim the row here if col 2 looks like a price OR the part number is W- prefixed —
+                // both signals mean this is a Worth-Provided row.
                 const pn = cleanPN(cells[0]); const desc = cleanPN(cells[1]);
                 const col2IsPrice = cells[2] != null && !isNaN(parseFloat(cells[2])) && String(cells[2]).trim() !== '';
                 const isWPrefixed = pn && /^w-/i.test(pn);
                 if (pn && desc && (col2IsPrice || isWPrefixed) && /^W?-?[0-9A-Z]{4,7}$/.test(pn.replace(/ /g,"")) && !["part #","part#"].includes(pn.toLowerCase())) {
                     const key = pn + "||" + desc;
                     if (!seen.has(key)) {
-                        const cat = cleanPN(cells[3]) || "WORTH-PROVIDED";
                         seen.add(key);
-                        parts.push({ partNumber: pn, description: desc, canonical: canonicalFor(desc), category: cat, adp: adpFromCategory(cat), price: toPrice(cells[2]), source: "Worth", notes: "" });
+                        parts.push({ partNumber: pn, description: desc, canonical: canonicalFor(desc), coverage: 'Worth', price: toPrice(cells[2]) });
                     }
                 }
                 // FieldPower layout: Part#, Desc, Category(NON/UADP), Model, Notes  — capture the ADP category FIRST.
@@ -392,18 +386,19 @@
                         const key = fpPn + "||" + fpDesc;
                         if (!seen.has(key)) {
                             seen.add(key);
-                            parts.push({ partNumber: fpPn, description: fpDesc, canonical: canonicalFor(fpDesc), category: fpCat, adp: adpFromCategory(fpCat), price: null, source: "FieldPower", notes: cleanPN(cells[4]) || "" });
+                            parts.push({ partNumber: fpPn, description: fpDesc, canonical: canonicalFor(fpDesc), coverage: coverageFromCategory(fpCat), price: null });
                         }
                         fpCaptured = true;
                     }
                 }
                 // Secondary paired blocks (Part#/Desc/Notes at col 0 and col 4) — skip col 0 if FieldPower already took it.
+                // No category column available here, so this is always an unclassified plain OEM number.
                 [0,4].forEach(base => {
                     if (base === 0 && fpCaptured) return;
-                    const p2 = cleanPN(cells[base]); const d2 = cleanPN(cells[base+1]); const note = cleanPN(cells[base+2]);
+                    const p2 = cleanPN(cells[base]); const d2 = cleanPN(cells[base+1]);
                     if (p2 && d2 && /^[0-9A-Z]{5}$/.test(p2) && d2.toLowerCase() !== "description") {
                         const key = p2 + "||" + d2;
-                        if (!seen.has(key)) { seen.add(key); parts.push({ partNumber: p2, description: d2, canonical: canonicalFor(d2), category: "FieldPower", adp: "", price: null, source: "FieldPower", notes: note || "" }); }
+                        if (!seen.has(key)) { seen.add(key); parts.push({ partNumber: p2, description: d2, canonical: canonicalFor(d2), coverage: 'Dell Warranty', price: null }); }
                     }
                 });
             });
@@ -414,13 +409,12 @@
                 } else { models[modelName] = { aliases: modelAliases(modelName), parts }; }
             }
         });
-        const aliasMap = {}; ALIAS_RULES.forEach(([canon, keys]) => keys.forEach(k => aliasMap[k] = canon));
-        return { meta: { generatedAt: new Date().toISOString(), source: "admin-import", contract: "Richland1-Worth", schema: 2 }, canonicalParts: CANONICAL_PARTS, aliasMap, models };
+        return { meta: { generatedAt: new Date().toISOString(), source: "admin-import", schema: 2 }, models };
     }
     let activeDB = null; let importedDB = null;
     async function loadActiveDB() {
         try { const cached = localStorage.getItem(PARTS_DB_KEY); if (cached) { activeDB = JSON.parse(cached); return "override"; } } catch (e) {}
-        try { const res = await fetch('part-numbers.json?v=' + Date.now(), { cache: 'no-store' }); if (res.ok) { activeDB = await res.json(); return "file"; } } catch (e) {}
+        try { const res = await fetch('diagnostic_generator/A5_FM_U_parts.json?v=' + Date.now(), { cache: 'no-store' }); if (res.ok) { activeDB = await res.json(); return "file"; } } catch (e) {}
         if (PARTS_EMBEDDED && PARTS_EMBEDDED.models) { activeDB = JSON.parse(JSON.stringify(PARTS_EMBEDDED)); return "embedded"; }
         activeDB = null; return "none";
     }
@@ -460,7 +454,7 @@
             renderDBSummary(activeDB, 'active-db-summary', 'active-db-status');
             flashSaved(e.currentTarget);
         });
-        document.getElementById('download-import').addEventListener('click', () => { if (importedDB) downloadJSON(importedDB, 'part-numbers.json'); });
+        document.getElementById('download-import').addEventListener('click', () => { if (importedDB) downloadJSON(importedDB, 'A5_FM_U_parts.json'); });
     }
     function handleFile(file) {
         document.getElementById('dz-title').textContent = file.name;
@@ -491,7 +485,7 @@
             renderDBSummary(activeDB, 'active-db-summary', 'active-db-status');
             flashSaved(e.currentTarget);
         });
-        document.getElementById('download-json').addEventListener('click', () => { const r = validateEditor(); if (r.ok) downloadJSON(r.db, 'part-numbers.json'); });
+        document.getElementById('download-json').addEventListener('click', () => { const r = validateEditor(); if (r.ok) downloadJSON(r.db, 'A5_FM_U_parts.json'); });
     }
     function validateEditor() {
         try { const db = JSON.parse(document.getElementById('json-editor').value); if (!db.models || typeof db.models !== 'object') throw new Error("missing 'models' object"); return { ok: true, db }; }
@@ -518,7 +512,7 @@
             parts.forEach(p => { if (!uniq.some(u => u.partNumber === p.partNumber)) uniq.push(p); });
             if (!uniq.length) return null;
             const base = uniq[0];
-            return { partNumber: uniq.map(p => p.partNumber).join(' or '), description: base.description, price: uniq.length===1?base.price:null, category: base.category, adp: base.adp, isWorthResult: /^w-/i.test(base.partNumber) };
+            return { partNumber: uniq.map(p => p.partNumber).join(' or '), description: base.description, price: uniq.length===1?base.price:null, coverage: base.coverage, isWorthResult: /^w-/i.test(base.partNumber) };
         };
         if (isAdp) {
             // Worth mode: use W- if available, else whatever exists (part with no W- keeps its OEM number).
@@ -668,7 +662,7 @@
             }
         } catch (e) {}
         try {
-            const res = await fetch('verbiage.json?v=' + Date.now(), { cache: 'no-store' });
+            const res = await fetch('diagnostic_generator/verbiage.json?v=' + Date.now(), { cache: 'no-store' });
             if (res.ok) { verbiageData = await res.json(); return 'file'; }
         } catch (e) {}
         // fetch blocked (e.g. file:// origin) or file missing → use the embedded copy
@@ -876,13 +870,13 @@
                 <td><input class="${isW ? 'worth' : ''}" value="${(p.partNumber||'').replace(/"/g,'&quot;')}" onchange="peEdit(${i},'partNumber',this.value); peRenderTable();" title="${isW ? 'Worth-Provided (preferred)' : ''}"></td>
                 <td><input value="${(p.description||'').replace(/"/g,'&quot;')}" onchange="peEdit(${i},'description',this.value)"></td>
                 <td><input value="${(p.canonical||'').replace(/"/g,'&quot;')}" onchange="peEdit(${i},'canonical',this.value.toUpperCase())"></td>
-                <td><input value="${(p.category||'').replace(/"/g,'&quot;')}" onchange="peEdit(${i},'category',this.value)"></td>
+                <td><input value="${(p.coverage||'').replace(/"/g,'&quot;')}" onchange="peEdit(${i},'coverage',this.value)"></td>
                 <td><input value="${p.price==null?'':p.price}" onchange="peEdit(${i},'price',this.value)" style="max-width:70px;"></td>
                 <td class="del-cell"><button class="pe-del" onclick="peRemove(${i})">✕</button></td>
             </tr>`;
         }).join('');
         wrap.innerHTML = `<table class="pe-table"><thead><tr>
-            <th>Part # <span class="pe-worth-badge">W- = preferred</span></th><th>Description</th><th>Canonical</th><th>Category</th><th>Price</th><th></th>
+            <th>Part # <span class="pe-worth-badge">W- = preferred</span></th><th>Description</th><th>Canonical</th><th>Coverage</th><th>Price</th><th></th>
         </tr></thead><tbody>${rows}</tbody></table>`;
         if (typeof renderLookupTable === 'function') renderLookupTable();
     }
@@ -1034,12 +1028,12 @@
         document.getElementById('reload-db').addEventListener('click', async () => {
             localStorage.removeItem(PARTS_DB_KEY);
             const s = await loadActiveDB(); renderDBSummary(activeDB, 'active-db-summary', 'active-db-status'); pePopulateModels();
-            if (s === 'file') setStatus('active-db-status', 'ok', 'Reloaded from part-numbers.json.');
-            else if (s === 'embedded') setStatus('active-db-status', 'ok', 'Loaded the built-in parts database (part-numbers.json is only fetchable when hosted).');
+            if (s === 'file') setStatus('active-db-status', 'ok', 'Reloaded from A5_FM_U_parts.json.');
+            else if (s === 'embedded') setStatus('active-db-status', 'ok', 'Loaded the built-in parts database (A5_FM_U_parts.json is only fetchable when hosted).');
             else setStatus('active-db-status', 'warn', 'No parts database found.');
         });
         document.getElementById('clear-override').addEventListener('click', async () => {
-            if (!confirm('Remove the saved parts override? Tools will fall back to part-numbers.json.')) return;
+            if (!confirm('Remove the saved parts override? Tools will fall back to A5_FM_U_parts.json.')) return;
             localStorage.removeItem(PARTS_DB_KEY); await loadActiveDB();
             renderDBSummary(activeDB, 'active-db-summary', 'active-db-status'); pePopulateModels();
             setStatus('active-db-status', 'ok', 'Override cleared.');
