@@ -127,10 +127,16 @@
             </div>
 
             <div class="card" style="border-color:#f5b5ae;">
-                <h2 style="color:#b71c1c;">Danger Zone</h2>
-                <p class="muted">Permanently delete <strong>all</strong> parts data — every model and part is removed and the list becomes empty.
-                   The generators will show no parts until you re-import a spreadsheet, or press <em>Clear saved override</em> / <em>Reload from file</em> above to restore the shipped data. You'll confirm first.</p>
-                <button class="action danger" id="pe-delete-all">🗑 Delete ALL saved parts data</button>
+                <h2 style="color:#b71c1c;">Danger Zone — Delete Part Data</h2>
+                <p class="muted">Each imported catalog can be cleared independently, or wipe everything. This removes the
+                   saved localStorage override for that catalog; the tools then fall back to the shipped repo file
+                   (or the built-in copy) until you re-import or publish.</p>
+                <div id="danger-status"></div>
+                <div class="row-flex" style="margin-top:6px;">
+                    <button class="action danger" id="pe-delete-worth">🗑 Delete Richland 1 / Worth data</button>
+                    <button class="action danger" id="pe-delete-fieldpower">🗑 Delete FieldPower (ADP/Warranty) data</button>
+                    <button class="action danger" id="pe-delete-all">🗑 Delete ALL part data</button>
+                </div>
             </div>
         </div>
         <div class="tab-panel" id="tab-editor">
@@ -272,6 +278,7 @@
     passwordInput.addEventListener("keydown", e => { if (e.key === "Enter") unlockPage(); });
 
     const PARTS_DB_KEY = 'ebryit_parts_db_v2';
+    const WORTH_DB_KEY = 'ebryit_worth_db_v1'; // Richland 1 / Worth catalog override
     // ---- GitHub "Publish to repo" config (Option 2a: token pasted at runtime, memory only) ----
     // Edit these three if the repo/branch ever changes.
     const GITHUB_CONFIG = {
@@ -917,16 +924,26 @@
             setStatus('parts-edit-status', 'ok', 'Saved. The generators now use these part numbers. Use the Publish tab to push live to all devices.');
             flashSaved(e.currentTarget);
         });
+        document.getElementById('pe-delete-worth').addEventListener('click', () => {
+            if (!confirm('Delete the Richland 1 / Worth catalog override? The Worth data reverts to the shipped r1_worth_parts.json. FieldPower data is untouched.')) return;
+            localStorage.removeItem(WORTH_DB_KEY);
+            setStatus('danger-status', 'ok', 'Richland 1 / Worth override cleared. Reverting to the shipped r1_worth_parts.json.');
+        });
+        document.getElementById('pe-delete-fieldpower').addEventListener('click', () => {
+            if (!confirm('Delete the FieldPower (ADP/Warranty) catalog override? The FieldPower data reverts to the shipped A5_FM_U_parts.json. Worth data is untouched.')) return;
+            localStorage.removeItem(PARTS_DB_KEY);
+            loadActiveDB().then(() => { renderDBSummary(activeDB, 'active-db-summary', 'active-db-status'); pePopulateModels(); });
+            setStatus('danger-status', 'ok', 'FieldPower override cleared. Reverting to the shipped A5_FM_U_parts.json.');
+        });
         document.getElementById('pe-delete-all').addEventListener('click', () => {
-            const sure = confirm('Are you sure? This permanently deletes ALL parts data — every model and every part will be removed and the list will be empty.\n\nThis cannot be undone (though you can re-import a spreadsheet or reload from file later).');
+            const sure = confirm('Are you sure? This permanently deletes ALL parts data from BOTH catalogs — every model and every part will be removed and the list will be empty. This cannot be undone (though you can re-import a spreadsheet or reload from file later).');
             if (!sure) return;
-            // Wipe to a genuinely empty database and persist it as the override,
-            // so reloads show "empty" instead of falling back to the shipped/embedded data.
             activeDB = { meta: { generatedAt: new Date().toISOString(), source: 'wiped', schema: 2 }, canonicalParts: CANONICAL_PARTS, aliasMap: {}, models: {} };
             localStorage.setItem(PARTS_DB_KEY, JSON.stringify(activeDB));
+            localStorage.setItem(WORTH_DB_KEY, JSON.stringify({ meta: { generatedAt: new Date().toISOString(), source: 'wiped', schema: 2 }, models: {} }));
             renderDBSummary(activeDB, 'active-db-summary', 'active-db-status');
             pePopulateModels();
-            setStatus('parts-edit-status', 'ok', 'All parts data deleted. The database is now empty. Import a spreadsheet or use "Reload from file" to restore.');
+            setStatus('danger-status', 'ok', 'All part data deleted from both catalogs. Import a spreadsheet or use "Reload from file" to restore.');
         });
     }
 
