@@ -430,13 +430,12 @@
         const container = document.getElementById('parts-list-output');
         if (!container) return;
 
-        // The Richland/Worth contract checkbox drives the WHOLE report:
-        //  checked  -> Worth mode: every part uses its W- version when it has one.
-        //  unchecked -> Warranty mode: every part uses its non-W- (OEM) number only.
-        const worthMode = (() => {
-            const cb = document.getElementById('richland-worth-checkbox');
-            return !!(cb && cb.checked);
-        })();
+        // The MIX OF SELECTED ISSUES drives the WHOLE report (the contract checkbox is not
+        // used for part selection):
+        //   any ADP / Worth-provided issue present -> Worth mode (whole report uses W- parts)
+        //   all issues are non-ADP (warranty)      -> Warranty mode (whole report uses OEM parts)
+        const anyAdpIssue = selectedIssues.some(i => i.type === 'ADP');
+        const worthMode = anyAdpIssue;
         const worthQualified = worthMode && !!getSelectedWorthModelKey();
         // Price column + Grand Total row only appear in Worth mode — only that catalog
         // carries real price data.
@@ -453,10 +452,9 @@
         let modelNote = selectedModelKey
             ? `<div class="parts-model-note">Model: <strong>${selectedModelKey}</strong></div>`
             : '<div class="parts-model-note warn">Select a device to auto-assign part numbers.</div>';
-        // Checkbox is on but this device has no Richland/Worth data (Chromebook is blocked
-        // earlier via enforceWorthChromebookExclusion and can't reach this state).
+        // Worth mode is on (an ADP issue is present) but this device has no Richland/Worth data.
         if (selectedModelKey && worthMode && !worthQualified) {
-            modelNote += '<div class="parts-model-note warn">No Richland 1 / Worth part data for this device — showing standard warranty numbers.</div>';
+            modelNote += '<div class="parts-model-note warn">No Richland 1 / Worth part data for this device — showing standard ADP/warranty numbers.</div>';
         }
 
         // Unique canonical parts from current selection (skip miscellaneous)
