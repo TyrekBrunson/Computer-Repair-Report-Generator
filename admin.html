@@ -128,9 +128,10 @@
 
             <div class="card" style="border-color:#f5b5ae;">
                 <h2 style="color:#b71c1c;">Danger Zone — Delete Part Data</h2>
-                <p class="muted">Each imported catalog can be cleared independently, or wipe everything. This removes the
-                   saved localStorage override for that catalog; the tools then fall back to the shipped repo file
-                   (or the built-in copy) until you re-import or publish.</p>
+                <p class="muted">Delete the Richland 1 / Worth list and the FieldPower list independently, or wipe both.
+                   Deleting empties that catalog. <strong>Important:</strong> this only affects THIS device until you
+                   <em>Publish</em> — the generators read the repo file, so you must publish the empty catalog to make it
+                   gone for everyone. If your token is pasted on the Publish tab, delete will offer to publish for you.</p>
                 <div id="danger-status"></div>
                 <div class="row-flex" style="margin-top:6px;">
                     <button class="action danger" id="pe-delete-worth">🗑 Delete Richland 1 / Worth data</button>
@@ -289,6 +290,7 @@
     // Every dataset maps to all the file paths in the repo that must stay in sync.
     const GITHUB_TARGETS = {
         parts: ['diagnostic_generator/A5_FM_U_parts.json'],
+        worth: ['diagnostic_generator/r1_worth_parts.json'],
         verbiage: ['diagnostic_generator/verbiage.json']
     };
     let githubToken = null; // held in memory only for the session; never stored
@@ -924,26 +926,64 @@
             setStatus('parts-edit-status', 'ok', 'Saved. The generators now use these part numbers. Use the Publish tab to push live to all devices.');
             flashSaved(e.currentTarget);
         });
+        // Build an empty catalog object (persisting this — not just removing the override —
+        // is what stops the tools from falling back to the shipped/embedded data).
+        const emptyCatalog = (extra) => Object.assign({ meta: { generatedAt: new Date().toISOString(), source: 'wiped', schema: 2 }, models: {} }, extra || {});
+
+        // After emptying locally, optionally push the empty file(s) to the repo so the deletion
+        // is real for EVERY device (the generators read the repo file first). Publishing needs a
+        // token pasted on the Publish tab; if none is present we tell the user to go publish.
+        async function deleteAndOfferPublish(kind, emptyObj, storageKey, label) {
+            localStorage.setItem(storageKey, JSON.stringify(emptyObj));
+            if (kind === 'parts') { activeDB = emptyObj; renderDBSummary(activeDB, 'active-db-summary', 'active-db-status'); pePopulateModels(); }
+            if (!githubToken) {
+                setStatus('danger-status', 'warn', label + ' emptied on this device. <strong>It is NOT yet gone for everyone</strong> — open the <em>Publish</em> tab, paste your token, and publish so the empty file is committed to the repo. Until then the tools still read the old file.');
+                return;
+            }
+            if (!confirm('Also publish the empty ' + label + ' to the repo now? This commits the emptied file so every device sees it.')) {
+                setStatus('danger-status', 'warn', label + ' emptied on this device only. Publish it to make it stick for everyone.');
+                return;
+            }
+            setStatus('danger-status', 'warn', 'Publishing empty ' + label + '…');
+            try {
+                await ghPublishDataset(kind, emptyObj);
+                setStatus('danger-status', 'ok', label + ' deleted AND published. All devices will show no ' + label + ' data after Pages rebuilds (~1 min).');
+            } catch (e) {
+                setStatus('danger-status', 'err', label + ' emptied locally but publish failed: ' + e.message + '. Try again from the Publish tab.');
+            }
+        }
+
         document.getElementById('pe-delete-worth').addEventListener('click', () => {
-            if (!confirm('Delete the Richland 1 / Worth catalog override? The Worth data reverts to the shipped r1_worth_parts.json. FieldPower data is untouched.')) return;
-            localStorage.removeItem(WORTH_DB_KEY);
-            setStatus('danger-status', 'ok', 'Richland 1 / Worth override cleared. Reverting to the shipped r1_worth_parts.json.');
+            if (!confirm('Delete ALL Richland 1 / Worth part data?\n\nThis empties the Worth catalog (r1_worth_parts.json). FieldPower data is untouched. To make it gone for everyone you must Publish afterward.')) return;
+            deleteAndOfferPublish('worth', emptyCatalog({ meta: { generatedAt: new Date().toISOString(), source: 'RICHLAND 1 Worth-Provided (wiped)', catalog: 'richland1_worth', schema: 2 } }), WORTH_DB_KEY, 'Richland 1 / Worth data');
         });
         document.getElementById('pe-delete-fieldpower').addEventListener('click', () => {
-            if (!confirm('Delete the FieldPower (ADP/Warranty) catalog override? The FieldPower data reverts to the shipped A5_FM_U_parts.json. Worth data is untouched.')) return;
-            localStorage.removeItem(PARTS_DB_KEY);
-            loadActiveDB().then(() => { renderDBSummary(activeDB, 'active-db-summary', 'active-db-status'); pePopulateModels(); });
-            setStatus('danger-status', 'ok', 'FieldPower override cleared. Reverting to the shipped A5_FM_U_parts.json.');
+            if (!confirm('Delete ALL FieldPower (ADP/Warranty) part data?\n\nThis empties the FieldPower catalog (A5_FM_U_parts.json). Worth data is untouched. To make it gone for everyone you must Publish afterward.')) return;
+            deleteAndOfferPublish('parts', emptyCatalog({ canonicalParts: CANONICAL_PARTS, aliasMap: {} }), PARTS_DB_KEY, 'FieldPower data');
         });
-        document.getElementById('pe-delete-all').addEventListener('click', () => {
-            const sure = confirm('Are you sure? This permanently deletes ALL parts data from BOTH catalogs — every model and every part will be removed and the list will be empty. This cannot be undone (though you can re-import a spreadsheet or reload from file later).');
-            if (!sure) return;
-            activeDB = { meta: { generatedAt: new Date().toISOString(), source: 'wiped', schema: 2 }, canonicalParts: CANONICAL_PARTS, aliasMap: {}, models: {} };
-            localStorage.setItem(PARTS_DB_KEY, JSON.stringify(activeDB));
-            localStorage.setItem(WORTH_DB_KEY, JSON.stringify({ meta: { generatedAt: new Date().toISOString(), source: 'wiped', schema: 2 }, models: {} }));
-            renderDBSummary(activeDB, 'active-db-summary', 'active-db-status');
-            pePopulateModels();
-            setStatus('danger-status', 'ok', 'All part data deleted from both catalogs. Import a spreadsheet or use "Reload from file" to restore.');
+        document.getElementById('pe-delete-all').addEventListener('click', async () => {
+            if (!confirm('Delete ALL part data from BOTH catalogs?\n\nEvery model and part in FieldPower AND Worth will be removed. To make it gone for everyone you must Publish afterward. This cannot be undone (re-import or reload to restore).')) return;
+            const emptyParts = emptyCatalog({ canonicalParts: CANONICAL_PARTS, aliasMap: {} });
+            const emptyWorth = emptyCatalog({ meta: { generatedAt: new Date().toISOString(), source: 'RICHLAND 1 Worth-Provided (wiped)', catalog: 'richland1_worth', schema: 2 } });
+            localStorage.setItem(PARTS_DB_KEY, JSON.stringify(emptyParts));
+            localStorage.setItem(WORTH_DB_KEY, JSON.stringify(emptyWorth));
+            activeDB = emptyParts; renderDBSummary(activeDB, 'active-db-summary', 'active-db-status'); pePopulateModels();
+            if (!githubToken) {
+                setStatus('danger-status', 'warn', 'Both catalogs emptied on this device. <strong>NOT yet gone for everyone</strong> — go to the <em>Publish</em> tab, paste your token, and publish both Parts and Worth to commit the empty files to the repo.');
+                return;
+            }
+            if (!confirm('Also publish BOTH empty catalogs to the repo now?')) {
+                setStatus('danger-status', 'warn', 'Both catalogs emptied on this device only. Publish them to make it stick for everyone.');
+                return;
+            }
+            setStatus('danger-status', 'warn', 'Publishing both empty catalogs…');
+            try {
+                await ghPublishDataset('parts', emptyParts);
+                await ghPublishDataset('worth', emptyWorth);
+                setStatus('danger-status', 'ok', 'All part data deleted AND published for both catalogs. Every device will be empty after Pages rebuilds (~1 min).');
+            } catch (e) {
+                setStatus('danger-status', 'err', 'Emptied locally but publish failed: ' + e.message + '. Retry from the Publish tab.');
+            }
         });
     }
 
