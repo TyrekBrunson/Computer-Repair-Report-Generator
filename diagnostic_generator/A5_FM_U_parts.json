@@ -1,9 +1,10 @@
 {
   "meta": {
-    "generatedAt": "2026-08-04T14:02:51.346Z",
+    "generatedAt": "2026-08-04T14:19:12.134Z",
     "source": "wiped",
     "schema": 2
   },
+  "models": {},
   "canonicalParts": [
     "BATTERY CABLE",
     "BATTERY",
@@ -32,6 +33,5 @@
     "RIGHT HINGE",
     "AC ADAPTER"
   ],
-  "aliasMap": {},
-  "models": {}
+  "aliasMap": {}
 }
