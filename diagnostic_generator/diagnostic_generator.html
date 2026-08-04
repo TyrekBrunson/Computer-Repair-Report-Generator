@@ -410,14 +410,15 @@
             };
         };
 
-        // The verbiage's contract type is authoritative for which coverage's part number
-        // comes back — an ADP-verbiage issue must return the ADP (or Worth, in Worth mode)
-        // part number, a NON-ADP-verbiage issue must return the Dell Warranty number. Strict:
-        // no fallback to this model's other coverage tier, no fallback across catalogs.
-        const desiredCoverage = issueType === 'ADP' ? (usingWorthDB ? 'Worth' : 'ADP')
-            : issueType === 'NON-ADP' ? 'Dell Warranty'
-            : null;
-        if (!desiredCoverage) return null;
+        // The Richland/Worth contract checkbox decides coverage for the ENTIRE report — not
+        // the per-issue verbiage type. This prevents mixed reports (one Worth part + one
+        // Warranty part) and prevents a Worth number appearing when the whole job is warranty.
+        //   worthMode + qualified model -> 'Worth'      (Richland 1 Worth catalog)
+        //   worthMode + unqualified     -> 'ADP'        (no Worth data; use the ADP tier)
+        //   not worthMode               -> 'Dell Warranty'
+        const desiredCoverage = worthMode
+            ? (usingWorthDB ? 'Worth' : 'ADP')
+            : 'Dell Warranty';
         const matches = candidates.filter(p => p.coverage === desiredCoverage);
         return matches.length ? multi(matches) : null;
     }
