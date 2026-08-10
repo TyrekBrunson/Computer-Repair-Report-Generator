@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Computer Repair Report Generator</title>
     <link rel="icon" type="image/x-icon" href="../images/laptopICO.ico">
+    <link rel="stylesheet" href="../shared/shared-styles.css">
     <link rel="stylesheet" href="diag-styles.css">
 </head>
 <body>
@@ -36,7 +37,6 @@
     <p class="auto-refresh-note" id="refresh-note">
         Last refreshed at: <span id="last-refresh-time">--:--</span><br>
         Auto refreshes at 7:00 AM and 6:00 PM daily<br>
-        Next refresh at: <span id="next-refresh-time">--:--</span><br>
         Love ya guys, keep up the great work! 💺
     </p>
 
@@ -44,58 +44,68 @@
         <h2>Device Selection</h2>
         <div class="device-selection-grid">
             <div class="device-family-column">
-                <h3>Chromebook</h3>
+                <h3>Anderson / Ft. Mill</h3>
                 <div class="CB3110-option">
-                    <input type="radio" name="device-selection" id="CB3110-checkbox">
+                    <input type="radio" name="device-selection" id="CB3110-checkbox" data-district="anderson">
                     <label for="CB3110-checkbox">Chromebook 3110</label>
                 </div>
                 <div class="CB3120-option">
-                    <input type="radio" name="device-selection" id="CB3120-checkbox">
+                    <input type="radio" name="device-selection" id="CB3120-checkbox" data-district="anderson">
                     <label for="CB3120-checkbox">Chromebook 3120</label>
                 </div>
                 <div class="CB3110-2in1-option">
-                    <input type="radio" name="device-selection" id="CB3110-2in1-checkbox">
+                    <input type="radio" name="device-selection" id="CB3110-2in1-checkbox" data-district="anderson">
                     <label for="CB3110-2in1-checkbox">Chromebook 3110 2-in-1</label>
                 </div>
                 <div class="CB3120-2in1-option">
-                    <input type="radio" name="device-selection" id="CB3120-2in1-checkbox">
+                    <input type="radio" name="device-selection" id="CB3120-2in1-checkbox" data-district="anderson">
                     <label for="CB3120-2in1-checkbox">Chromebook 3120 2-in-1</label>
                 </div>
             </div>
 
             <div class="device-family-column">
-                <h3>Latitude</h3>
-                <div class="Lat3120-option">
-                    <input type="radio" name="device-selection" id="Lat3120-checkbox">
-                    <label for="Lat3120-checkbox">Latitude 3120</label>
-                </div>
-                <div class="Lat3140-option">
-                    <input type="radio" name="device-selection" id="Lat3140-checkbox">
-                    <label for="Lat3140-checkbox">Latitude 3140</label>
-                </div>
+                <h3>Richland 1</h3>
+
                 <div class="Lat3120-2in1-option">
-                    <input type="radio" name="device-selection" id="Lat3120-2in1-checkbox">
+                    <input type="radio" name="device-selection" id="Lat3120-2in1-checkbox" data-district="richland">
                     <label for="Lat3120-2in1-checkbox">Latitude 3120 2-in-1</label>
                 </div>
                 <div class="Lat3140-2in1-option">
-                    <input type="radio" name="device-selection" id="Lat3140-2in1-checkbox">
+                    <input type="radio" name="device-selection" id="Lat3140-2in1-checkbox" data-district="richland">
                     <label for="Lat3140-2in1-checkbox">Latitude 3140 2-in-1</label>
                 </div>
                 <div class="Lat3310-2in1-option">
-                    <input type="radio" name="device-selection" id="Lat3310-2in1-checkbox">
+                    <input type="radio" name="device-selection" id="Lat3310-2in1-checkbox" data-district="richland">
                     <label for="Lat3310-2in1-checkbox">Latitude 3310 2-in-1</label>
+                </div>
+                <div class="DP11-option">
+                    <input type="radio" name="device-selection" id="DP11-checkbox" data-district="richland">
+                    <label for="DP11-checkbox">Dell Pro 11</label>
+                </div>
+                <div class="DP14-option">
+                    <input type="radio" name="device-selection" id="DP14-checkbox" data-district="richland">
+                    <label for="DP14-checkbox">Dell Pro 14</label>
                 </div>
             </div>
 
             <div class="device-family-column">
-                <h3>Dell Pro</h3>
-                <div class="DP11-option">
-                    <input type="radio" name="device-selection" id="DP11-checkbox">
-                    <label for="DP11-checkbox">Dell Pro 11</label>
+                <h3>Union</h3>
+                <div class="Lat3120-option">
+                    <input type="radio" name="device-selection" id="Lat3120-checkbox" data-district="union">
+                    <label for="Lat3120-checkbox">Latitude 3120</label>
                 </div>
-                <div class="DP14-option">
-                    <input type="radio" name="device-selection" id="DP14-checkbox">
-                    <label for="DP14-checkbox">Dell Pro 14</label>
+                <div class="Lat3140-option">
+                    <input type="radio" name="device-selection" id="Lat3140-checkbox" data-district="union">
+                    <label for="Lat3140-checkbox">Latitude 3140</label>
+                </div>
+                <div class="Lat3120-2in1-option">
+                    <input type="radio" name="device-selection" id="Lat3120-2in1-Union-checkbox" data-district="union">
+                    <label for="Lat3120-2in1-Union-checkbox">Latitude 3120 2-in-1</label>
+                </div>
+                <div class="Lat3140-2in1-option">
+                    <input type="radio" name="device-selection" id="Lat3140-2in1-Union-checkbox" data-district="union">
+                    <label for="Lat3140-2in1-Union-checkbox">Latitude 3140 2-in-1</label>
+                </div>
                 </div>
             </div>
         </div>
@@ -105,11 +115,6 @@
         <textarea id="unit-description" placeholder="e.g., Lcd screen cracked"></textarea>
         
         <div class="contract-options">
-            <div class="richland-option">
-                <input type="checkbox" id="richland-worth-checkbox" checked>
-                <label for="richland-worth-checkbox">Richland 1 / Worth Repair Contract</label>
-            </div>
-            
             <div class="initial-comment-option">
                 <input type="checkbox" id="initial-comment-checkbox">
                 <label for="initial-comment-checkbox">Add Initial Comment</label>
@@ -221,19 +226,17 @@
         </div>
     </div>
 
+<script src="../shared/refresh-menu.js"></script>
 <script>
     // Global array to track the order of selected issues
     let selectedIssues = [];
-    const REFRESH_HOURS = [7, 18];
 
     // =========================================================
     // PARTS DATABASE (loaded from A5_FM_U_parts.json; admin can override via localStorage)
     // =========================================================
-    const PARTS_DB_KEY = 'ebryit_parts_db_v2';
     const VERBIAGE_KEY = 'ebryit_verbiage_v1';
     let PARTS_DB = null;
     let WORTH_DB = null; // Richland 1 / Worth-Provided catalog — only covers a subset of models
-    // Embedded fallback so part numbers resolve under file:// (fetch blocked).
     let selectedModelKey = null;
 
     // Device radio id -> alias token used in A5_FM_U_parts.json
@@ -248,7 +251,12 @@
         'Lat3140-2in1-checkbox': 'lat3140-2in1',
         'Lat3310-2in1-checkbox': 'lat3310-2in1',
         'DP11-checkbox': 'dp11',
-        'DP14-checkbox': 'dp14pc14250'
+        'DP14-checkbox': 'dp14pc14250',
+        // Same physical devices/parts catalog as their Richland 1 counterparts above —
+        // only the district (see data-district on the radio) differs, which is what now
+        // drives automatic Worth-mode behavior instead of the old manual checkbox.
+        'Lat3120-2in1-Union-checkbox': 'lat3120-2in1',
+        'Lat3140-2in1-Union-checkbox': 'lat3140-2in1'
     };
 
     async function loadPartsDB() {
@@ -334,6 +342,14 @@
         return modelKeyForAliasIn(WORTH_DB, RADIO_TO_ALIAS[checked.id]);
     }
 
+    // Replaces the old manual "Richland 1 / Worth Repair Contract" checkbox: the same model
+    // (e.g. Latitude 3120 2-in-1) behaves as a Worth-contract repair only when selected from
+    // the Richland 1 column, never when the identical model is selected under Union.
+    function isSelectedDeviceRichland() {
+        const checked = document.querySelector('input[name="device-selection"]:checked');
+        return !!(checked && checked.getAttribute('data-district') === 'richland');
+    }
+
     // (model, canonical part, isAdp) -> best part-number match
     function lookupPartNumber(canonicalPart, worthMode, issueType) {
         let model = null;
@@ -358,7 +374,8 @@
         const aliasFix = {
             'EDP CABLE': 'LCD CABLE',
             'AUDIO BOARD': 'DAUGHTERBOARD',
-            'LEFT HINGE AND RIGHT HINGE': 'HINGE SET'
+            'LEFT HINGE AND RIGHT HINGE': 'HINGE SET',
+            'BEZEL': 'LCD BEZEL'
         };
         const target = aliasFix[want] || want;
 
@@ -900,7 +917,7 @@
         // =========================================================
         // NORMAL PATH
         // =========================================================
-        const isRichlandWorth = document.getElementById('richland-worth-checkbox').checked;
+        const isRichlandWorth = isSelectedDeviceRichland();
         const cannotVerifyChecked = document.getElementById('cannot-verify-checkbox').checked;
         const cannotVerifyDescription = document.getElementById('cannot-verify-description').value.trim();
         const initialCommentChecked = document.getElementById('initial-comment-checkbox').checked;
@@ -1113,103 +1130,16 @@
         }
     }
 
-    function formatTime(date) {
-        let hours = date.getHours();
-        const minutes = date.getMinutes().toString().padStart(2, '0');
-        const period = hours >= 12 ? 'PM' : 'AM';
-        hours = hours % 12;
-        if (hours === 0) hours = 12;
-        return `${hours}:${minutes} ${period}`;
-    }
-
-    function getHourMinute(value) {
-        const hour = Math.floor(value);
-        const minute = Math.round((value - hour) * 60);
-        return { hour, minute };
-    }
-
-    function getNextRefreshTime(now = new Date()) {
-        const current = new Date(now);
-        current.setSeconds(0, 0);
-
-        for (const value of REFRESH_HOURS) {
-            const { hour, minute } = getHourMinute(value);
-            const candidate = new Date(current);
-            candidate.setHours(hour, minute, 0, 0);
-            if (candidate >= now) return candidate;
-        }
-
-        const tomorrow = new Date(current);
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        const { hour, minute } = getHourMinute(REFRESH_HOURS[0]);
-        tomorrow.setHours(hour, minute, 0, 0);
-        return tomorrow;
-    }
-
-    function getPreviousRefreshTime(now = new Date()) {
-        const current = new Date(now);
-        current.setSeconds(0, 0);
-
-        for (let i = REFRESH_HOURS.length - 1; i >= 0; i--) {
-            const { hour, minute } = getHourMinute(REFRESH_HOURS[i]);
-            const candidate = new Date(current);
-            candidate.setHours(hour, minute, 0, 0);
-            if (candidate <= now) return candidate;
-        }
-
-        const yesterday = new Date(current);
-        yesterday.setDate(yesterday.getDate() - 1);
-        const lastValue = REFRESH_HOURS[REFRESH_HOURS.length - 1];
-        const lastTime = getHourMinute(lastValue);
-        yesterday.setHours(lastTime.hour, lastTime.minute, 0, 0);
-        return yesterday;
-    }
-
-    function updateRefreshCountdown() {
-        const nextRefresh = getNextRefreshTime();
-        const remainingSeconds = Math.max(0, Math.ceil((nextRefresh - new Date()) / 1000));
-        const minutes = Math.floor(remainingSeconds / 60).toString().padStart(2, '0');
-        const seconds = (remainingSeconds % 60).toString().padStart(2, '0');
-        const countdownElement = document.getElementById('refresh-countdown');
-        if (countdownElement) countdownElement.textContent = `${minutes}:${seconds}`;
-        const nextRefreshElement = document.getElementById('next-refresh-time');
-        if (nextRefreshElement) nextRefreshElement.textContent = formatTime(nextRefresh);
-    }
-
-    function updateRefreshStatus() {
-        const lastRefreshElement = document.getElementById('last-refresh-time');
-        if (lastRefreshElement) lastRefreshElement.textContent = formatTime(new Date());
-        updateRefreshCountdown();
-    }
-
-    function toggleMenu() {
-        document.getElementById('menu-dropdown').classList.toggle('show');
-    }
-
-    document.addEventListener('click', function(event) {
-        const menu = document.querySelector('.hamburger-menu');
-        const dropdown = document.getElementById('menu-dropdown');
-        if (menu && !menu.contains(event.target) && dropdown) dropdown.classList.remove('show');
-    });
-
     // =========================================================
     // INIT
     // =========================================================
-    // Richland 1 / Worth Repair Contract is not a valid combination with a Chromebook —
-    // proactively un-checks the box and alerts, rather than letting an invalid state render.
-    function enforceWorthChromebookExclusion() {
-        const rwCb = document.getElementById('richland-worth-checkbox');
-        if (!rwCb) return;
-        const checked = document.querySelector('input[name="device-selection"]:checked');
-        const alias = checked ? RADIO_TO_ALIAS[checked.id] : null;
-        const isChromebook = !!(alias && alias.startsWith('cb'));
-        if (rwCb.checked && isChromebook) {
-            rwCb.checked = false;
-            alert('Richland 1 / Worth Repair Contract is not available for Chromebook devices. The Worth checkbox has been unchecked.');
-        }
-    }
-
     document.addEventListener('DOMContentLoaded', async () => {
+        // Exposed immediately, before anything that could throw below (e.g. a missing
+        // shared/refresh-menu.js), so the Generate/Clear buttons never end up wired to
+        // undefined functions just because an unrelated later step failed.
+        window.clearAllIssues = clearAllIssues;
+        window.generateReport = generateReport;
+
         await loadPartsDB();
         await loadWorthDB();
         await loadVerbiage();
@@ -1220,18 +1150,9 @@
         document.querySelectorAll('input[name="device-selection"]').forEach(radio => {
             radio.addEventListener('change', () => {
                 selectedModelKey = getSelectedModelKey();
-                enforceWorthChromebookExclusion();
                 updateIssueDeviceVisibility();
                 renderPartsList();
             });
-        });
-
-        // Re-render parts table when the Richland/Worth contract checkbox is toggled
-        // (it controls the motherboard Worth-part override).
-        const rwCb = document.getElementById('richland-worth-checkbox');
-        if (rwCb) rwCb.addEventListener('change', () => {
-            enforceWorthChromebookExclusion();
-            renderPartsList();
         });
         renderPartsList();
 
@@ -1295,8 +1216,6 @@
         toggleInitialCommentDescription();
         markPageRefreshed();
         updateRefreshStatus();
-        window.clearAllIssues = clearAllIssues;
-        window.generateReport = generateReport;
     });
 
     setInterval(function() {

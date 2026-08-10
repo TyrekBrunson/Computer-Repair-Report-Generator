@@ -13,7 +13,8 @@
       "Bash(python3 -m json.tool diagnostic_generator/verbiage.json)",
       "Bash(rm -f .orig_check.tmp)",
       "Bash(git rm *)",
-      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://127.0.0.1:8000/diagnostic_generator/diagnostic_generator.html)"
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://127.0.0.1:8000/diagnostic_generator/diagnostic_generator.html)",
+      "Bash(xargs -I{} du -h \"{}\")"
     ]
   }
 }

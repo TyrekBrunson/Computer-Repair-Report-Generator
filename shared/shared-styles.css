@@ -1,0 +1,145 @@
+/* Shared by diagnostic_generator.html and repair_generator.html:
+   page chrome (body, container, hamburger menu) and the buttons/output
+   boxes common to both tools' base layout. */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f7f9;
+    color: #333;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    position: relative; /* For absolute positioning of hamburger menu */
+}
+
+h1 {
+    color: #0056b3;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+h2 {
+    color: #333;
+    border-bottom: 2px solid #0056b3;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.auto-refresh-note {
+    text-align: center;
+    color: #555;
+    font-size: 0.75em;
+    margin-bottom: 25px;
+}
+
+/* Hamburger Menu Styling */
+.hamburger-menu {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.hamburger-icon {
+    width: 30px;
+    height: 25px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.hamburger-icon span {
+    display: block;
+    height: 3px;
+    width: 100%;
+    background-color: #0056b3;
+    border-radius: 3px;
+    transition: all 0.3s ease;
+}
+
+.menu-dropdown {
+    display: none;
+    position: absolute;
+    top: 35px;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    min-width: 250px;
+    z-index: 1000;
+}
+
+.menu-dropdown.show {
+    display: block;
+}
+
+.menu-item {
+    padding: 12px 20px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.menu-item:last-child {
+    border-bottom: none;
+}
+
+/* Button Styling */
+.button-group button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s;
+    min-width: 150px; /* Ensures all buttons have the same minimum width */
+}
+
+#generate-button {
+    background-color: #28a745;
+    color: white;
+}
+
+#generate-button:hover {
+    background-color: #218838;
+}
+
+#clear-button {
+    background-color: #dc3545;
+    color: white;
+}
+
+#clear-button:hover {
+    background-color: #c82333;
+}
+
+/* --- REQUIRED PHOTOS Formatting --- */
+#required-photos-output {
+    background-color: #fff;
+    padding: 15px;
+    border: 1px solid #0056b3;
+    border-radius: 4px;
+    font-size: 1.0em;
+    min-height: 50px;
+    line-height: 1.4;
+    font-family: Arial, sans-serif;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    color: #218838;
+    font-weight: bold;
+}
+
+/* Misc textarea */
+#miscellaneous-description-container {
+    width: 100%;
+    margin-top: 8px;
+}

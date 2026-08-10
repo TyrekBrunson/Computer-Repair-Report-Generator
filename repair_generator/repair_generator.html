@@ -5,76 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Repair Generator</title>
     <link rel="icon" type="image/x-icon" href="../images/laptopICO.ico">
+    <link rel="stylesheet" href="../shared/shared-styles.css">
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f4f7f9;
-            color: #333;
-        }
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            position: relative;
-        }
-
-        .hamburger-menu {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-        }
-
-        .hamburger-icon {
-            width: 30px;
-            height: 25px;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .hamburger-icon span {
-            display: block;
-            height: 3px;
-            width: 100%;
-            background-color: #0056b3;
-            border-radius: 3px;
-            transition: all 0.3s ease;
-        }
-
-        .menu-dropdown {
-            display: none;
-            position: absolute;
-            top: 35px;
-            right: 0;
-            background-color: white;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            min-width: 250px;
-            z-index: 1000;
-        }
-
-        .menu-dropdown.show {
-            display: block;
-        }
-
-        .menu-item {
-            padding: 12px 20px;
-            border-bottom: 1px solid #eee;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .menu-item:last-child {
-            border-bottom: none;
-        }
         .part-checkbox {
             width: 15px;
             height: 15px;
@@ -103,17 +35,6 @@
             padding: 10px;
             border-radius: 4px;
         }
-        h1 {
-            color: #0056b3;
-            text-align: center;
-            margin-bottom: 10px;
-        }
-        .auto-refresh-note {
-            text-align: center;
-            color: #555;
-            font-size: 0.75em;
-            margin-bottom: 25px;
-        }
         .repair-options {
             padding: 20px;
             margin-bottom: 15px;
@@ -125,31 +46,12 @@
             gap: 10px;
             align-items: start;
         }
-        h2 {
-            color: #333;
-            border-bottom: 2px solid #0056b3;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-        }
         .button-group {
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
             margin-bottom: 15px;
         }
-        .button-group button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 1em;
-            transition: background-color 0.3s;
-            min-width: 150px;
-        }
-        #generate-button { background-color: #28a745; color: white; }
-        #generate-button:hover { background-color: #218838; }
-        #clear-button { background-color: #dc3545; color: white; }
-        #clear-button:hover { background-color: #c82333; }
         #copy-button { background-color: #0056b3; color: white; }
         #copy-button:hover { background-color: #004494; }
 
@@ -182,26 +84,7 @@
             color: #218838;
             font-weight: bold;
         }
-        #required-photos-output {
-            background-color: #fff;
-            padding: 15px;
-            border: 1px solid #0056b3;
-            border-radius: 4px;
-            font-size: 1.0em;
-            min-height: 50px;
-            line-height: 1.4;
-            font-family: Arial, sans-serif;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            color: #218838;
-            font-weight: bold;
-        }
-
         /* Misc textarea */
-        #miscellaneous-description-container {
-            width: 100%;
-            margin-top: 8px;
-        }
         #miscellaneous-comment-area {
             width: 100%;
             min-height: 60px;
@@ -513,11 +396,11 @@
     </div>
 </div>
 
+<script src="../shared/refresh-menu.js"></script>
 <script>
     // --- Order tracking array (mirrors the diagnostic tool's selectedIssues pattern) ---
     let selectedParts = []; // Each entry: { id, name }
     let reseatedSelections = []; // component names that were reseated
-    const REFRESH_HOURS = [7, 18];
 
     // Map checkbox IDs to display names
     const allParts = [
@@ -640,75 +523,6 @@
         syncBatteryOowLock();
         updateRefreshStatus();
     });
-
-    function formatTime(date) {
-        let hours = date.getHours();
-        const minutes = date.getMinutes().toString().padStart(2, '0');
-        const period = hours >= 12 ? 'PM' : 'AM';
-        hours = hours % 12;
-        if (hours === 0) hours = 12;
-        return `${hours}:${minutes} ${period}`;
-    }
-
-    function getHourMinute(value) {
-        const hour = Math.floor(value);
-        const minute = Math.round((value - hour) * 60);
-        return { hour, minute };
-    }
-
-    function getNextRefreshTime(now = new Date()) {
-        const current = new Date(now);
-        current.setSeconds(0, 0);
-
-        for (const value of REFRESH_HOURS) {
-            const { hour, minute } = getHourMinute(value);
-            const candidate = new Date(current);
-            candidate.setHours(hour, minute, 0, 0);
-            if (candidate >= now) return candidate;
-        }
-
-        const tomorrow = new Date(current);
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        const { hour, minute } = getHourMinute(REFRESH_HOURS[0]);
-        tomorrow.setHours(hour, minute, 0, 0);
-        return tomorrow;
-    }
-
-    function getPreviousRefreshTime(now = new Date()) {
-        const current = new Date(now);
-        current.setSeconds(0, 0);
-
-        for (let i = REFRESH_HOURS.length - 1; i >= 0; i--) {
-            const { hour, minute } = getHourMinute(REFRESH_HOURS[i]);
-            const candidate = new Date(current);
-            candidate.setHours(hour, minute, 0, 0);
-            if (candidate <= now) return candidate;
-        }
-
-        const yesterday = new Date(current);
-        yesterday.setDate(yesterday.getDate() - 1);
-        const lastValue = REFRESH_HOURS[REFRESH_HOURS.length - 1];
-        const lastTime = getHourMinute(lastValue);
-        yesterday.setHours(lastTime.hour, lastTime.minute, 0, 0);
-        return yesterday;
-    }
-
-    function updateRefreshCountdown() {
-        const nextRefresh = getNextRefreshTime();
-        const remainingSeconds = Math.max(0, Math.ceil((nextRefresh - new Date()) / 1000));
-        const minutes = Math.floor(remainingSeconds / 60).toString().padStart(2, '0');
-        const seconds = (remainingSeconds % 60).toString().padStart(2, '0');
-        const countdownElement = document.getElementById('refresh-countdown');
-        if (countdownElement) countdownElement.textContent = `${minutes}:${seconds}`;
-        const nextRefreshElement = document.getElementById('next-refresh-time');
-        if (nextRefreshElement) nextRefreshElement.textContent = formatTime(nextRefresh);
-    }
-
-    function updateRefreshStatus() {
-        const lastRefreshElement = document.getElementById('last-refresh-time');
-        if (lastRefreshElement) lastRefreshElement.textContent = formatTime(new Date());
-        updateRefreshCountdown();
-    }
 
     // Show/hide reseated & replaced input
     document.getElementById('reseated-replaced-checkbox').addEventListener('change', function () {
@@ -1069,19 +883,6 @@
             alert('Copy failed. Please select and copy the text manually.');
         });
     }
-    function toggleMenu() {
-        const dropdown = document.getElementById('menu-dropdown');
-        dropdown.classList.toggle('show');
-    }
-
-    document.addEventListener('click', function(event) {
-        const menu = document.querySelector('.hamburger-menu');
-        const dropdown = document.getElementById('menu-dropdown');
-        if (menu && !menu.contains(event.target) && dropdown) {
-            dropdown.classList.remove('show');
-        }
-    });
-
     // Automatically refresh the page at local 7:00 and 18:00 daily.
     setInterval(function() {
         updateRefreshCountdown();
