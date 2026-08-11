@@ -9,6 +9,8 @@
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 20px; background-color: #f4f7f9; color: #333; }
         h1 { text-align: center; color: #0056b3; }
+        #web-center-link { position: fixed; top: 16px; left: 16px; color: #fff; text-decoration: none; background-color: #0056b3; border: 1px solid #003d80; border-radius: 4px; padding: 8px 14px; font-weight: bold; font-size: 0.9em; z-index: 1001; }
+        #web-center-link:hover { background-color: #003d80; }
         h2 { color: #0056b3; margin-top: 0; }
         .password-overlay { position: fixed; inset: 0; background: rgba(180,183,184,0.75); display: flex; align-items: center; justify-content: center; z-index: 1000; }
         .password-card { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); width: min(90vw, 360px); text-align: center; }
@@ -90,6 +92,7 @@
         </div>
     </div>
     <div id="page-content" style="display: none;">
+        <a href="ebryit_web_center.html" id="web-center-link">🏠 Web Center</a>
         <h1>&#9881;&#65039; Admin Settings &mdash; Parts &amp; Verbiage</h1>
         <div class="tab-bar">
             <button class="tab-btn active" data-tab="parts">Parts List Updater</button>
@@ -102,7 +105,10 @@
         <div class="tab-panel active" id="tab-parts">
             <div class="card">
                 <h2>Import Parts Spreadsheet (XLSX)</h2>
-                <p class="muted">Drag &amp; drop the Richland 1 Worth-Provided part list (or any per-model workbook). Each sheet becomes a model; part numbers are auto-mapped to the canonical part names the generators use.</p>
+                <p class="muted">Drag &amp; drop either the Richland 1 Worth-Provided part list or the FieldPower (ADP/Warranty)
+                   part list — any per-model workbook works. Each row is auto-classified by its own columns (a price + <code>W-</code>/Worth
+                   category means Richland 1 / Worth; a NON/UADP category means FieldPower) and routed to the matching catalog below,
+                   so the file you drop always lands in the correct <code>.json</code> — never the wrong one.</p>
                 <div class="dropzone" id="dropzone">
                     <div class="icon">&#128193;</div>
                     <div id="dz-title">Drag &amp; drop a Parts Sheet XLSX file here</div>
@@ -110,19 +116,41 @@
                     <input type="file" id="file-input" accept=".xlsx,.xls" style="display:none;">
                 </div>
                 <div id="import-status"></div>
-                <div id="import-summary"></div>
-                <div class="row-flex" style="margin-top: 14px;">
-                    <button class="action" id="apply-import" style="display:none;">&#10004; Save to Web Center</button>
-                    <button class="action secondary" id="download-import" style="display:none;">&#11015; Download A5_FM_U_parts.json</button>
+
+                <div id="import-block-worth" style="display:none; margin-top:16px; border-top:1px solid #d4d9de; padding-top:12px;">
+                    <h3 style="margin:0 0 6px; color:#1e7e34;">&#8594; Richland 1 / Worth catalog <span class="muted" style="font-weight:normal;">(r1_worth_parts.json)</span></h3>
+                    <div id="import-summary-worth"></div>
+                    <div class="row-flex" style="margin-top: 10px;">
+                        <button class="action" id="apply-import-worth">&#10004; Save to Web Center — Richland 1 / Worth</button>
+                        <button class="action secondary" id="download-import-worth">&#11015; Download r1_worth_parts.json</button>
+                    </div>
+                </div>
+
+                <div id="import-block-parts" style="display:none; margin-top:16px; border-top:1px solid #d4d9de; padding-top:12px;">
+                    <h3 style="margin:0 0 6px; color:#0056b3;">&#8594; FieldPower catalog <span class="muted" style="font-weight:normal;">(A5_FM_U_parts.json)</span></h3>
+                    <div id="import-summary-parts"></div>
+                    <div class="row-flex" style="margin-top: 10px;">
+                        <button class="action" id="apply-import-parts">&#10004; Save to Web Center — FieldPower</button>
+                        <button class="action secondary" id="download-import-parts">&#11015; Download A5_FM_U_parts.json</button>
+                    </div>
                 </div>
             </div>
             <div class="card">
-                <h2>Active Parts Database</h2>
+                <h2>Active Parts Database &mdash; FieldPower <span class="muted" style="font-weight:normal;">(A5_FM_U_parts.json)</span></h2>
                 <div id="active-db-status"></div>
                 <div class="summary-grid" id="active-db-summary"></div>
                 <div class="row-flex" style="margin-top: 14px;">
                     <button class="action secondary" id="reload-db">&#8635; Reload from file</button>
                     <button class="action secondary" id="clear-override">&#128465; Clear saved override</button>
+                </div>
+            </div>
+            <div class="card">
+                <h2>Active Parts Database &mdash; Richland 1 / Worth <span class="muted" style="font-weight:normal;">(r1_worth_parts.json)</span></h2>
+                <div id="active-worth-db-status"></div>
+                <div class="summary-grid" id="active-worth-db-summary"></div>
+                <div class="row-flex" style="margin-top: 14px;">
+                    <button class="action secondary" id="reload-worth-db">&#8635; Reload from file</button>
+                    <button class="action secondary" id="clear-worth-override">&#128465; Clear saved override</button>
                 </div>
             </div>
 
@@ -142,8 +170,16 @@
         </div>
         <div class="tab-panel" id="tab-editor">
             <div class="card">
-                <h2>Edit A5_FM_U_parts.json</h2>
+                <h2>Edit <span id="editor-title">A5_FM_U_parts.json</span></h2>
                 <p class="muted">Direct edit of the active database. Validate before saving. Saving writes to localStorage, which every Web Center tool reads first.</p>
+                <div class="row-flex" style="margin-bottom:10px;">
+                    <label>Catalog:
+                        <select id="editor-catalog">
+                            <option value="parts">FieldPower (A5_FM_U_parts.json)</option>
+                            <option value="worth">Richland 1 / Worth (r1_worth_parts.json)</option>
+                        </select>
+                    </label>
+                </div>
                 <textarea class="json-area" id="json-editor" spellcheck="false"></textarea>
                 <div id="editor-status"></div>
                 <div class="row-flex" style="margin-top: 10px;">
@@ -162,6 +198,12 @@
                    Worth-Provided (<code>W-</code>) parts are highlighted green.</p>
                 <div id="parts-edit-status"></div>
                 <div class="row-flex" style="margin-bottom:10px;">
+                    <label>Catalog:
+                        <select id="pe-catalog">
+                            <option value="parts">FieldPower (A5_FM_U_parts.json)</option>
+                            <option value="worth">Richland 1 / Worth (r1_worth_parts.json)</option>
+                        </select>
+                    </label>
                     <label>Model: <select id="pe-model"></select></label>
                     <input type="text" id="pe-filter" placeholder="filter parts...">
                     <button class="action secondary" id="pe-add-row">+ Add Part</button>
@@ -254,7 +296,8 @@
                 </div>
                 <div id="gh-status"></div>
                 <div class="row-flex" style="margin-top:14px;">
-                    <button class="action" id="gh-publish-parts">⬆ Publish Parts Database</button>
+                    <button class="action" id="gh-publish-parts">⬆ Publish FieldPower Parts Database</button>
+                    <button class="action" id="gh-publish-worth">⬆ Publish Richland 1 / Worth Database</button>
                     <button class="action" id="gh-publish-verbiage">⬆ Publish Verbiage</button>
                 </div>
                 <p class="muted" style="margin-top:12px;">
@@ -265,7 +308,7 @@
         </div>
     </div>
     <script>
-    const correctPassword = "admin";
+    const correctPassword = "1248702026";
     const overlay = document.getElementById("password-overlay");
     const pageContent = document.getElementById("page-content");
     const passwordInput = document.getElementById("password-input");
@@ -358,10 +401,21 @@
         return r;
     }
 
+    // Splits a workbook's rows into TWO catalogs by their own coverage signal — Worth-Provided
+    // rows (price column + W- prefix) go to the Richland 1 / Worth catalog, everything else
+    // (NON/UADP category, or unclassified OEM pairs) goes to the FieldPower catalog. A single
+    // sheet (like the Richland workbook's combined Worth+Warranty sections) can and does feed
+    // both — that's correct, not a bug. This is what lets one dropzone always route each row to
+    // the right file instead of the admin having to pre-select a target.
     function buildFromWorkbook(wb) {
-        const models = {};
+        const fpModels = {}; const worthModels = {};
         const cleanPN = v => { if (v == null) return null; const s = String(v).trim(); return s || null; };
         const toPrice = v => { const n = parseFloat(v); return isNaN(n) ? null : Math.round(n*100)/100; };
+        const addPart = (bucket, modelName, part) => {
+            if (!bucket[modelName]) bucket[modelName] = { aliases: modelAliases(modelName), parts: [] };
+            const ex = bucket[modelName].parts;
+            if (!ex.some(p => p.partNumber === part.partNumber && p.description === part.description)) ex.push(part);
+        };
         wb.SheetNames.forEach(sheetName => {
             const ws = wb.Sheets[sheetName];
             const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: null });
@@ -369,7 +423,7 @@
             let titleCell = rows[0] && rows[0][0];
             let modelName = (titleCell && String(titleCell).trim()) ? String(titleCell).trim() : sheetName.trim();
             modelName = stripTitleBoilerplate(modelName);
-            const parts = []; const seen = new Set();
+            const seen = new Set();
             rows.forEach(cells => {
                 if (!cells) return;
                 // Worth-Provided layout: Part#, Desc, Price(number), Category
@@ -382,7 +436,7 @@
                     const key = pn + "||" + desc;
                     if (!seen.has(key)) {
                         seen.add(key);
-                        parts.push({ partNumber: pn, description: desc, canonical: canonicalFor(desc), coverage: 'Worth', price: toPrice(cells[2]) });
+                        addPart(worthModels, modelName, { partNumber: pn, description: desc, canonical: canonicalFor(desc), coverage: 'Worth', price: toPrice(cells[2]) });
                     }
                 }
                 // FieldPower layout: Part#, Desc, Category(NON/UADP), Model, Notes  — capture the ADP category FIRST.
@@ -393,37 +447,50 @@
                         const key = fpPn + "||" + fpDesc;
                         if (!seen.has(key)) {
                             seen.add(key);
-                            parts.push({ partNumber: fpPn, description: fpDesc, canonical: canonicalFor(fpDesc), coverage: coverageFromCategory(fpCat), price: null });
+                            addPart(fpModels, modelName, { partNumber: fpPn, description: fpDesc, canonical: canonicalFor(fpDesc), coverage: coverageFromCategory(fpCat), price: null });
                         }
                         fpCaptured = true;
                     }
                 }
                 // Secondary paired blocks (Part#/Desc/Notes at col 0 and col 4) — skip col 0 if FieldPower already took it.
                 // No category column available here, so this is always an unclassified plain OEM number.
+                // These sit alongside a Worth section in the Richland sheets (the motherboard side-table),
+                // so they belong in the FieldPower/Warranty bucket, not Worth.
                 [0,4].forEach(base => {
                     if (base === 0 && fpCaptured) return;
                     const p2 = cleanPN(cells[base]); const d2 = cleanPN(cells[base+1]);
                     if (p2 && d2 && /^[0-9A-Z]{5}$/.test(p2) && d2.toLowerCase() !== "description") {
                         const key = p2 + "||" + d2;
-                        if (!seen.has(key)) { seen.add(key); parts.push({ partNumber: p2, description: d2, canonical: canonicalFor(d2), coverage: 'Dell Warranty', price: null }); }
+                        if (!seen.has(key)) { seen.add(key); addPart(fpModels, modelName, { partNumber: p2, description: d2, canonical: canonicalFor(d2), coverage: 'Dell Warranty', price: null }); }
                     }
                 });
             });
-            if (parts.length) {
-                if (models[modelName]) {
-                    const ex = new Set(models[modelName].parts.map(p => p.partNumber + "||" + p.description));
-                    parts.forEach(p => { if (!ex.has(p.partNumber + "||" + p.description)) models[modelName].parts.push(p); });
-                } else { models[modelName] = { aliases: modelAliases(modelName), parts }; }
-            }
         });
-        return { meta: { generatedAt: new Date().toISOString(), source: "admin-import", schema: 2 }, models };
+        const meta = (extra) => Object.assign({ generatedAt: new Date().toISOString(), source: "admin-import", schema: 2 }, extra || {});
+        return {
+            parts: { meta: meta(), models: fpModels, canonicalParts: CANONICAL_PARTS, aliasMap: {} },
+            worth: { meta: meta({ catalog: "richland1_worth" }), models: worthModels },
+        };
     }
-    let activeDB = null; let importedDB = null;
+    let activeDB = null; let activeWorthDB = null;
+    let importedDB = null; let importedWorthDB = null;
+    const CATALOGS = {
+        parts: { key: 'ebryit_parts_db_v2', file: 'diagnostic_generator/A5_FM_U_parts.json', filename: 'A5_FM_U_parts.json', label: 'FieldPower', ghKind: 'parts' },
+        worth: { key: 'ebryit_worth_db_v1', file: 'diagnostic_generator/r1_worth_parts.json', filename: 'r1_worth_parts.json', label: 'Richland 1 / Worth', ghKind: 'worth' },
+    };
+    function getActiveDB(cat) { return cat === 'worth' ? activeWorthDB : activeDB; }
+    function setActiveDB(cat, db) { if (cat === 'worth') activeWorthDB = db; else activeDB = db; }
     async function loadActiveDB() {
         try { const cached = localStorage.getItem(PARTS_DB_KEY); if (cached) { activeDB = JSON.parse(cached); return "override"; } } catch (e) {}
         try { const res = await fetch('diagnostic_generator/A5_FM_U_parts.json?v=' + Date.now(), { cache: 'no-store' }); if (res.ok) { activeDB = await res.json(); return "file"; } } catch (e) {}
         activeDB = null; return "none";
     }
+    async function loadActiveWorthDB() {
+        try { const cached = localStorage.getItem(WORTH_DB_KEY); if (cached) { activeWorthDB = JSON.parse(cached); return "override"; } } catch (e) {}
+        try { const res = await fetch('diagnostic_generator/r1_worth_parts.json?v=' + Date.now(), { cache: 'no-store' }); if (res.ok) { activeWorthDB = await res.json(); return "file"; } } catch (e) {}
+        activeWorthDB = null; return "none";
+    }
+    async function loadActiveDBFor(cat) { return cat === 'worth' ? loadActiveWorthDB() : loadActiveDB(); }
     function countCanonical(db) { let total = 0, other = 0; for (const m of Object.values(db.models || {})) { for (const p of m.parts) { total++; if (p.canonical === "OTHER") other++; } } return { total, other, mapped: total - other }; }
     function renderDBSummary(db, containerId, statusId) {
         const c = document.getElementById(containerId); const s = statusId ? document.getElementById(statusId) : null;
@@ -453,14 +520,22 @@
         dz.addEventListener('dragleave', () => dz.classList.remove('dragover'));
         dz.addEventListener('drop', e => { e.preventDefault(); dz.classList.remove('dragover'); if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]); });
         fileInput.addEventListener('change', e => { if (e.target.files.length) handleFile(e.target.files[0]); });
-        document.getElementById('apply-import').addEventListener('click', (e) => {
+        document.getElementById('apply-import-parts').addEventListener('click', (e) => {
             if (!importedDB) return;
-            localStorage.setItem(PARTS_DB_KEY, JSON.stringify(importedDB)); activeDB = importedDB;
-            setStatus('import-status', 'ok', 'Saved. All Web Center tools will now use this parts database.');
+            localStorage.setItem(CATALOGS.parts.key, JSON.stringify(importedDB)); activeDB = importedDB;
+            setStatus('import-status', 'ok', 'Saved to the FieldPower catalog. All Web Center tools will now use this parts database.');
             renderDBSummary(activeDB, 'active-db-summary', 'active-db-status');
             flashSaved(e.currentTarget);
         });
-        document.getElementById('download-import').addEventListener('click', () => { if (importedDB) downloadJSON(importedDB, 'A5_FM_U_parts.json'); });
+        document.getElementById('download-import-parts').addEventListener('click', () => { if (importedDB) downloadJSON(importedDB, CATALOGS.parts.filename); });
+        document.getElementById('apply-import-worth').addEventListener('click', (e) => {
+            if (!importedWorthDB) return;
+            localStorage.setItem(CATALOGS.worth.key, JSON.stringify(importedWorthDB)); activeWorthDB = importedWorthDB;
+            setStatus('import-status', 'ok', 'Saved to the Richland 1 / Worth catalog. All Web Center tools will now use this parts database.');
+            renderDBSummary(activeWorthDB, 'active-worth-db-summary', 'active-worth-db-status');
+            flashSaved(e.currentTarget);
+        });
+        document.getElementById('download-import-worth').addEventListener('click', () => { if (importedWorthDB) downloadJSON(importedWorthDB, CATALOGS.worth.filename); });
     }
     function handleFile(file) {
         document.getElementById('dz-title').textContent = file.name;
@@ -469,29 +544,47 @@
         reader.onload = e => {
             try {
                 const wb = XLSX.read(new Uint8Array(e.target.result), { type: 'array' });
-                importedDB = buildFromWorkbook(wb);
-                const stats = countCanonical(importedDB);
-                setStatus('import-status', 'ok', 'Parsed ' + Object.keys(importedDB.models).length + ' models, ' + stats.total + ' parts (' + stats.mapped + ' mapped' + (stats.other ? ', ' + stats.other + ' unmapped' : '') + '). Review below, then save.');
-                renderDBSummary(importedDB, 'import-summary', null);
-                document.getElementById('apply-import').style.display = 'inline-block';
-                document.getElementById('download-import').style.display = 'inline-block';
+                const built = buildFromWorkbook(wb);
+                importedDB = built.parts; importedWorthDB = built.worth;
+                const fpStats = countCanonical(importedDB);
+                const worthStats = countCanonical(importedWorthDB);
+                const fpModelCount = Object.keys(importedDB.models).length;
+                const worthModelCount = Object.keys(importedWorthDB.models).length;
+                const parts = [];
+                if (worthModelCount) parts.push(worthModelCount + ' Richland/Worth model(s), ' + worthStats.total + ' parts');
+                if (fpModelCount) parts.push(fpModelCount + ' FieldPower model(s), ' + fpStats.total + ' parts');
+                setStatus('import-status', 'ok', parts.length ? ('Parsed ' + parts.join(' &middot; ') + '. Each landed in the matching catalog below — review, then save.') : 'Parsed the file, but no rows matched a known layout (Worth price+category, or FieldPower NON/UADP category).');
+                document.getElementById('import-block-worth').style.display = worthModelCount ? 'block' : 'none';
+                if (worthModelCount) renderDBSummary(importedWorthDB, 'import-summary-worth', null);
+                document.getElementById('import-block-parts').style.display = fpModelCount ? 'block' : 'none';
+                if (fpModelCount) renderDBSummary(importedDB, 'import-summary-parts', null);
             } catch (err) { setStatus('import-status', 'err', 'Failed to parse: ' + err.message); }
         };
         reader.onerror = () => setStatus('import-status', 'err', 'Could not read file.');
         reader.readAsArrayBuffer(file);
     }
-    function loadActiveIntoEditor() { if (activeDB) document.getElementById('json-editor').value = JSON.stringify(activeDB, null, 2); }
+    function editorCatalog() { const sel = document.getElementById('editor-catalog'); return sel ? sel.value : 'parts'; }
+    function loadActiveIntoEditor() {
+        const cat = editorCatalog(); const db = getActiveDB(cat);
+        document.getElementById('editor-title').textContent = CATALOGS[cat].filename;
+        if (db) document.getElementById('json-editor').value = JSON.stringify(db, null, 2);
+        else document.getElementById('json-editor').value = '';
+    }
     function initEditor() {
+        document.getElementById('editor-catalog').addEventListener('change', loadActiveIntoEditor);
         document.getElementById('load-active-json').addEventListener('click', loadActiveIntoEditor);
         document.getElementById('validate-json').addEventListener('click', () => { const r = validateEditor(); if (r.ok) setStatus('editor-status', 'ok', 'Valid JSON &middot; ' + Object.keys(r.db.models||{}).length + ' models.'); });
         document.getElementById('save-json').addEventListener('click', (e) => {
             const r = validateEditor(); if (!r.ok) return;
-            localStorage.setItem(PARTS_DB_KEY, JSON.stringify(r.db)); activeDB = r.db;
-            setStatus('editor-status', 'ok', 'Saved to Web Center. Tools will use this database.');
-            renderDBSummary(activeDB, 'active-db-summary', 'active-db-status');
+            const cat = editorCatalog();
+            localStorage.setItem(CATALOGS[cat].key, JSON.stringify(r.db)); setActiveDB(cat, r.db);
+            setStatus('editor-status', 'ok', 'Saved to the ' + CATALOGS[cat].label + ' catalog. Tools will use this database.');
+            const summaryId = cat === 'worth' ? 'active-worth-db-summary' : 'active-db-summary';
+            const statusId = cat === 'worth' ? 'active-worth-db-status' : 'active-db-status';
+            renderDBSummary(getActiveDB(cat), summaryId, statusId);
             flashSaved(e.currentTarget);
         });
-        document.getElementById('download-json').addEventListener('click', () => { const r = validateEditor(); if (r.ok) downloadJSON(r.db, 'A5_FM_U_parts.json'); });
+        document.getElementById('download-json').addEventListener('click', () => { const r = validateEditor(); if (r.ok) downloadJSON(r.db, CATALOGS[editorCatalog()].filename); });
     }
     function validateEditor() {
         try { const db = JSON.parse(document.getElementById('json-editor').value); if (!db.models || typeof db.models !== 'object') throw new Error("missing 'models' object"); return { ok: true, db }; }
@@ -531,16 +624,18 @@
         return null;
     }
     function populateLookupModels() { renderLookupTable(); }
+    function peCatalog() { const sel = document.getElementById('pe-catalog'); return sel ? sel.value : 'parts'; }
     function renderLookupTable() {
         const modelSel = document.getElementById('pe-model');
         const modelKey = modelSel ? modelSel.value : '';
         const lt = document.getElementById('lookup-table');
         if (!lt) return;
-        if (!activeDB || !modelKey) { lt.innerHTML = '<p class="muted">No model selected.</p>'; return; }
+        const db = getActiveDB(peCatalog());
+        if (!db || !modelKey) { lt.innerHTML = '<p class="muted">No model selected.</p>'; return; }
         const filter = (document.getElementById('lookup-filter').value || '').toUpperCase();
         const rows = CANONICAL_PARTS.filter(p => !filter || p.includes(filter)).map(part => {
-            const adpM = lookupPartNumber(activeDB, modelKey, part, true);
-            const warM = lookupPartNumber(activeDB, modelKey, part, false);
+            const adpM = lookupPartNumber(db, modelKey, part, true);
+            const warM = lookupPartNumber(db, modelKey, part, false);
             const cell = m => m ? (m.partNumber + (m.price != null ? ' <span class="pn-price">$'+m.price.toFixed(2)+'</span>' : '')) : '<em>—</em>';
             const anyMissing = !adpM && !warM;
             return '<tr class="' + (anyMissing ? 'missing' : '') + '"><td>' + part + '</td><td>' + cell(adpM) + '</td><td>' + cell(warM) + '</td><td>' + (adpM ? adpM.description : (warM ? warM.description : '<em>not stocked</em>')) + '</td></tr>';
@@ -847,18 +942,20 @@
     // =====================================================================
     function pePopulateModels() {
         const sel = document.getElementById('pe-model');
-        if (!activeDB || !activeDB.models) { sel.innerHTML = ''; return; }
-        sel.innerHTML = Object.keys(activeDB.models).map(m => `<option>${m}</option>`).join('');
+        const db = getActiveDB(peCatalog());
+        if (!db || !db.models) { sel.innerHTML = ''; peRenderTable(); return; }
+        sel.innerHTML = Object.keys(db.models).map(m => `<option>${m}</option>`).join('');
         peRenderTable();
     }
 
     function peRenderTable() {
+        const db = getActiveDB(peCatalog());
         const model = document.getElementById('pe-model').value;
         const wrap = document.getElementById('pe-table');
-        if (!activeDB || !activeDB.models || !activeDB.models[model]) { wrap.innerHTML = '<div class="vb-empty">No model selected.</div>'; return; }
+        if (!db || !db.models || !db.models[model]) { wrap.innerHTML = '<div class="vb-empty">No model selected.</div>'; return; }
         const filterEl = document.getElementById('pe-filter');
         const filter = (filterEl && filterEl.value || '').toUpperCase();
-        const parts = activeDB.models[model].parts;
+        const parts = db.models[model].parts;
         const rows = parts.map((p, i) => ({ p, i }))
             .filter(({ p }) => !filter || ((p.partNumber||'') + ' ' + (p.description||'') + ' ' + (p.canonical||'')).toUpperCase().includes(filter))
             .map(({ p, i }) => {
@@ -879,39 +976,47 @@
     }
 
     function peEdit(i, field, val) {
+        const db = getActiveDB(peCatalog());
         const model = document.getElementById('pe-model').value;
-        const part = activeDB.models[model].parts[i];
+        const part = db.models[model].parts[i];
         if (field === 'price') { const n = parseFloat(val); part.price = isNaN(n) ? null : Math.round(n*100)/100; }
         else part[field] = val;
     }
     window.peEdit = peEdit;
 
     function peRemove(i) {
+        const db = getActiveDB(peCatalog());
         const model = document.getElementById('pe-model').value;
-        activeDB.models[model].parts.splice(i, 1);
+        db.models[model].parts.splice(i, 1);
         peRenderTable();
     }
     window.peRemove = peRemove;
 
     function initPartsEditor() {
+        document.getElementById('pe-catalog').addEventListener('change', () => { pePopulateModels(); renderLookupTable(); });
         document.getElementById('pe-model').addEventListener('change', () => { peRenderTable(); renderLookupTable(); });
         const pf = document.getElementById('pe-filter');
         if (pf) pf.addEventListener('input', peRenderTable);
         document.getElementById('pe-add-row').addEventListener('click', () => {
+            const db = getActiveDB(peCatalog());
             const model = document.getElementById('pe-model').value;
-            if (!activeDB || !activeDB.models[model]) return;
+            if (!db || !db.models[model]) return;
             // New parts default to a NON-Worth (warranty/OEM) category. To make a part Worth,
             // give its Part # a "W-" prefix. Leaving it blank keeps it a warranty part.
-            activeDB.models[model].parts.push({ partNumber:'', description:'', canonical:'OTHER', category:'Warranty', adp:'NON_ADP', price:null, source:'Manual', notes:'' });
+            db.models[model].parts.push({ partNumber:'', description:'', canonical:'OTHER', category:'Warranty', adp:'NON_ADP', price:null, source:'Manual', notes:'' });
             peRenderTable();
         });
         document.getElementById('pe-save').addEventListener('click', (e) => {
-            if (!activeDB) return;
-            if (activeDB.meta) activeDB.meta.generatedAt = new Date().toISOString();
-            localStorage.setItem(PARTS_DB_KEY, JSON.stringify(activeDB));
-            renderDBSummary(activeDB, 'active-db-summary', 'active-db-status');
+            const cat = peCatalog();
+            const db = getActiveDB(cat);
+            if (!db) return;
+            if (db.meta) db.meta.generatedAt = new Date().toISOString();
+            localStorage.setItem(CATALOGS[cat].key, JSON.stringify(db));
+            const summaryId = cat === 'worth' ? 'active-worth-db-summary' : 'active-db-summary';
+            const statusId = cat === 'worth' ? 'active-worth-db-status' : 'active-db-status';
+            renderDBSummary(db, summaryId, statusId);
             renderLookupTable();
-            setStatus('parts-edit-status', 'ok', 'Saved. The generators now use these part numbers. Use the Publish tab to push live to all devices.');
+            setStatus('parts-edit-status', 'ok', 'Saved to the ' + CATALOGS[cat].label + ' catalog. Use the Publish tab to push live to all devices.');
             flashSaved(e.currentTarget);
         });
         // Build an empty catalog object (persisting this — not just removing the override —
@@ -923,7 +1028,9 @@
         // token pasted on the Publish tab; if none is present we tell the user to go publish.
         async function deleteAndOfferPublish(kind, emptyObj, storageKey, label) {
             localStorage.setItem(storageKey, JSON.stringify(emptyObj));
-            if (kind === 'parts') { activeDB = emptyObj; renderDBSummary(activeDB, 'active-db-summary', 'active-db-status'); pePopulateModels(); }
+            if (kind === 'parts') { activeDB = emptyObj; renderDBSummary(activeDB, 'active-db-summary', 'active-db-status'); }
+            if (kind === 'worth') { activeWorthDB = emptyObj; renderDBSummary(activeWorthDB, 'active-worth-db-summary', 'active-worth-db-status'); }
+            if (kind === peCatalog()) pePopulateModels();
             if (!githubToken) {
                 setStatus('danger-status', 'warn', label + ' emptied on this device. <strong>It is NOT yet gone for everyone</strong> — open the <em>Publish</em> tab, paste your token, and publish so the empty file is committed to the repo. Until then the tools still read the old file.');
                 return;
@@ -955,7 +1062,9 @@
             const emptyWorth = emptyCatalog({ meta: { generatedAt: new Date().toISOString(), source: 'RICHLAND 1 Worth-Provided (wiped)', catalog: 'richland1_worth', schema: 2 } });
             localStorage.setItem(PARTS_DB_KEY, JSON.stringify(emptyParts));
             localStorage.setItem(WORTH_DB_KEY, JSON.stringify(emptyWorth));
-            activeDB = emptyParts; renderDBSummary(activeDB, 'active-db-summary', 'active-db-status'); pePopulateModels();
+            activeDB = emptyParts; renderDBSummary(activeDB, 'active-db-summary', 'active-db-status');
+            activeWorthDB = emptyWorth; renderDBSummary(activeWorthDB, 'active-worth-db-summary', 'active-worth-db-status');
+            pePopulateModels();
             if (!githubToken) {
                 setStatus('danger-status', 'warn', 'Both catalogs emptied on this device. <strong>NOT yet gone for everyone</strong> — go to the <em>Publish</em> tab, paste your token, and publish both Parts and Worth to commit the empty files to the repo.');
                 return;
@@ -1061,6 +1170,7 @@
         }
 
         document.getElementById('gh-publish-parts').addEventListener('click', () => publish('parts', () => activeDB));
+        document.getElementById('gh-publish-worth').addEventListener('click', () => publish('worth', () => activeWorthDB));
         document.getElementById('gh-publish-verbiage').addEventListener('click', () => publish('verbiage', () => verbiageData));
     }
 
@@ -1068,8 +1178,11 @@
         initTabs(); initImport(); initEditor(); initLookup(); initVerbiageEditor(); initPartsEditor(); initSuggestionsBoard(); initGithubPublish();
         const src = await loadActiveDB();
         renderDBSummary(activeDB, 'active-db-summary', 'active-db-status');
-        pePopulateModels();
         if (src === 'none') setStatus('active-db-status', 'warn', 'No parts database found. Import a spreadsheet to begin.');
+        const worthSrc = await loadActiveWorthDB();
+        renderDBSummary(activeWorthDB, 'active-worth-db-summary', 'active-worth-db-status');
+        if (worthSrc === 'none') setStatus('active-worth-db-status', 'warn', 'No Worth database found. Import a spreadsheet to begin.');
+        pePopulateModels();
         document.getElementById('reload-db').addEventListener('click', async () => {
             localStorage.removeItem(PARTS_DB_KEY);
             const s = await loadActiveDB(); renderDBSummary(activeDB, 'active-db-summary', 'active-db-status'); pePopulateModels();
@@ -1081,6 +1194,18 @@
             localStorage.removeItem(PARTS_DB_KEY); await loadActiveDB();
             renderDBSummary(activeDB, 'active-db-summary', 'active-db-status'); pePopulateModels();
             setStatus('active-db-status', 'ok', 'Override cleared.');
+        });
+        document.getElementById('reload-worth-db').addEventListener('click', async () => {
+            localStorage.removeItem(WORTH_DB_KEY);
+            const s = await loadActiveWorthDB(); renderDBSummary(activeWorthDB, 'active-worth-db-summary', 'active-worth-db-status'); pePopulateModels();
+            if (s === 'file') setStatus('active-worth-db-status', 'ok', 'Reloaded from r1_worth_parts.json.');
+            else setStatus('active-worth-db-status', 'warn', 'No Worth database found.');
+        });
+        document.getElementById('clear-worth-override').addEventListener('click', async () => {
+            if (!confirm('Remove the saved Worth override? Tools will fall back to r1_worth_parts.json.')) return;
+            localStorage.removeItem(WORTH_DB_KEY); await loadActiveWorthDB();
+            renderDBSummary(activeWorthDB, 'active-worth-db-summary', 'active-worth-db-status'); pePopulateModels();
+            setStatus('active-worth-db-status', 'ok', 'Override cleared.');
         });
     }
     </script>

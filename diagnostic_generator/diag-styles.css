@@ -61,6 +61,17 @@
             padding: 10px;
             border-radius: 4px;
         }
+        #web-center-link {
+            color: rgb(255, 255, 255);
+            text-decoration: none;
+            border: 1px solid #003d80;
+            background-color: #0056b3;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border-radius: 4px;
+        }
 
         /* Input and Report Sections */
         .input-section {

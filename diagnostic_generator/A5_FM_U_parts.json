@@ -1,10 +1,1324 @@
 {
   "meta": {
-    "generatedAt": "2026-08-04T14:31:54.966Z",
-    "source": "wiped",
+    "generatedAt": "2026-08-11T01:10:55.000Z",
+    "source": "Parts - FieldPower Parts Color Coded.xlsx",
+    "catalog": "fieldpower",
     "schema": 2
   },
-  "models": {},
+  "models": {
+    "Chromebook 3110": {
+      "family": "Chromebook",
+      "twoInOne": false,
+      "aliases": [
+        "cb3110",
+        "chromebook 3110"
+      ],
+      "parts": [
+        {
+          "partNumber": "0YT39X",
+          "description": "Battery",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "BATTERY"
+        },
+        {
+          "partNumber": "YT39X",
+          "description": "Battery",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "BATTERY"
+        },
+        {
+          "partNumber": "07T73H",
+          "description": "Battery Cable",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "BATTERY CABLE"
+        },
+        {
+          "partNumber": "7T73H",
+          "description": "Battery Cable",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "BATTERY CABLE"
+        },
+        {
+          "partNumber": "0W5W31",
+          "description": "Bezel",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "LCD BEZEL"
+        },
+        {
+          "partNumber": "0KT6XH",
+          "description": "Bottom Cover",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "BOTTOM COVER"
+        },
+        {
+          "partNumber": "KT6XH",
+          "description": "Bottom Cover",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "BOTTOM COVER"
+        },
+        {
+          "partNumber": "XYXJ2",
+          "description": "Camera",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "WEBCAM"
+        },
+        {
+          "partNumber": "3G0H0",
+          "description": "Keyboard",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "KEYBOARD"
+        },
+        {
+          "partNumber": "03G0H0",
+          "description": "Keyboard",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "KEYBOARD"
+        },
+        {
+          "partNumber": "W5W31",
+          "description": "LCD Bezel",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "LCD BEZEL"
+        },
+        {
+          "partNumber": "0RT4GY",
+          "description": "LCD Cable",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "LCD CABLE"
+        },
+        {
+          "partNumber": "NF6YY",
+          "description": "LCD Cable - Touch Screen",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "LCD CABLE"
+        },
+        {
+          "partNumber": "1197G",
+          "description": "LCD Cover (TOP COVER)",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "TOP COVER"
+        },
+        {
+          "partNumber": "1JCKW",
+          "description": "LCD Touch Screen",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "LCD SCREEN"
+        },
+        {
+          "partNumber": "0MWDNF",
+          "description": "LCD Screen (NON TOUCH) - valid for both ADP and Non-ADP",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "LCD SCREEN"
+        },
+        {
+          "partNumber": "0MWDNF",
+          "description": "LCD Screen (NON TOUCH) - valid for both ADP and Non-ADP",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "LCD SCREEN"
+        },
+        {
+          "partNumber": "RCCDP",
+          "description": "Left and Right Hinges",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "HINGE SET"
+        },
+        {
+          "partNumber": "0R5KMT",
+          "description": "Left Hinge",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "LEFT HINGE"
+        },
+        {
+          "partNumber": "00H7CN",
+          "description": "Palmrest - 2 USB",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "PALMREST"
+        },
+        {
+          "partNumber": "0YNRFG",
+          "description": "Right Hinge",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "RIGHT HINGE"
+        },
+        {
+          "partNumber": "0MFX68",
+          "description": "Speakers",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "SPEAKERS"
+        },
+        {
+          "partNumber": "MFX68",
+          "description": "Speakers",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "SPEAKERS"
+        },
+        {
+          "partNumber": "0M05K0",
+          "description": "Webcam",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "WEBCAM"
+        },
+        {
+          "partNumber": "0VY37V",
+          "description": "Motherboard",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "MOTHERBOARD"
+        },
+        {
+          "partNumber": "137C3",
+          "description": "Motherboard",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "MOTHERBOARD"
+        },
+        {
+          "partNumber": "0H28M4",
+          "description": "Motherboard",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "MOTHERBOARD"
+        },
+        {
+          "partNumber": "0M1DGT",
+          "description": "Motherboard",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "MOTHERBOARD"
+        },
+        {
+          "partNumber": "V8TP1",
+          "description": "Motherboard",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "MOTHERBOARD"
+        },
+        {
+          "partNumber": "05M6T5",
+          "description": "Motherboard - 4 GB RAM - 1.1 GHz Dual Core Celeron N4500 - 64 GB Storage",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "MOTHERBOARD"
+        },
+        {
+          "partNumber": "006H2T",
+          "description": "Motherboard - 1.10 GHz dual core Intel N100 Quad Core CPU, 2.8 Ghz Burst, 4GB RAM, 32GB Hard Drive",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "MOTHERBOARD"
+        }
+      ]
+    },
+    "Chromebook 3110 2-in-1": {
+      "family": "Chromebook",
+      "twoInOne": true,
+      "aliases": [
+        "cb3110-2in1",
+        "chromebook 3110 2-in-1"
+      ],
+      "parts": [
+        {
+          "partNumber": "YT39X",
+          "description": "Battery",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "BATTERY"
+        },
+        {
+          "partNumber": "7T73H",
+          "description": "Battery Cable",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "BATTERY CABLE"
+        },
+        {
+          "partNumber": "GW93P",
+          "description": "Bottom Cover",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "BOTTOM COVER"
+        },
+        {
+          "partNumber": "3M03V",
+          "description": "Hinge Set (order individually, specify which hinge)",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "HINGE SET"
+        },
+        {
+          "partNumber": "RFXCF",
+          "description": "Keyboard",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "KEYBOARD"
+        },
+        {
+          "partNumber": "Y21WR",
+          "description": "LCD Cable",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "LCD CABLE"
+        },
+        {
+          "partNumber": "X1M23",
+          "description": "LCD - 11.6\" Touchscreen WXGAHD LCD LED Widescreen",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "LCD SCREEN"
+        },
+        {
+          "partNumber": "17M7M",
+          "description": "LCD Screen - Touch",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "LCD SCREEN"
+        },
+        {
+          "partNumber": "7HRRT",
+          "description": "Motherboard",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "MOTHERBOARD"
+        },
+        {
+          "partNumber": "7J75H",
+          "description": "Palmrest",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "PALMREST"
+        },
+        {
+          "partNumber": "K07W7",
+          "description": "Palmrest (w/o WFC)",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "PALMREST"
+        },
+        {
+          "partNumber": "MFX68",
+          "description": "Speakers",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "SPEAKERS"
+        },
+        {
+          "partNumber": "KX8T2",
+          "description": "Top Cover",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "TOP COVER"
+        },
+        {
+          "partNumber": "NYJPR",
+          "description": "Webcam",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "WEBCAM"
+        },
+        {
+          "partNumber": "GVCKW",
+          "description": "WFC Cable",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "WEBCAM"
+        },
+        {
+          "partNumber": "Y7N24",
+          "description": "World Facing Camera",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "WEBCAM"
+        },
+        {
+          "partNumber": "0808Y8",
+          "description": "Motherboard - 4 GB RAM - 1.1GHz Dual Core Celeron N4500 - 64GB Storage",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "MOTHERBOARD"
+        }
+      ]
+    },
+    "Chromebook 3120": {
+      "family": "Chromebook",
+      "twoInOne": false,
+      "aliases": [
+        "cb3120",
+        "chromebook 3120"
+      ],
+      "parts": [
+        {
+          "partNumber": "7K4PW",
+          "description": "Screen - Touch (use for both ADP and NON-ADP)",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "LCD SCREEN"
+        },
+        {
+          "partNumber": "7K4PW",
+          "description": "Screen - Touch (use for both ADP and NON-ADP)",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "LCD SCREEN"
+        },
+        {
+          "partNumber": "W5W31",
+          "description": "LCD Bezel",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "LCD BEZEL"
+        },
+        {
+          "partNumber": "1197G",
+          "description": "Top Cover",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "TOP COVER"
+        },
+        {
+          "partNumber": "1YVFX",
+          "description": "Bottom Cover",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "BOTTOM COVER"
+        },
+        {
+          "partNumber": "NT57R",
+          "description": "Palmrest with 2 USB Ports",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "PALMREST"
+        },
+        {
+          "partNumber": "3G0H0",
+          "description": "Keyboard",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "KEYBOARD"
+        },
+        {
+          "partNumber": "RCCDP",
+          "description": "Left or Right Hinge",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "HINGE SET"
+        },
+        {
+          "partNumber": "X9T75",
+          "description": "Daughterboard",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "DAUGHTERBOARD"
+        },
+        {
+          "partNumber": "YT39X",
+          "description": "Battery",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "BATTERY"
+        },
+        {
+          "partNumber": "7T73H",
+          "description": "Battery Cable",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "BATTERY CABLE"
+        },
+        {
+          "partNumber": "NF6YY",
+          "description": "LCD Cable",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "LCD CABLE"
+        },
+        {
+          "partNumber": "XYXJ2",
+          "description": "Webcam",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "WEBCAM"
+        },
+        {
+          "partNumber": "MFX68",
+          "description": "Speakers",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "SPEAKERS"
+        },
+        {
+          "partNumber": "0t2t93",
+          "description": "Upper I/O Bracket",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": null
+        },
+        {
+          "partNumber": "JDB10-L-B",
+          "description": "Lower I/O Bracket",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": null
+        },
+        {
+          "partNumber": "JK75Y",
+          "description": "Motherboard",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "MOTHERBOARD"
+        },
+        {
+          "partNumber": "868GG",
+          "description": "Motherboard, Intel N100 Quad Core Processor, 4GB RAM, 64GB EMMC Drive",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "MOTHERBOARD"
+        }
+      ]
+    },
+    "Chromebook 3120 2-in-1": {
+      "family": "Chromebook",
+      "twoInOne": true,
+      "aliases": [
+        "cb3120-2in1",
+        "chromebook 3120 2-in-1"
+      ],
+      "parts": [
+        {
+          "partNumber": "YT39X",
+          "description": "Battery",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "BATTERY"
+        },
+        {
+          "partNumber": "YT39X",
+          "description": "Battery",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "BATTERY"
+        },
+        {
+          "partNumber": "7T73H",
+          "description": "Battery Cable",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "BATTERY CABLE"
+        },
+        {
+          "partNumber": "7T73H",
+          "description": "Battery Cable",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "BATTERY CABLE"
+        },
+        {
+          "partNumber": "0T4JW",
+          "description": "Bottom Cover",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "BOTTOM COVER"
+        },
+        {
+          "partNumber": "0T4JW",
+          "description": "Bottom Cover",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "BOTTOM COVER"
+        },
+        {
+          "partNumber": "RM09H",
+          "description": "Camera",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "WEBCAM"
+        },
+        {
+          "partNumber": "RM09H",
+          "description": "Camera",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "WEBCAM"
+        },
+        {
+          "partNumber": "YYNTM",
+          "description": "Daughterboard I/O",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "DAUGHTERBOARD"
+        },
+        {
+          "partNumber": "YYNTM",
+          "description": "Daughterboard I/O",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "DAUGHTERBOARD"
+        },
+        {
+          "partNumber": "92PD7",
+          "description": "Embedded Display Port Cable",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "LCD CABLE"
+        },
+        {
+          "partNumber": "92PD7",
+          "description": "Embedded Display Port Cable",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "LCD CABLE"
+        },
+        {
+          "partNumber": "RFXCF",
+          "description": "Keyboard",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "KEYBOARD"
+        },
+        {
+          "partNumber": "RFXCF",
+          "description": "Keyboard",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "KEYBOARD"
+        },
+        {
+          "partNumber": "R5KMT",
+          "description": "Left Hinge",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "LEFT HINGE"
+        },
+        {
+          "partNumber": "R5KMT",
+          "description": "Left Hinge",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "LEFT HINGE"
+        },
+        {
+          "partNumber": "4CK8F",
+          "description": "Palmrest w/WFC",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "PALMREST"
+        },
+        {
+          "partNumber": "4CK8F",
+          "description": "Palmrest w/WFC",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "PALMREST"
+        },
+        {
+          "partNumber": "YNRFG",
+          "description": "Right Hinge",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "RIGHT HINGE"
+        },
+        {
+          "partNumber": "YNRFG",
+          "description": "Right Hinge",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "RIGHT HINGE"
+        },
+        {
+          "partNumber": "MFX68",
+          "description": "Speakers",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "SPEAKERS"
+        },
+        {
+          "partNumber": "MFX68",
+          "description": "Speakers",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "SPEAKERS"
+        },
+        {
+          "partNumber": "G3C2R",
+          "description": "Top Cover",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "TOP COVER"
+        },
+        {
+          "partNumber": "G3C2R",
+          "description": "Top Cover",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "TOP COVER"
+        },
+        {
+          "partNumber": "689C0",
+          "description": "Touch Screen - Touch",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "LCD SCREEN"
+        },
+        {
+          "partNumber": "689C0",
+          "description": "Touch Screen - Touch",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "LCD SCREEN"
+        },
+        {
+          "partNumber": "28FDG",
+          "description": "Motherboard, Intel N100, 8GB",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "MOTHERBOARD"
+        },
+        {
+          "partNumber": "TH4R1",
+          "description": "Motherboard, Intel N100, 8GB",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "MOTHERBOARD"
+        },
+        {
+          "partNumber": "0TH4R1",
+          "description": "OEM Motherboard - 8GB RAM - 3.4 GHz Intel N100 - 64 GB Storage",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "MOTHERBOARD"
+        }
+      ]
+    },
+    "Latitude 3120": {
+      "family": "Latitude",
+      "twoInOne": false,
+      "aliases": [
+        "lat3120",
+        "latitude 3120"
+      ],
+      "parts": [
+        {
+          "partNumber": "R1060",
+          "description": "Bezel",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "LCD BEZEL"
+        },
+        {
+          "partNumber": "R0577",
+          "description": "Bottom Cover (NO USB-C)",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "BOTTOM COVER"
+        },
+        {
+          "partNumber": "T0587",
+          "description": "DC-in",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "DC-IN PORT"
+        },
+        {
+          "partNumber": "R4910",
+          "description": "Palm Rest (same part for ADP and Non-ADP)",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "PALMREST"
+        },
+        {
+          "partNumber": "WCDNH",
+          "description": "LCD",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "LCD SCREEN"
+        },
+        {
+          "partNumber": "0R6877",
+          "description": "Left Hinge",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "LEFT HINGE"
+        },
+        {
+          "partNumber": "0R6416",
+          "description": "Right Hinge",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "RIGHT HINGE"
+        },
+        {
+          "partNumber": "R1047",
+          "description": "Top Cover",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "TOP COVER"
+        },
+        {
+          "partNumber": "0N2309",
+          "description": "Audio Board",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "DAUGHTERBOARD"
+        },
+        {
+          "partNumber": "0T0767",
+          "description": "Audio Board Cable",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "DAUGHTERBOARD CABLE"
+        },
+        {
+          "partNumber": "0TXD03",
+          "description": "Battery",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "BATTERY"
+        },
+        {
+          "partNumber": "0T0768",
+          "description": "Battery Cable",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "BATTERY CABLE"
+        },
+        {
+          "partNumber": "T0587",
+          "description": "DC-In Jack",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "DC-IN PORT"
+        },
+        {
+          "partNumber": "0YPG7G",
+          "description": "LCD (NO TOUCH)",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "LCD SCREEN"
+        },
+        {
+          "partNumber": "0T0431",
+          "description": "LCD Cable",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "LCD CABLE"
+        },
+        {
+          "partNumber": "R4910",
+          "description": "Palmrest (same as ADP part)",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "PALMREST"
+        },
+        {
+          "partNumber": "0TN2CC",
+          "description": "Solid State Hard Drive",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "SSD"
+        },
+        {
+          "partNumber": "M05K0",
+          "description": "Webcam",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "WEBCAM"
+        },
+        {
+          "partNumber": "0T0462",
+          "description": "Wireless Cable",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "HALL SENSOR"
+        },
+        {
+          "partNumber": "0ND233",
+          "description": "Speakers",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "SPEAKERS"
+        },
+        {
+          "partNumber": "0MY091",
+          "description": "Dell OEM Latitude 3120 Motherboard System Board Intel Celeron Quad Core 1.1GHz CPU - 4GB",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "MOTHERBOARD"
+        },
+        {
+          "partNumber": "0MY090",
+          "description": "Dell Latitude 3120 Motherboard System Board Celeron Quad Core 1.1GHz - 64GB EMMC - 4GB",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "MOTHERBOARD"
+        },
+        {
+          "partNumber": "M1374",
+          "description": "Motherboard 8GB - LPDDR4 - Intel Core Pentium Silver N6000 - 3.30 GHz",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "MOTHERBOARD"
+        },
+        {
+          "partNumber": "0M0DGG",
+          "description": "Motherboard - 4 GB RAM - 1.1 GHz Celeron Quad Core - 64 GB Storage",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "MOTHERBOARD"
+        },
+        {
+          "partNumber": "0MY093",
+          "description": "Motherboard - 8 GB RAM - 1.1 GHz N6000 CPU - Removable MSATA Storage",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "MOTHERBOARD"
+        }
+      ]
+    },
+    "Latitude 3120 2-in-1": {
+      "family": "Latitude",
+      "twoInOne": true,
+      "aliases": [
+        "lat3120-2in1",
+        "latitude 3120 2-in-1"
+      ],
+      "parts": [
+        {
+          "partNumber": "R4910",
+          "description": "Palm Rest (same part for ADP and Non-ADP)",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "PALMREST"
+        },
+        {
+          "partNumber": "R0577",
+          "description": "Bottom Cover (NO USB-C)",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "BOTTOM COVER"
+        },
+        {
+          "partNumber": "R0759",
+          "description": "Bottom Cover (WITH Type-C charger slot)",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "BOTTOM COVER"
+        },
+        {
+          "partNumber": "YPG7G",
+          "description": "LCD 2-in-1",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "LCD SCREEN"
+        },
+        {
+          "partNumber": "0P8795",
+          "description": "Top Cover 2-in-1",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "TOP COVER"
+        },
+        {
+          "partNumber": "PF108",
+          "description": "Left Hinge",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "LEFT HINGE"
+        },
+        {
+          "partNumber": "PF110",
+          "description": "Right Hinge",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "RIGHT HINGE"
+        },
+        {
+          "partNumber": "RWDY5",
+          "description": "LCD 2-IN-1",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "LCD SCREEN"
+        },
+        {
+          "partNumber": "R4910",
+          "description": "Palmrest (same as ADP part)",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "PALMREST"
+        },
+        {
+          "partNumber": "NX9FY",
+          "description": "Top Cover (Wi-fi cable / Hall Sensor)",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "TOP COVER"
+        },
+        {
+          "partNumber": "NX9FY",
+          "description": "Top Cover (Wi-fi cable / Hall Sensor)",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "WIFI CARD"
+        },
+        {
+          "partNumber": "NX9FY",
+          "description": "Top Cover (Wi-fi cable / Hall Sensor)",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "HALL SENSOR"
+        },
+        {
+          "partNumber": "M05K0",
+          "description": "Webcam",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "WEBCAM"
+        },
+        {
+          "partNumber": "0MY091",
+          "description": "Dell OEM Latitude 3120 Motherboard System Board Intel Celeron Quad Core 1.1GHz CPU - 4GB",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "MOTHERBOARD"
+        },
+        {
+          "partNumber": "0MY090",
+          "description": "Dell Latitude 3120 Motherboard System Board Celeron Quad Core 1.1GHz - 64GB EMMC - 4GB",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "MOTHERBOARD"
+        },
+        {
+          "partNumber": "M1374",
+          "description": "Motherboard 8GB - LPDDR4 - Intel Core Pentium Silver N6000 - 3.30 GHz",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "MOTHERBOARD"
+        },
+        {
+          "partNumber": "0M0DGG",
+          "description": "Motherboard - 4 GB RAM - 1.1 GHz Celeron Quad Core - 64 GB Storage",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "MOTHERBOARD"
+        },
+        {
+          "partNumber": "0MY093",
+          "description": "Motherboard - 8 GB RAM - 1.1 GHz N6000 CPU - Removable MSATA Storage",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "MOTHERBOARD"
+        }
+      ]
+    },
+    "Latitude 3140": {
+      "family": "Latitude",
+      "twoInOne": false,
+      "aliases": [
+        "lat3140",
+        "latitude 3140"
+      ],
+      "parts": [
+        {
+          "partNumber": "55C45",
+          "description": "Bezel",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "LCD BEZEL"
+        },
+        {
+          "partNumber": "5816G",
+          "description": "Bottom Cover (2-CELL)",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "BOTTOM COVER"
+        },
+        {
+          "partNumber": "587N9",
+          "description": "Bottom Cover (3-CELL)",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "BOTTOM COVER"
+        },
+        {
+          "partNumber": "T0587",
+          "description": "DC-in",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "DC-IN PORT"
+        },
+        {
+          "partNumber": "0R6416",
+          "description": "Right Hinge",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "RIGHT HINGE"
+        },
+        {
+          "partNumber": "0R6877",
+          "description": "Left Hinge",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "LEFT HINGE"
+        },
+        {
+          "partNumber": "8NYG0",
+          "description": "LCD",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "LCD SCREEN"
+        },
+        {
+          "partNumber": "DGFJ9",
+          "description": "Palmrest",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "PALMREST"
+        },
+        {
+          "partNumber": "DC8CD",
+          "description": "Top Cover",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "TOP COVER"
+        },
+        {
+          "partNumber": "TRDFV",
+          "description": "256 GB Solid State Hard Drive",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "SSD"
+        },
+        {
+          "partNumber": "8N7Y1",
+          "description": "Audio Daughterboard With Cable",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "DAUGHTERBOARD"
+        },
+        {
+          "partNumber": "TXD03",
+          "description": "Battery",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "BATTERY"
+        },
+        {
+          "partNumber": "T0768",
+          "description": "Battery Cable",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "BATTERY CABLE"
+        },
+        {
+          "partNumber": "T0587",
+          "description": "DC Power Input Jack",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "DC-IN PORT"
+        },
+        {
+          "partNumber": "Y9P1M",
+          "description": "11.6\" WXGAHD LCD LED Widescreen Matte (LCD NON TOUCH SCREEN)",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "LCD SCREEN"
+        },
+        {
+          "partNumber": "6P80N",
+          "description": "LCD Touch Screen",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "LCD SCREEN"
+        },
+        {
+          "partNumber": "50D69",
+          "description": "LCD Cable",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "LCD CABLE"
+        },
+        {
+          "partNumber": "R4910",
+          "description": "Palmrest",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "PALMREST"
+        },
+        {
+          "partNumber": "ND233",
+          "description": "Speakers",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "SPEAKERS"
+        },
+        {
+          "partNumber": "P8795",
+          "description": "Top Cover (Wi-fi cable / Hall Sensor)",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "TOP COVER"
+        },
+        {
+          "partNumber": "P8795",
+          "description": "Top Cover (Wi-fi cable / Hall Sensor)",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "WIFI CARD"
+        },
+        {
+          "partNumber": "P8795",
+          "description": "Top Cover (Wi-fi cable / Hall Sensor)",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "HALL SENSOR"
+        },
+        {
+          "partNumber": "D8J87",
+          "description": "Webcam",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "WEBCAM"
+        },
+        {
+          "partNumber": "PNKFT",
+          "description": "Motherboard",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "MOTHERBOARD"
+        },
+        {
+          "partNumber": "0J2D4P",
+          "description": "Motherboard - 4 GB RAM - 3.4 GHZ N100",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "MOTHERBOARD"
+        },
+        {
+          "partNumber": "P70C3",
+          "description": "Motherboard LA-M501P - 3.4 Ghz, N100 Processor, 4GB RAM",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "MOTHERBOARD"
+        }
+      ]
+    },
+    "Latitude 3140 2-in-1": {
+      "family": "Latitude",
+      "twoInOne": true,
+      "aliases": [
+        "lat3140-2in1",
+        "latitude 3140 2-in-1"
+      ],
+      "parts": [
+        {
+          "partNumber": "55C45",
+          "description": "Bezel",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "LCD BEZEL"
+        },
+        {
+          "partNumber": "5816G",
+          "description": "Bottom Cover (2-CELL)",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "BOTTOM COVER"
+        },
+        {
+          "partNumber": "587N9",
+          "description": "Bottom Cover (3-CELL)",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "BOTTOM COVER"
+        },
+        {
+          "partNumber": "T0587",
+          "description": "DC-in",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "DC-IN PORT"
+        },
+        {
+          "partNumber": "DGFJ9",
+          "description": "Palmrest",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "PALMREST"
+        },
+        {
+          "partNumber": "9C2PM",
+          "description": "LCD - 2-in-1",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "LCD SCREEN"
+        },
+        {
+          "partNumber": "DCWWV",
+          "description": "Top Cover 2-in-1",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "TOP COVER"
+        },
+        {
+          "partNumber": "PF108",
+          "description": "Left Hinge",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "LEFT HINGE"
+        },
+        {
+          "partNumber": "PF110",
+          "description": "Right Hinge",
+          "coverage": "ADP",
+          "price": null,
+          "canonical": "RIGHT HINGE"
+        },
+        {
+          "partNumber": "PNKFT",
+          "description": "Motherboard",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "MOTHERBOARD"
+        },
+        {
+          "partNumber": "0J2D4P",
+          "description": "Motherboard - 4 GB RAM - 3.4 GHZ N100",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "MOTHERBOARD"
+        },
+        {
+          "partNumber": "P70C3",
+          "description": "Motherboard LA-M501P - 3.4 Ghz, N100 Processor, 4GB RAM",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "MOTHERBOARD"
+        }
+      ]
+    }
+  },
   "canonicalParts": [
     "BATTERY CABLE",
     "BATTERY",

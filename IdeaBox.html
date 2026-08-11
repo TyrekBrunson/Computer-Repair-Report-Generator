@@ -17,6 +17,23 @@
                 text-align: center;
                 color: #0056b3;
             }
+            #web-center-link {
+                position: fixed;
+                top: 16px;
+                left: 16px;
+                color: #fff;
+                text-decoration: none;
+                background-color: #0056b3;
+                border: 1px solid #003d80;
+                border-radius: 4px;
+                padding: 8px 14px;
+                font-weight: bold;
+                font-size: 0.9em;
+                z-index: 1001;
+            }
+            #web-center-link:hover {
+                background-color: #003d80;
+            }
             .column-container {
                 display: flex;
                 justify-content: center;
@@ -70,6 +87,7 @@
         </style>
     </head>
 <body>
+    <a href="ebryit_web_center.html" id="web-center-link">🏠 Web Center</a>
     <h1>💡 Idea Box 💡</h1>
     <div class="column-container">
         <div class="verbiage-editor-column">
@@ -94,50 +112,51 @@
         </div>
     </div>
     <script>
-    const SUGGESTIONS_KEY = 'ebryit_suggestions_v1';
+    // Paste the "When an HTTP request is received" trigger URL from the Power Automate
+    // flow here (Post message in a chat or channel -> your Teams group chat).
+    const POWER_AUTOMATE_URL = 'PASTE_YOUR_FLOW_HTTP_TRIGGER_URL_HERE';
 
-    function saveEntry(type, text) {
-        let list = [];
-        try { list = JSON.parse(localStorage.getItem(SUGGESTIONS_KEY) || '[]'); } catch (e) {}
-        list.unshift({
-            type: type,
-            text: text,
-            when: new Date().toLocaleString()
+    async function sendEntry(kind, text) {
+        const res = await fetch(POWER_AUTOMATE_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ kind, text })
         });
-        // Keep the most recent 200 entries
-        if (list.length > 200) list = list.slice(0, 200);
-        localStorage.setItem(SUGGESTIONS_KEY, JSON.stringify(list));
+        if (!res.ok) throw new Error('HTTP ' + res.status);
     }
 
-    function flash(button, message) {
+    function flash(button, message, isError) {
         const original = button.textContent;
         button.textContent = message;
-        button.style.backgroundColor = '#28a745';
+        button.style.backgroundColor = isError ? '#b71c1c' : '#28a745';
         setTimeout(() => {
             button.textContent = original;
             button.style.backgroundColor = '#0056b3';
-        }, 1800);
+        }, isError ? 3000 : 1800);
     }
 
-    document.getElementById('suggestions-form').addEventListener('submit', function (e) {
-        e.preventDefault();
-        const ta = document.getElementById('suggestion-text');
-        const val = ta.value.trim();
-        if (!val) return;
-        saveEntry('Suggestion', val);
-        ta.value = '';
-        flash(document.getElementById('submit-button-verbiage'), '✓ Sent!');
-    });
+    function wireForm(formId, textareaId, buttonId, kind) {
+        document.getElementById(formId).addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const ta = document.getElementById(textareaId);
+            const btn = document.getElementById(buttonId);
+            const val = ta.value.trim();
+            if (!val) return;
+            btn.disabled = true;
+            try {
+                await sendEntry(kind, val);
+                ta.value = '';
+                flash(btn, '✓ Sent!');
+            } catch (err) {
+                flash(btn, '✗ Failed — try again', true);
+            } finally {
+                btn.disabled = false;
+            }
+        });
+    }
 
-    document.getElementById('bugreport-form').addEventListener('submit', function (e) {
-        e.preventDefault();
-        const ta = document.getElementById('bugreport-text');
-        const val = ta.value.trim();
-        if (!val) return;
-        saveEntry('Bug Report', val);
-        ta.value = '';
-        flash(document.getElementById('submit-button-parts'), '✓ Sent!');
-    });
+    wireForm('suggestions-form', 'suggestion-text', 'submit-button-verbiage', 'Suggestion');
+    wireForm('bugreport-form', 'bugreport-text', 'submit-button-parts', 'Bug Report');
     </script>
 </body>
 <footer>
