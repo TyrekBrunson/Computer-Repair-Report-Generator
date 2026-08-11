@@ -107,12 +107,11 @@
                     <input type="radio" name="device-selection" id="Lat3140-2in1-Union-checkbox" data-district="union">
                     <label for="Lat3140-2in1-Union-checkbox">Latitude 3140 2-in-1</label>
                 </div>
-                </div>
             </div>
         </div>
 
         <h2>Report Details</h2>
-        <label for="unit-description">Unit Presented With Description Of (Custom Input):</label>
+        <label for="unit-description"><b>Initial Issue:</b></label>
         <textarea id="unit-description" placeholder="e.g., Lcd screen cracked"></textarea>
         
         <div class="contract-options">
@@ -860,12 +859,6 @@
         const berChecked = document.getElementById('ber-checkbox').checked;
         const doaChecked = document.getElementById('doa-checkbox').checked;
 
-		// Checks if Initial Issue field has input. If not, it does not generate the report until the field is populated.
-        if (customDescription === "") {
-            alert("You must fill out the 'Unit Presented With Description Of' field before generating a report.");
-            return;
-        }
-
         // =========================================================
         // BER PATH — overrides everything; no issue selections needed
         // =========================================================
@@ -948,7 +941,8 @@
         if (cannotVerifyChecked && cannotVerifyDescription) {
             line2Prefix = `UPON ARRIVAL: CANNOT VERIFY INITIAL ISSUE: `;
             reportSections.push(cannotVerifyDescription.replace(/\.$/, '') + '. ');
-        } else if (initialCommentChecked && initialCommentDescription) {
+        }
+        if (initialCommentChecked && initialCommentDescription) {
             reportSections.push(initialCommentDescription.replace(/\.$/, '') + '. ');
         }
 
