@@ -114,13 +114,18 @@
     <script>
     // Paste the "When an HTTP request is received" trigger URL from the Power Automate
     // flow here (Post message in a chat or channel -> your Teams group chat).
-    const POWER_AUTOMATE_URL = 'PASTE_YOUR_FLOW_HTTP_TRIGGER_URL_HERE';
+    const POWER_AUTOMATE_URL = 'https://defaultb350c1e642a6447a974a2394cc5f65.ca.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/07/workflows/17c4ffd9ed714fceba7dfd6a680c3e65/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=vr8j0lLYwhtVA338J_xQrBlNVEg4d9AjLFqWD3NvZ1w';
+
+    // Shared secret checked by a Condition step in the flow before it posts to Teams.
+    // This is NOT real security (it's visible in this public page's source) — it only
+    // filters out bots that blindly POST to scraped Power Automate URLs.
+    const SHARED_SECRET = 'IsZeHoGwvSHDUYoxb31cjV-poUHo9G45';
 
     async function sendEntry(kind, text) {
         const res = await fetch(POWER_AUTOMATE_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ kind, text })
+            body: JSON.stringify({ kind, text, secret: SHARED_SECRET })
         });
         if (!res.ok) throw new Error('HTTP ' + res.status);
     }
@@ -155,8 +160,8 @@
         });
     }
 
-    wireForm('suggestions-form', 'suggestion-text', 'submit-button-verbiage', 'Suggestion');
-    wireForm('bugreport-form', 'bugreport-text', 'submit-button-parts', 'Bug Report');
+    wireForm('suggestions-form', 'suggestion-text', 'submit-button-verbiage', 'Idea Submission');
+    wireForm('bugreport-form', 'bugreport-text', 'submit-button-parts', 'Bug Reported');
     </script>
 </body>
 <footer>
