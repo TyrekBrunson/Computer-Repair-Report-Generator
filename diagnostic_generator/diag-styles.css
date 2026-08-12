@@ -555,6 +555,10 @@
     color: #856404;
     border-color: #ffe08a;
 }
+.parts-model-district {
+    font-weight: normal;
+    opacity: 0.75;
+}
 .pn-price {
     color: #1e7e34;
     font-size: 0.85em;

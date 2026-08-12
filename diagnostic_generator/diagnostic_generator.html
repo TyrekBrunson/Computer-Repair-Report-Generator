@@ -339,14 +339,6 @@
         return modelKeyForAlias(RADIO_TO_ALIAS[checked.id]);
     }
 
-    // Resolves the currently selected device against WORTH_DB specifically — a device can be
-    // "qualified" (has Richland/Worth data) independently of whether it's in PARTS_DB.
-    function getSelectedWorthModelKey() {
-        const checked = document.querySelector('input[name="device-selection"]:checked');
-        if (!checked) return null;
-        return modelKeyForAliasIn(WORTH_DB, RADIO_TO_ALIAS[checked.id]);
-    }
-
     // Replaces the old manual "Richland 1 / Worth Repair Contract" checkbox: the same model
     // (e.g. Latitude 3120 2-in-1) behaves as a Worth-contract repair only when selected from
     // the Richland 1 column, never when the identical model is selected under Union.
@@ -355,25 +347,35 @@
         return !!(checked && checked.getAttribute('data-district') === 'richland');
     }
 
+    // Resolves the currently selected device against WORTH_DB specifically — a device can be
+    // "qualified" (has Richland/Worth data) independently of whether it's in PARTS_DB. Gated on
+    // isSelectedDeviceRichland() so a Union selection of the same model/alias (e.g. Latitude
+    // 3120 2-in-1 exists in both catalogs) never accidentally qualifies for Worth coverage.
+    function getSelectedWorthModelKey() {
+        if (!isSelectedDeviceRichland()) return null;
+        const checked = document.querySelector('input[name="device-selection"]:checked');
+        if (!checked) return null;
+        return modelKeyForAliasIn(WORTH_DB, RADIO_TO_ALIAS[checked.id]);
+    }
+
     // (model, canonical part, isAdp) -> best part-number match
-    function lookupPartNumber(canonicalPart, worthMode, issueType) {
+    // Districts NEVER cross-reference each other's sheet: Richland 1 only ever reads
+    // r1_worth_parts.json (Worth + that sheet's own Dell Warranty rows); every other district
+    // only ever reads A5_FM_U_parts.json (ADP + Dell Warranty rows). A Richland selection with
+    // no Worth-catalog entry for a part returns "not found" — it never falls back to the
+    // Union/Anderson catalog just because a name happens to match there too.
+    function lookupPartNumber(canonicalPart, issueType) {
         let model = null;
         let usingWorthDB = false;
-        if (worthMode) {
+        if (isSelectedDeviceRichland()) {
             const worthKey = getSelectedWorthModelKey();
-            if (worthKey) { model = WORTH_DB.models[worthKey]; usingWorthDB = true; }
-            // else: checked but not a qualified model — falls through to PARTS_DB below,
-            // identical to unchecked (this is the "not blocked, just degrades" case; Chromebook
-            // is handled separately as a hard block before rendering ever gets here).
-        }
-        if (!model) {
+            if (!worthKey || !WORTH_DB) return null;
+            model = WORTH_DB.models[worthKey];
+            usingWorthDB = true;
+        } else {
             if (!PARTS_DB || !selectedModelKey) return null;
             model = PARTS_DB.models[selectedModelKey];
         }
-        // Qualified: r1_worth_parts.json fully replaces PARTS_DB for this render — if this
-        // model's Worth catalog doesn't have a given canonical part, the caller falls through
-        // to "not found" below; PARTS_DB's ADP/warranty numbers are never consulted as a
-        // silent per-part substitute once a qualified model puts the table in Worth mode.
         if (!model) return null;
         const want = (canonicalPart || '').toUpperCase();
         const aliasFix = {
@@ -409,33 +411,25 @@
 
         if (candidates.length === 0) return null;
 
-        // Join multiple distinct part numbers of the SAME coverage with " or " (e.g. two
-        // Dell Warranty motherboard variants).
-        const multi = (parts) => {
-            const uniq = [];
-            parts.forEach(p => { if (!uniq.some(u => u.partNumber === p.partNumber)) uniq.push(p); });
-            if (!uniq.length) return null;
-            const base = uniq[0];
-            return {
-                partNumber: uniq.map(p => p.partNumber).join(' or '),
-                description: base.description,
-                price: uniq.length === 1 ? base.price : null,
-                coverage: base.coverage,
-                isWorthResult: /^w-/i.test(base.partNumber)
-            };
-        };
-
-        // The Richland/Worth contract checkbox decides coverage for the ENTIRE report — not
-        // the per-issue verbiage type. This prevents mixed reports (one Worth part + one
-        // Warranty part) and prevents a Worth number appearing when the whole job is warranty.
-        //   worthMode + qualified model -> 'Worth'      (Richland 1 Worth catalog)
-        //   worthMode + unqualified     -> 'ADP'        (no Worth data; use the ADP tier)
-        //   not worthMode               -> 'Dell Warranty'
-        const desiredCoverage = worthMode
-            ? (usingWorthDB ? 'Worth' : 'ADP')
-            : 'Dell Warranty';
+        // Richland (usingWorthDB): coverage is forced for the WHOLE report, same as the
+        // "AWAITING WORTH REPAIRS" vs "AWAITING DELL WARRANTY PARTS" verbiage split below —
+        // multiple NON-ADP parts can coexist as long as they're ALL Dell Warranty, but the
+        // moment any ADP issue is present, every part (ADP or NON-ADP) switches to Worth. No
+        // per-part fallback and never the Union/Anderson catalog.
+        // Union/Anderson (PARTS_DB): each issue pulls its own tier — ADP issues get the
+        // ADP/UADP row, NON-ADP issues get the Dell Warranty row — and the two CAN coexist on
+        // the same report (e.g. a NON-ADP motherboard + an ADP screen on the same ticket).
+        const desiredCoverage = usingWorthDB
+            ? (selectedIssues.some(i => i.type === 'ADP') ? 'Worth' : 'Dell Warranty')
+            : (issueType === 'ADP' ? 'ADP' : 'Dell Warranty');
         const matches = candidates.filter(p => p.coverage === desiredCoverage);
-        return matches.length ? multi(matches) : null;
+        if (!matches.length) return null;
+        // Return one entry per DISTINCT part number (e.g. two Dell Warranty motherboard
+        // variants) — the caller renders each as its own row so Copy stays focused on a
+        // single part number instead of a combined "A or B" string.
+        const uniq = [];
+        matches.forEach(p => { if (!uniq.some(u => u.partNumber === p.partNumber)) uniq.push(p); });
+        return uniq.map(p => ({ partNumber: p.partNumber, description: p.description, price: p.price, coverage: p.coverage }));
     }
 
     // =========================================================
@@ -445,16 +439,17 @@
         const container = document.getElementById('parts-list-output');
         if (!container) return;
 
-        // The MIX OF SELECTED ISSUES drives the WHOLE report (the contract checkbox is not
-        // used for part selection):
-        //   any ADP / Worth-provided issue present -> Worth mode (whole report uses W- parts)
-        //   all issues are non-ADP (warranty)      -> Warranty mode (whole report uses OEM parts)
+        // Richland 1 and every other district read from two entirely separate catalogs (see
+        // lookupPartNumber) — resolve which one applies once, up front, for the price column
+        // and the model note below. anyAdpIssue drives the same whole-report Worth/Warranty
+        // split as the "AWAITING WORTH REPAIRS" vs "AWAITING DELL WARRANTY PARTS" verbiage.
+        const richlandSelected = isSelectedDeviceRichland();
+        const worthKey = getSelectedWorthModelKey(); // non-null only when richlandSelected && qualified
+        const worthQualified = !!worthKey;
         const anyAdpIssue = selectedIssues.some(i => i.type === 'ADP');
-        const worthMode = anyAdpIssue;
-        const worthQualified = worthMode && !!getSelectedWorthModelKey();
-        // Price column + Grand Total row only appear in Worth mode — only that catalog
-        // carries real price data.
-        const showPrice = worthMode;
+        // Price column + Grand Total row only appear when Richland is actually resolving to
+        // the priced Worth rows — its own Dell Warranty rows carry no price data.
+        const showPrice = worthQualified && anyAdpIssue;
         const colCount = showPrice ? 5 : 4;
 
         const emptyRow = () => `<tr>${'<td>&nbsp;</td>'.repeat(colCount - 1)}<td></td></tr>`;
@@ -464,12 +459,18 @@
             return rows;
         };
 
-        let modelNote = selectedModelKey
-            ? `<div class="parts-model-note">Model: <strong>${selectedModelKey}</strong></div>`
-            : '<div class="parts-model-note warn">Select a device to auto-assign part numbers.</div>';
-        // Worth mode is on (an ADP issue is present) but this device has no Richland/Worth data.
-        if (selectedModelKey && worthMode && !worthQualified) {
-            modelNote += '<div class="parts-model-note warn">No Richland 1 / Worth part data for this device — showing standard ADP/warranty numbers.</div>';
+        // Same model name (e.g. "Latitude 3120 2-in-1") can exist in both catalogs, so the
+        // note always names which catalog/tier is actually driving this render.
+        let modelNote;
+        if (richlandSelected) {
+            const richlandTier = anyAdpIssue ? 'Richland 1 / Worth' : 'Richland 1 / Dell Warranty';
+            modelNote = worthKey
+                ? `<div class="parts-model-note">Model: <strong>${worthKey}</strong> <span class="parts-model-district">(${richlandTier})</span></div>`
+                : '<div class="parts-model-note warn">No Richland 1 / Worth part data for this device.</div>';
+        } else {
+            modelNote = selectedModelKey
+                ? `<div class="parts-model-note">Model: <strong>${selectedModelKey}</strong> <span class="parts-model-district">(ADP / Warranty catalog)</span></div>`
+                : '<div class="parts-model-note warn">Select a device to auto-assign part numbers.</div>';
         }
 
         // Unique canonical parts from current selection (skip miscellaneous)
@@ -490,38 +491,50 @@
 
         let bodyRows = '';
         let grandTotal = 0;
+        let rowCount = 0;
         if (wantParts.length === 0) {
             bodyRows = emptyRows();
         } else {
             wantParts.forEach(wp => {
-                const match = lookupPartNumber(wp.name, worthMode, wp.issueType);
-                const pn = match ? match.partNumber : '—';
-                const notFound = !match;
-                // The Type reflects the ACTUAL coverage of the part chosen.
-                const typeLabel = match
-                    ? `<span class="pn-type ${match.coverage === 'Dell Warranty' ? 'warranty' : 'worth'}">${match.coverage === 'Dell Warranty' ? 'Warranty' : match.coverage}</span>`
-                    : '';
-                const copyBtn = match
-                    ? `<button class="pn-copy" onclick="copyPartNumber('${match.partNumber.replace(/'/g, "\\'")}', this)">Copy</button>`
-                    : '';
-                let priceCell = '';
-                if (showPrice) {
-                    if (match && match.price != null) {
-                        grandTotal += match.price;
-                        priceCell = `<td><span class="pn-price">$${match.price.toFixed(2)}</span></td>`;
-                    } else {
-                        priceCell = '<td>—</td>';
-                    }
+                const matches = lookupPartNumber(wp.name, wp.issueType);
+                if (!matches) {
+                    bodyRows += `<tr class="pn-missing">
+                        <td>${wp.name}</td>
+                        <td></td>
+                        <td>—</td>
+                        ${showPrice ? '<td>—</td>' : ''}
+                        <td></td>
+                    </tr>`;
+                    rowCount++;
+                    return;
                 }
-                bodyRows += `<tr class="${notFound ? 'pn-missing' : ''}">
-                    <td>${wp.name}</td>
-                    <td>${typeLabel}</td>
-                    <td>${pn}</td>
-                    ${priceCell}
-                    <td>${copyBtn}</td>
-                </tr>`;
+                // One row PER DISTINCT part number, so Copy always targets a single number —
+                // e.g. two motherboard variants render as two rows instead of one "A or B" row.
+                matches.forEach(match => {
+                    const typeLabel = `<span class="pn-type ${match.coverage === 'Dell Warranty' ? 'warranty' : 'worth'}">${match.coverage === 'Dell Warranty' ? 'Warranty' : match.coverage}</span>`;
+                    const copyBtn = `<button class="pn-copy" onclick="copyPartNumber('${match.partNumber.replace(/'/g, "\\'")}', this)">Copy</button>`;
+                    let priceCell = '';
+                    if (showPrice) {
+                        if (match.price != null) {
+                            // Multiple listings are ALTERNATIVES (only one gets ordered) — show
+                            // each price for reference but only count it once toward the total.
+                            if (matches.length === 1) grandTotal += match.price;
+                            priceCell = `<td><span class="pn-price">$${match.price.toFixed(2)}</span></td>`;
+                        } else {
+                            priceCell = '<td>—</td>';
+                        }
+                    }
+                    bodyRows += `<tr>
+                        <td>${wp.name}</td>
+                        <td>${typeLabel}</td>
+                        <td>${match.partNumber}</td>
+                        ${priceCell}
+                        <td>${copyBtn}</td>
+                    </tr>`;
+                    rowCount++;
+                });
             });
-            for (let i = wantParts.length; i < 6; i++) {
+            for (let i = rowCount; i < 6; i++) {
                 bodyRows += emptyRow();
             }
         }
