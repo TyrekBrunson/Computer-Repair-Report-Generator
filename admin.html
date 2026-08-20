@@ -37,6 +37,8 @@
         .status-ok { background: #e6f4ea; color: #1e7e34; border: 1px solid #a3d9b1; }
         .status-warn { background: #fff3cd; color: #856404; border: 1px solid #ffe08a; }
         .status-err { background: #fdecea; color: #b71c1c; border: 1px solid #f5b5ae; }
+        #sync-banner { position: sticky; top: 0; z-index: 999; text-align: center; max-width: 1000px; margin: 12px auto 0; }
+        #sync-banner a { color: #856404; }
         select, input[type="text"] { padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-family: inherit; font-size: 0.95em; }
         table { width: 100%; border-collapse: collapse; font-size: 0.9em; margin-top: 12px; }
         th, td { padding: 7px 9px; border: 1px solid #d4d9de; text-align: left; }
@@ -94,6 +96,7 @@
     <div id="page-content" style="display: none;">
         <a href="ebryit_web_center.html" id="web-center-link">🏠 Web Center</a>
         <h1>&#9881;&#65039; Admin Settings &mdash; Parts &amp; Verbiage</h1>
+        <div id="sync-banner" class="status-line status-warn" style="display:none;"></div>
         <div class="tab-bar">
             <button class="tab-btn active" data-tab="parts">Parts List Updater</button>
             <button class="tab-btn" data-tab="editor">JSON Editor</button>
@@ -337,6 +340,10 @@
         verbiage: ['diagnostic_generator/verbiage.json']
     };
     let githubToken = null; // held in memory only for the session; never stored
+    // The GitHub file SHA each dataset had at the moment THIS admin loaded it — used to detect
+    // if another admin has published a newer version in the meantime (see ghPutFile/ghPublishDataset).
+    // undefined = not captured yet (falls back to old fetch-fresh behavior); null = file didn't exist.
+    let datasetBaselines = { parts: undefined, worth: undefined, verbiage: undefined };
     const SUGGESTIONS_KEY = 'ebryit_suggestions_v1';
     const ALIAS_RULES = [
         ["BATTERY CABLE", ["battery cable"]],
@@ -481,11 +488,13 @@
     function getActiveDB(cat) { return cat === 'worth' ? activeWorthDB : activeDB; }
     function setActiveDB(cat, db) { if (cat === 'worth') activeWorthDB = db; else activeDB = db; }
     async function loadActiveDB() {
+        captureBaselineSha('parts'); // fire-and-forget: don't block the UI load on this
         try { const cached = localStorage.getItem(PARTS_DB_KEY); if (cached) { activeDB = JSON.parse(cached); return "override"; } } catch (e) {}
         try { const res = await fetch('diagnostic_generator/A5_FM_U_parts.json?v=' + Date.now(), { cache: 'no-store' }); if (res.ok) { activeDB = await res.json(); return "file"; } } catch (e) {}
         activeDB = null; return "none";
     }
     async function loadActiveWorthDB() {
+        captureBaselineSha('worth');
         try { const cached = localStorage.getItem(WORTH_DB_KEY); if (cached) { activeWorthDB = JSON.parse(cached); return "override"; } } catch (e) {}
         try { const res = await fetch('diagnostic_generator/r1_worth_parts.json?v=' + Date.now(), { cache: 'no-store' }); if (res.ok) { activeWorthDB = await res.json(); return "file"; } } catch (e) {}
         activeWorthDB = null; return "none";
@@ -753,6 +762,7 @@
     let verbiageData = null;     // { Device: { ADP|NON_ADP: { Category: [lines] } } }
 
     async function loadVerbiageData() {
+        captureBaselineSha('verbiage'); // fire-and-forget: don't block the UI load on this
         try {
             const cached = localStorage.getItem(VERBIAGE_KEY);
             if (cached) {
@@ -1088,11 +1098,11 @@
     // GITHUB PUBLISH (Option 2a — token pasted at runtime, memory-only)
     // =====================================================================
     function ghHeaders() {
-        return {
-            'Authorization': 'Bearer ' + githubToken,
-            'Accept': 'application/vnd.github+json',
-            'X-GitHub-Api-Version': '2022-11-28'
-        };
+        const h = { 'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' };
+        // Omit Authorization when no token is pasted yet — lets us read (public repo, unauthenticated)
+        // baseline SHAs before an admin has entered a token, without sending a literal "Bearer null".
+        if (githubToken) h['Authorization'] = 'Bearer ' + githubToken;
+        return h;
     }
     function ghContentsUrl(path) {
         const { owner, repo } = GITHUB_CONFIG;
@@ -1110,9 +1120,20 @@
         const data = await res.json();
         return data.sha;
     }
-    // Commit one file (create or update).
-    async function ghPutFile(path, contentString, message) {
-        const sha = await ghGetSha(path);
+    // Snapshot the current GitHub SHA for a dataset the moment this admin loads/reloads it, so a
+    // later publish can detect whether someone else has published a newer version in between.
+    // Works unauthenticated (public repo) so it captures even before a token is pasted.
+    async function captureBaselineSha(kind) {
+        try { datasetBaselines[kind] = await ghGetSha(GITHUB_TARGETS[kind][0]); }
+        catch (e) { datasetBaselines[kind] = undefined; }
+    }
+    // Commit one file (create or update). baselineSha, when provided (string or null), is used
+    // as-is instead of re-fetching the SHA — re-fetching right before the PUT would always see the
+    // latest commit and defeat GitHub's own conflict check, silently overwriting another admin's
+    // concurrent publish. Passing the SHA captured at load time lets GitHub reject (409) a PUT
+    // that's based on stale data instead of accepting it.
+    async function ghPutFile(path, contentString, message, baselineSha) {
+        const sha = (baselineSha !== undefined) ? baselineSha : await ghGetSha(path);
         const body = {
             message,
             content: b64(contentString),
@@ -1123,6 +1144,11 @@
         if (!res.ok) {
             let detail = '';
             try { detail = (await res.json()).message || ''; } catch (e) {}
+            if (res.status === 409) {
+                const err = new Error('Another admin published changes to ' + path + ' since you loaded it. Click "Reload" to pick up their version, then redo your edits before publishing again — publishing now would overwrite their update.');
+                err.conflict = true;
+                throw err;
+            }
             throw new Error('Commit failed for ' + path + ' (HTTP ' + res.status + (detail ? ': ' + detail : '') + ')');
         }
         return res.json();
@@ -1134,11 +1160,64 @@
         const content = JSON.stringify(dataObj, null, 2);
         const stamp = new Date().toISOString();
         const results = [];
+        let lastSha;
         for (const p of paths) {
-            const r = await ghPutFile(p, content, `Admin panel: update ${kind} (${stamp})`);
+            const r = await ghPutFile(p, content, `Admin panel: update ${kind} (${stamp})`, datasetBaselines[kind]);
             results.push({ path: p, commit: r.commit && r.commit.html_url });
+            lastSha = r.content && r.content.sha;
         }
+        datasetBaselines[kind] = lastSha; // this publish is now the new baseline for this session
         return results;
+    }
+
+    // =====================================================================
+    // LIGHTWEIGHT POLLING — warns an open admin panel when another admin has
+    // published a dataset it already loaded, so a conflict shows up before a
+    // failed Publish click, not only after one.
+    // =====================================================================
+    let staleKinds = new Set();
+    const KIND_LABELS = { parts: 'Parts', worth: 'Worth', verbiage: 'Verbiage' };
+    const KIND_RELOAD_BTN = { parts: 'reload-db', worth: 'reload-worth-db', verbiage: 'vb-reload' };
+
+    function renderSyncBanner() {
+        const el = document.getElementById('sync-banner');
+        if (!el) return;
+        if (!staleKinds.size) { el.style.display = 'none'; el.innerHTML = ''; return; }
+        const names = [...staleKinds].map(k => KIND_LABELS[k]).join(', ');
+        const links = [...staleKinds].map(k =>
+            '<a href="#" data-kind="' + k + '" class="sync-reload-link"><strong>Reload ' + KIND_LABELS[k] + '</strong></a>'
+        ).join(' &middot; ');
+        el.innerHTML = '⚠ Another admin published ' + names + ' since you loaded it — publishing now would be rejected. ' +
+            links + ' &middot; <a href="#" id="sync-dismiss">Dismiss</a>';
+        el.style.display = 'block';
+        el.querySelectorAll('.sync-reload-link').forEach(a => {
+            a.addEventListener('click', (e) => {
+                e.preventDefault();
+                const kind = a.dataset.kind;
+                const btn = document.getElementById(KIND_RELOAD_BTN[kind]);
+                if (btn) btn.click();
+                staleKinds.delete(kind);
+                renderSyncBanner();
+            });
+        });
+        const dismiss = document.getElementById('sync-dismiss');
+        if (dismiss) dismiss.addEventListener('click', (e) => { e.preventDefault(); staleKinds.clear(); renderSyncBanner(); });
+    }
+
+    // Checks only datasets THIS admin has actually loaded (datasetBaselines[kind] !== undefined) —
+    // no point warning about a tab they haven't opened yet. Rebuilt fresh each tick so a kind drops
+    // off the banner on its own once its baseline catches back up (reload, or this admin's own publish).
+    async function pollForRemoteChanges() {
+        const next = new Set();
+        for (const kind of Object.keys(GITHUB_TARGETS)) {
+            if (datasetBaselines[kind] === undefined) continue;
+            try {
+                const liveSha = await ghGetSha(GITHUB_TARGETS[kind][0]);
+                if (liveSha !== datasetBaselines[kind]) next.add(kind);
+            } catch (e) {}
+        }
+        staleKinds = next;
+        renderSyncBanner();
     }
 
     function initGithubPublish() {
@@ -1162,10 +1241,11 @@
             setStatus('gh-status', 'warn', 'Publishing ' + kind + '… committing ' + GITHUB_TARGETS[kind].length + ' file(s).');
             try {
                 const results = await ghPublishDataset(kind, data);
+                staleKinds.delete(kind); renderSyncBanner(); // this publish is now current, no need to wait for the next poll
                 const links = results.map(r => r.commit ? ('<a href="' + r.commit + '" target="_blank">' + r.path + '</a>') : r.path).join('<br>');
                 setStatus('gh-status', 'ok', 'Published ' + kind + '. Commits:<br>' + links + '<br><span class="muted">Pages will rebuild shortly; reload the tools to see changes.</span>');
             } catch (e) {
-                setStatus('gh-status', 'err', 'Publish failed: ' + e.message);
+                setStatus('gh-status', 'err', e.conflict ? e.message : ('Publish failed: ' + e.message));
             }
         }
 
@@ -1207,6 +1287,7 @@
             renderDBSummary(activeWorthDB, 'active-worth-db-summary', 'active-worth-db-status'); pePopulateModels();
             setStatus('active-worth-db-status', 'ok', 'Override cleared.');
         });
+        setInterval(pollForRemoteChanges, 45000);
     }
     </script>
 </body>
