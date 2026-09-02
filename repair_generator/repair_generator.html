@@ -630,7 +630,7 @@
 
         const partsList = formatPartsList(orderedPartNames);
         const hasParts  = orderedPartNames.length > 0;
-        const partsListText = hasParts ? partsList : 'NONE';
+        const partsListText = hasParts ? partsList : '';
 
         let reportText = '';
 
@@ -638,11 +638,11 @@
         const activeModifierCount = [cannotVerify, fixedWithoutParts, batteryOow, richlandImaging, unionNeedsOs, reseatedReplaced].filter(Boolean).length;
 
         // Helper strings
-        const replaced  = hasParts ? `REPLACED ${partsList}.` : 'NONE.';
-        const reseated  = hasParts ? `RESEATED ${partsList}.` : 'NONE.';
+        const replaced  = hasParts ? `REPLACED ${partsList}.` : '';
+        const reseated  = hasParts ? `RESEATED ${partsList}.` : '';
 
         if (activeModifierCount === 0 && !hasParts) {
-            reportText = 'REPAIRS COMPLETED: NONE. UNIT IS FULLY FUNCTIONAL.';
+            reportText = '';
 
         // --- Single modifiers ---
         } else if (activeModifierCount === 0) {
