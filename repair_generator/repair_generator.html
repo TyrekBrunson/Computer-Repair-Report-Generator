@@ -630,7 +630,6 @@
 
         const partsList = formatPartsList(orderedPartNames);
         const hasParts  = orderedPartNames.length > 0;
-        const partsListText = hasParts ? partsList : '';
 
         let reportText = '';
 
@@ -640,6 +639,7 @@
         // Helper strings
         const replaced  = hasParts ? `REPLACED ${partsList}.` : '';
         const reseated  = hasParts ? `RESEATED ${partsList}.` : '';
+        const replacedPartText = hasParts ? `REPLACED ${partsList}. ` : '';
 
         if (activeModifierCount === 0 && !hasParts) {
             reportText = '';
@@ -661,7 +661,7 @@
                 reportText = `REPAIRS COMPLETED: ${replaced} NEEDS OPERATING SYSTEM INSTALLED. OTHER THAN NEEDING OS, THE UNIT IS FULLY FUNCTIONAL.`.trim();
             } else if (reseatedReplaced) {
                 const rl = reseatedItem || 'COMPONENTS';
-                reportText = `REPAIRS COMPLETED: RESEATED ${rl}. REPLACED ${partsListText}. UNIT IS FULLY FUNCTIONAL.`.trim();
+                reportText = `REPAIRS COMPLETED: RESEATED ${rl}. ${replacedPartText}UNIT IS FULLY FUNCTIONAL.`.trim();
             }
 
         // --- Two modifier combinations ---
@@ -695,19 +695,19 @@
 
             } else if (reseatedReplaced && cannotVerify) {
                 const rl = reseatedItem || 'COMPONENTS';
-                reportText = `REPAIRS COMPLETED: RESEATED ${rl}. REPLACED ${partsListText}. RAN FULL DIAGNOSTICS. CANNOT REPLICATE CUSTOMER INITIAL ISSUE. UNIT IS FULLY FUNCTIONAL.`.trim();
+                reportText = `REPAIRS COMPLETED: RESEATED ${rl}. ${replacedPartText}RAN FULL DIAGNOSTICS. CANNOT REPLICATE CUSTOMER INITIAL ISSUE. UNIT IS FULLY FUNCTIONAL.`.trim();
 
             } else if (reseatedReplaced && batteryOow) {
                 const rl = reseatedItem || 'COMPONENTS';
-                reportText = `REPAIRS COMPLETED: RESEATED ${rl}. REPLACED ${partsListText}. BATTERY IS OUT OF WARRANTY. RECOMMEND CUSTOMER TO REPLACE CURRENT BATTERY SOON. UNIT IS OTHERWISE, FULLY FUNCTIONAL.`.trim();
+                reportText = `REPAIRS COMPLETED: RESEATED ${rl}. ${replacedPartText}BATTERY IS OUT OF WARRANTY. RECOMMEND CUSTOMER TO REPLACE CURRENT BATTERY SOON. UNIT IS OTHERWISE, FULLY FUNCTIONAL.`.trim();
 
             } else if (reseatedReplaced && richlandImaging) {
                 const rl = reseatedItem || 'COMPONENTS';
-                reportText = `REPAIRS COMPLETED: RESEATED ${rl}. REPLACED ${partsListText}. DEVICE IS AWAITING IMAGING.`.trim();
+                reportText = `REPAIRS COMPLETED: RESEATED ${rl}. ${replacedPartText}DEVICE IS AWAITING IMAGING.`.trim();
 
             } else if (reseatedReplaced && unionNeedsOs) {
                 const rl = reseatedItem || 'COMPONENTS';
-                reportText = `REPAIRS COMPLETED: RESEATED ${rl}. REPLACED ${partsListText}. NEEDS OPERATING SYSTEM INSTALLED. OTHER THAN NEEDING OS, THE UNIT IS FULLY FUNCTIONAL.`.trim();
+                reportText = `REPAIRS COMPLETED: RESEATED ${rl}. ${replacedPartText}NEEDS OPERATING SYSTEM INSTALLED. OTHER THAN NEEDING OS, THE UNIT IS FULLY FUNCTIONAL.`.trim();
 
             } else {
                 alert('Verbiage Modifier Combination not possible!');
@@ -733,23 +733,23 @@
 
             } else if (reseatedReplaced && cannotVerify && batteryOow && !richlandImaging && !unionNeedsOs && !fixedWithoutParts) {
                 const rl = reseatedItem || 'COMPONENTS';
-                reportText = `REPAIRS COMPLETED: RESEATED ${rl}. REPLACED ${partsListText}. RAN FULL DIAGNOSTICS. CANNOT REPLICATE CUSTOMER INITIAL ISSUE. BATTERY IS OUT OF WARRANTY. RECOMMEND CUSTOMER TO REPLACE CURRENT BATTERY SOON. UNIT IS OTHERWISE, FULLY FUNCTIONAL.`.trim();
+                reportText = `REPAIRS COMPLETED: RESEATED ${rl}. ${replacedPartText}RAN FULL DIAGNOSTICS. CANNOT REPLICATE CUSTOMER INITIAL ISSUE. BATTERY IS OUT OF WARRANTY. RECOMMEND CUSTOMER TO REPLACE CURRENT BATTERY SOON. UNIT IS OTHERWISE, FULLY FUNCTIONAL.`.trim();
 
             } else if (reseatedReplaced && cannotVerify && unionNeedsOs && !richlandImaging && !batteryOow && !fixedWithoutParts) {
                 const rl = reseatedItem || 'COMPONENTS';
-                reportText = `REPAIRS COMPLETED: RESEATED ${rl}. REPLACED ${partsListText}. RAN FULL DIAGNOSTICS. CANNOT REPLICATE CUSTOMER INITIAL ISSUE. NEEDS OPERATING SYSTEM INSTALLED. OTHER THAN NEEDING OS, THE UNIT IS FULLY FUNCTIONAL.`.trim();
+                reportText = `REPAIRS COMPLETED: RESEATED ${rl}. ${replacedPartText}RAN FULL DIAGNOSTICS. CANNOT REPLICATE CUSTOMER INITIAL ISSUE. NEEDS OPERATING SYSTEM INSTALLED. OTHER THAN NEEDING OS, THE UNIT IS FULLY FUNCTIONAL.`.trim();
 
             } else if (reseatedReplaced && cannotVerify && richlandImaging && !unionNeedsOs && !batteryOow && !fixedWithoutParts) {
                 const rl = reseatedItem || 'COMPONENTS';
-                reportText = `REPAIRS COMPLETED: RESEATED ${rl}. REPLACED ${partsListText}. RAN FULL DIAGNOSTICS. CANNOT REPLICATE CUSTOMER INITIAL ISSUE. DEVICE IS AWAITING IMAGING.`.trim();
+                reportText = `REPAIRS COMPLETED: RESEATED ${rl}. ${replacedPartText}RAN FULL DIAGNOSTICS. CANNOT REPLICATE CUSTOMER INITIAL ISSUE. DEVICE IS AWAITING IMAGING.`.trim();
 
             } else if (reseatedReplaced && batteryOow && richlandImaging && !cannotVerify && !unionNeedsOs && !fixedWithoutParts) {
                 const rl = reseatedItem || 'COMPONENTS';
-                reportText = `REPAIRS COMPLETED: RESEATED ${rl}. REPLACED ${partsListText}. BATTERY IS OUT OF WARRANTY. RECOMMEND CUSTOMER TO REPLACE CURRENT BATTERY SOON. DEVICE IS AWAITING IMAGING.`.trim();
+                reportText = `REPAIRS COMPLETED: RESEATED ${rl}. ${replacedPartText}BATTERY IS OUT OF WARRANTY. RECOMMEND CUSTOMER TO REPLACE CURRENT BATTERY SOON. DEVICE IS AWAITING IMAGING.`.trim();
 
             } else if (reseatedReplaced && batteryOow && unionNeedsOs && !cannotVerify && !richlandImaging && !fixedWithoutParts) {
                 const rl = reseatedItem || 'COMPONENTS';
-                reportText = `REPAIRS COMPLETED: RESEATED ${rl}. REPLACED ${partsListText}. BATTERY IS OUT OF WARRANTY. RECOMMEND CUSTOMER TO REPLACE CURRENT BATTERY SOON. NEEDS OPERATING SYSTEM INSTALLED. OTHER THAN NEEDING OS AND BATTERY, THE UNIT IS FULLY FUNCTIONAL.`.trim();
+                reportText = `REPAIRS COMPLETED: RESEATED ${rl}. ${replacedPartText}BATTERY IS OUT OF WARRANTY. RECOMMEND CUSTOMER TO REPLACE CURRENT BATTERY SOON. NEEDS OPERATING SYSTEM INSTALLED. OTHER THAN NEEDING OS AND BATTERY, THE UNIT IS FULLY FUNCTIONAL.`.trim();
 
             } else {
                 alert('Verbiage Modifier Combination not possible!');
@@ -766,11 +766,11 @@
 
             } else if (reseatedReplaced && cannotVerify && batteryOow && unionNeedsOs && !richlandImaging && !fixedWithoutParts) {
                 const rl = reseatedItem || 'COMPONENTS';
-                reportText = `REPAIRS COMPLETED: RESEATED ${rl}. REPLACED ${partsListText}. RAN FULL DIAGNOSTICS. CANNOT REPLICATE CUSTOMER INITIAL ISSUE. BATTERY IS OUT OF WARRANTY. RECOMMEND CUSTOMER TO REPLACE CURRENT BATTERY SOON. NEEDS OPERATING SYSTEM INSTALLED. OTHER THAN NEEDING OS AND BATTERY, THE UNIT IS FULLY FUNCTIONAL.`.trim();
+                reportText = `REPAIRS COMPLETED: RESEATED ${rl}. ${replacedPartText}RAN FULL DIAGNOSTICS. CANNOT REPLICATE CUSTOMER INITIAL ISSUE. BATTERY IS OUT OF WARRANTY. RECOMMEND CUSTOMER TO REPLACE CURRENT BATTERY SOON. NEEDS OPERATING SYSTEM INSTALLED. OTHER THAN NEEDING OS AND BATTERY, THE UNIT IS FULLY FUNCTIONAL.`.trim();
 
             } else if (reseatedReplaced && cannotVerify && batteryOow && richlandImaging && !unionNeedsOs && !fixedWithoutParts) {
                 const rl = reseatedItem || 'COMPONENTS';
-                reportText = `REPAIRS COMPLETED: RESEATED ${rl}. REPLACED ${partsListText}. RAN FULL DIAGNOSTICS. CANNOT REPLICATE CUSTOMER INITIAL ISSUE. BATTERY IS OUT OF WARRANTY. RECOMMEND CUSTOMER TO REPLACE CURRENT BATTERY SOON. DEVICE IS AWAITING IMAGING.`.trim();
+                reportText = `REPAIRS COMPLETED: RESEATED ${rl}. ${replacedPartText}RAN FULL DIAGNOSTICS. CANNOT REPLICATE CUSTOMER INITIAL ISSUE. BATTERY IS OUT OF WARRANTY. RECOMMEND CUSTOMER TO REPLACE CURRENT BATTERY SOON. DEVICE IS AWAITING IMAGING.`.trim();
 
             } else {
                 alert('Verbiage Modifier Combination not possible!');
