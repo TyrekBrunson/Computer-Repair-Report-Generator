@@ -16,6 +16,9 @@
         "lat3120-2in1",
         "latitude 3120 2-in-1"
       ],
+      "districts": [
+        "richland"
+      ],
       "parts": [
         {
           "partNumber": "W-FWJTG",
@@ -247,6 +250,9 @@
         "lat3140-2in1",
         "latitude 3140 2-in-1"
       ],
+      "districts": [
+        "richland"
+      ],
       "parts": [
         {
           "partNumber": "W-FWJTG",
@@ -465,6 +471,9 @@
         "lat3310-2in1",
         "latitude 3310 2-in-1"
       ],
+      "districts": [
+        "richland"
+      ],
       "parts": [
         {
           "partNumber": "W-P8MR0",
@@ -505,7 +514,7 @@
           "partNumber": "W-CYNK0",
           "description": "Battery Cable",
           "coverage": "Worth",
-          "price": 0.0,
+          "price": 0,
           "canonical": "BATTERY CABLE"
         },
         {
@@ -540,7 +549,7 @@
           "partNumber": "W-06YWWH",
           "description": "Junction Circuit Board for Keyboard Palmrest",
           "coverage": "Worth",
-          "price": 25.0,
+          "price": 25,
           "canonical": "DAUGHTERBOARD"
         },
         {
@@ -610,7 +619,7 @@
           "partNumber": "W-0V976R",
           "description": "Web Camera",
           "coverage": "Worth",
-          "price": 24.0,
+          "price": 24,
           "canonical": "WEBCAM"
         },
         {
@@ -745,6 +754,9 @@
         "lat3330-2in1",
         "latitude 3330 2-in-1"
       ],
+      "districts": [
+        "richland"
+      ],
       "parts": [
         {
           "partNumber": "W-FWJTG",
@@ -799,7 +811,7 @@
           "partNumber": "W-08RJ93",
           "description": "Motherboard - 16 GB RAM - 2.6 GHz Quad Core I5-1145G7",
           "coverage": "Worth",
-          "price": 300.0,
+          "price": 300,
           "canonical": "MOTHERBOARD"
         },
         {
@@ -913,6 +925,9 @@
         "lat3340",
         "latitude 3340"
       ],
+      "districts": [
+        "richland"
+      ],
       "parts": [
         {
           "partNumber": "W-6CVCT",
@@ -962,6 +977,9 @@
         "dell pro 14 pc14250",
         "dp14pc14250"
       ],
+      "districts": [
+        "richland"
+      ],
       "parts": [
         {
           "partNumber": "W-06G9K1",
@@ -974,7 +992,7 @@
           "partNumber": "W-W1KKY",
           "description": "16GB 5600MHz DDR5 RAM",
           "coverage": "Worth",
-          "price": 350.0,
+          "price": 350,
           "canonical": "RAM"
         },
         {
@@ -995,7 +1013,7 @@
           "partNumber": "W-GPR8R",
           "description": "Bottom Cover (Black)",
           "coverage": "Worth",
-          "price": 25.0,
+          "price": 25,
           "canonical": "BOTTOM COVER"
         },
         {
@@ -1023,7 +1041,7 @@
           "partNumber": "W-4K95G",
           "description": "CPU Heatsink Assembly",
           "coverage": "Worth",
-          "price": 35.0,
+          "price": 35,
           "canonical": "HEATSINK"
         },
         {
@@ -1044,7 +1062,7 @@
           "partNumber": "W-3RX17",
           "description": "Keyboard",
           "coverage": "Worth",
-          "price": 19.0,
+          "price": 19,
           "canonical": "KEYBOARD"
         },
         {
@@ -1065,7 +1083,7 @@
           "partNumber": "W-CXJXR",
           "description": "Motherboard",
           "coverage": "Worth",
-          "price": 475.0,
+          "price": 475,
           "canonical": "MOTHERBOARD"
         },
         {
@@ -1107,7 +1125,7 @@
           "partNumber": "W-G4CV4",
           "description": "Touch LCD Cable",
           "coverage": "Worth",
-          "price": 16.0,
+          "price": 16,
           "canonical": "LCD CABLE"
         },
         {
@@ -1216,6 +1234,16 @@
           "canonical": "WIFI CARD"
         }
       ]
+    },
+    "Dell Pro 11": {
+      "aliases": [
+        "dell pro 11",
+        "dp11"
+      ],
+      "districts": [
+        "richland"
+      ],
+      "parts": []
     }
   }
 }

@@ -43,76 +43,7 @@
 
     <div class="input-section">
         <h2>Device Selection</h2>
-        <div class="device-selection-grid">
-            <div class="device-family-column">
-                <h3>Anderson / Ft. Mill</h3>
-                <div class="CB3110-option">
-                    <input type="radio" name="device-selection" id="CB3110-checkbox" data-district="anderson">
-                    <label for="CB3110-checkbox">Chromebook 3110</label>
-                </div>
-                <div class="CB3120-option">
-                    <input type="radio" name="device-selection" id="CB3120-checkbox" data-district="anderson">
-                    <label for="CB3120-checkbox">Chromebook 3120</label>
-                </div>
-                <div class="CB3110-2in1-option">
-                    <input type="radio" name="device-selection" id="CB3110-2in1-checkbox" data-district="anderson">
-                    <label for="CB3110-2in1-checkbox">Chromebook 3110 2-in-1</label>
-                </div>
-                <div class="CB3120-2in1-option">
-                    <input type="radio" name="device-selection" id="CB3120-2in1-checkbox" data-district="anderson">
-                    <label for="CB3120-2in1-checkbox">Chromebook 3120 2-in-1</label>
-                </div>
-            </div>
-
-            <div class="device-family-column">
-                <h3>Richland 1</h3>
-
-                <div class="Lat3120-2in1-option">
-                    <input type="radio" name="device-selection" id="Lat3120-2in1-checkbox" data-district="richland">
-                    <label for="Lat3120-2in1-checkbox">Latitude 3120 2-in-1</label>
-                </div>
-                <div class="Lat3140-2in1-option">
-                    <input type="radio" name="device-selection" id="Lat3140-2in1-checkbox" data-district="richland">
-                    <label for="Lat3140-2in1-checkbox">Latitude 3140 2-in-1</label>
-                </div>
-                <div class="Lat3310-2in1-option">
-                    <input type="radio" name="device-selection" id="Lat3310-2in1-checkbox" data-district="richland">
-                    <label for="Lat3310-2in1-checkbox">Latitude 3310 2-in-1</label>
-                </div>
-                <div class="Lat3330-2in1-option">
-                    <input type="radio" name="device-selection" id="Lat3330-2in1-checkbox" data-district="richland">
-                    <label for="Lat3330-2in1-checkbox">Latitude 3330 2-in-1</label>
-                </div>
-                <div class="DP11-option">
-                    <input type="radio" name="device-selection" id="DP11-checkbox" data-district="richland">
-                    <label for="DP11-checkbox">Dell Pro 11</label>
-                </div>
-                <div class="DP14-option">
-                    <input type="radio" name="device-selection" id="DP14-checkbox" data-district="richland">
-                    <label for="DP14-checkbox">Dell Pro 14</label>
-                </div>
-            </div>
-
-            <div class="device-family-column">
-                <h3>Union</h3>
-                <div class="Lat3120-option">
-                    <input type="radio" name="device-selection" id="Lat3120-checkbox" data-district="union">
-                    <label for="Lat3120-checkbox">Latitude 3120</label>
-                </div>
-                <div class="Lat3140-option">
-                    <input type="radio" name="device-selection" id="Lat3140-checkbox" data-district="union">
-                    <label for="Lat3140-checkbox">Latitude 3140</label>
-                </div>
-                <div class="Lat3120-2in1-option">
-                    <input type="radio" name="device-selection" id="Lat3120-2in1-Union-checkbox" data-district="union">
-                    <label for="Lat3120-2in1-Union-checkbox">Latitude 3120 2-in-1</label>
-                </div>
-                <div class="Lat3140-2in1-option">
-                    <input type="radio" name="device-selection" id="Lat3140-2in1-Union-checkbox" data-district="union">
-                    <label for="Lat3140-2in1-Union-checkbox">Latitude 3140 2-in-1</label>
-                </div>
-            </div>
-        </div>
+        <div class="device-selection-grid" id="device-selection-grid"></div>
 
         <h2>Report Details</h2>
         <label for="unit-description"><b>Initial Issue:</b></label>
@@ -243,26 +174,64 @@
     let WORTH_DB = null; // Richland 1 / Worth-Provided catalog — only covers a subset of models
     let selectedModelKey = null;
 
-    // Device radio id -> alias token used in A5_FM_U_parts.json
-    const RADIO_TO_ALIAS = {
-        'CB3110-checkbox': 'cb3110',
-        'CB3120-checkbox': 'cb3120',
-        'CB3110-2in1-checkbox': 'cb3110-2in1',
-        'CB3120-2in1-checkbox': 'cb3120-2in1',
-        'Lat3120-checkbox': 'lat3120',
-        'Lat3140-checkbox': 'lat3140',
-        'Lat3120-2in1-checkbox': 'lat3120-2in1',
-        'Lat3140-2in1-checkbox': 'lat3140-2in1',
-        'Lat3310-2in1-checkbox': 'lat3310-2in1',
-        'Lat3330-2in1-checkbox': 'lat3330-2in1',
-        'DP11-checkbox': 'dp11',
-        'DP14-checkbox': 'dp14pc14250',
-        // Same physical devices/parts catalog as their Richland 1 counterparts above —
-        // only the district (see data-district on the radio) differs, which is what now
-        // drives automatic Worth-mode behavior instead of the old manual checkbox.
-        'Lat3120-2in1-Union-checkbox': 'lat3120-2in1',
-        'Lat3140-2in1-Union-checkbox': 'lat3140-2in1'
-    };
+    // Device Selection grid is built from the parts catalogs themselves (see
+    // buildDeviceSelectionGrid, called once both are loaded) — each model's own
+    // "districts" list decides which column(s) its button appears under, so adding a
+    // model in admin.html is enough to make it selectable here too.
+    const DISTRICT_COLUMNS = [
+        { key: 'anderson', label: 'Anderson / Ft. Mill' },
+        { key: 'richland', label: 'Richland 1' },
+        { key: 'union', label: 'Union' }
+    ];
+
+    // Dell Pro has no dedicated verbiage/issue section of its own, so it resolves to the
+    // 'Latitude' family — the section it shares. Derived from the model name directly
+    // (rather than a compacted alias) so it doesn't depend on alias ordering/format.
+    function deviceFamilyForModelName(name) {
+        const n = (name || '').toLowerCase();
+        if (n.startsWith('chromebook')) return 'Chromebook';
+        if (n.startsWith('latitude') || n.startsWith('dell pro')) return 'Latitude';
+        return null;
+    }
+
+    function slugifyForId(name) {
+        return String(name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-+|-+$)/g, '');
+    }
+
+    function buildDeviceSelectionGrid() {
+        const grid = document.getElementById('device-selection-grid');
+        if (!grid) return;
+
+        // A model can be defined in only one catalog (e.g. Richland/Worth-only devices like
+        // Latitude 3310 2-in-1) — merge both by name so its button still shows up, unioning
+        // districts in case the same model is tagged differently in each catalog.
+        const merged = {};
+        [PARTS_DB, WORTH_DB].forEach(db => {
+            if (!db || !db.models) return;
+            Object.entries(db.models).forEach(([name, data]) => {
+                if (!merged[name]) merged[name] = new Set();
+                (data.districts || []).forEach(d => merged[name].add(d));
+            });
+        });
+
+        grid.innerHTML = DISTRICT_COLUMNS.map(col => {
+            const rows = Object.entries(merged)
+                .filter(([, districts]) => districts.has(col.key))
+                .map(([name]) => {
+                    const id = `${col.key}-${slugifyForId(name)}-checkbox`;
+                    const family = deviceFamilyForModelName(name) || '';
+                    const safeName = name.replace(/"/g, '&quot;');
+                    return `<div>
+                    <input type="radio" name="device-selection" id="${id}" data-district="${col.key}" data-model="${safeName}" data-family="${family}">
+                    <label for="${id}">${name}</label>
+                </div>`;
+                }).join('');
+            return `<div class="device-family-column">
+                <h3>${col.label}</h3>
+                ${rows}
+            </div>`;
+        }).join('');
+    }
 
     async function loadPartsDB() {
         // The repo JSON file is the ONLY source of truth. Always fetch it fresh on every load.
@@ -336,7 +305,7 @@
     function getSelectedModelKey() {
         const checked = document.querySelector('input[name="device-selection"]:checked');
         if (!checked) return null;
-        return modelKeyForAlias(RADIO_TO_ALIAS[checked.id]);
+        return modelKeyForAlias(checked.getAttribute('data-model'));
     }
 
     // Replaces the old manual "Richland 1 / Worth Repair Contract" checkbox: the same model
@@ -355,7 +324,7 @@
         if (!isSelectedDeviceRichland()) return null;
         const checked = document.querySelector('input[name="device-selection"]:checked');
         if (!checked) return null;
-        return modelKeyForAliasIn(WORTH_DB, RADIO_TO_ALIAS[checked.id]);
+        return modelKeyForAliasIn(WORTH_DB, checked.getAttribute('data-model'));
     }
 
     // (model, canonical part, isAdp) -> best part-number match
@@ -769,11 +738,7 @@
     // no dedicated section of its own, so it resolves to 'Latitude' — the section it shares.
     function selectedIssueFamily() {
         const checked = document.querySelector('input[name="device-selection"]:checked');
-        if (!checked) return null;
-        const alias = RADIO_TO_ALIAS[checked.id] || '';
-        if (alias.startsWith('cb')) return 'Chromebook';
-        if (alias.startsWith('lat') || alias.startsWith('dp')) return 'Latitude';
-        return null;
+        return checked ? (checked.getAttribute('data-family') || null) : null;
     }
 
     // Shows only the verbiage group matching the selected device (both groups show when no
@@ -1158,6 +1123,7 @@
         await loadPartsDB();
         await loadWorthDB();
         await loadVerbiage();
+        buildDeviceSelectionGrid();
         buildDropdowns();
         updateIssueDeviceVisibility();
 

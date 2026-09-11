@@ -13,6 +13,9 @@
         "cb3110",
         "chromebook 3110"
       ],
+      "districts": [
+        "anderson"
+      ],
       "parts": [
         {
           "partNumber": "0YT39X",
@@ -240,6 +243,9 @@
         "cb3110-2in1",
         "chromebook 3110 2-in-1"
       ],
+      "districts": [
+        "anderson"
+      ],
       "parts": [
         {
           "partNumber": "YT39X",
@@ -368,6 +374,9 @@
       "aliases": [
         "cb3120",
         "chromebook 3120"
+      ],
+      "districts": [
+        "anderson"
       ],
       "parts": [
         {
@@ -504,6 +513,9 @@
       "aliases": [
         "cb3120-2in1",
         "chromebook 3120 2-in-1"
+      ],
+      "districts": [
+        "anderson"
       ],
       "parts": [
         {
@@ -718,6 +730,9 @@
         "lat3120",
         "latitude 3120"
       ],
+      "districts": [
+        "union"
+      ],
       "parts": [
         {
           "partNumber": "R1060",
@@ -903,6 +918,9 @@
         "lat3120-2in1",
         "latitude 3120 2-in-1"
       ],
+      "districts": [
+        "union"
+      ],
       "parts": [
         {
           "partNumber": "R4910",
@@ -1038,6 +1056,9 @@
       "aliases": [
         "lat3140",
         "latitude 3140"
+      ],
+      "districts": [
+        "union"
       ],
       "parts": [
         {
@@ -1230,6 +1251,9 @@
       "aliases": [
         "lat3140-2in1",
         "latitude 3140 2-in-1"
+      ],
+      "districts": [
+        "union"
       ],
       "parts": [
         {

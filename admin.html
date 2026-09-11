@@ -1016,7 +1016,15 @@
                 alert(`"${name}" already exists in the ${CATALOGS[peCatalog()].label} catalog.`);
                 return;
             }
-            db.models[name] = { aliases: modelAliases(name), parts: [] };
+            // Districts decide which Diagnostic Generator column(s) this model's button shows
+            // under. A model can span more than one (e.g. Latitude 3120 2-in-1 is both Richland
+            // 1 and Union today), so ask about each independently rather than a single choice.
+            const districts = [];
+            if (confirm(`Show "${name}" under the Anderson / Ft. Mill column in the Diagnostic Generator?`)) districts.push('anderson');
+            if (confirm(`Show "${name}" under the Richland 1 column in the Diagnostic Generator?`)) districts.push('richland');
+            if (confirm(`Show "${name}" under the Union column in the Diagnostic Generator?`)) districts.push('union');
+            if (!districts.length) alert(`"${name}" was created but won't show a button in the Diagnostic Generator since no district was picked. Delete and re-add it to assign one.`);
+            db.models[name] = { aliases: modelAliases(name), districts, parts: [] };
             pePopulateModels();
             document.getElementById('pe-model').value = name;
             peRenderTable();
