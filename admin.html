@@ -208,6 +208,8 @@
                         </select>
                     </label>
                     <label>Model: <select id="pe-model"></select></label>
+                    <button class="action secondary" id="pe-add-model">+ Add Model</button>
+                    <button class="action danger" id="pe-remove-model">🗑 Remove Model</button>
                     <input type="text" id="pe-filter" placeholder="filter parts...">
                     <button class="action secondary" id="pe-add-row">+ Add Part</button>
                     <button class="action" id="pe-save">💾 Save Changes</button>
@@ -1005,6 +1007,31 @@
     function initPartsEditor() {
         document.getElementById('pe-catalog').addEventListener('change', () => { pePopulateModels(); renderLookupTable(); });
         document.getElementById('pe-model').addEventListener('change', () => { peRenderTable(); renderLookupTable(); });
+        document.getElementById('pe-add-model').addEventListener('click', () => {
+            const db = getActiveDB(peCatalog());
+            if (!db || !db.models) return;
+            const name = (prompt('New model name (e.g. Latitude 5450):') || '').trim();
+            if (!name) return;
+            if (Object.keys(db.models).some(m => m.toLowerCase() === name.toLowerCase())) {
+                alert(`"${name}" already exists in the ${CATALOGS[peCatalog()].label} catalog.`);
+                return;
+            }
+            db.models[name] = { aliases: modelAliases(name), parts: [] };
+            pePopulateModels();
+            document.getElementById('pe-model').value = name;
+            peRenderTable();
+            renderLookupTable();
+        });
+        document.getElementById('pe-remove-model').addEventListener('click', () => {
+            const db = getActiveDB(peCatalog());
+            const model = document.getElementById('pe-model').value;
+            if (!db || !db.models || !db.models[model]) return;
+            const partCount = db.models[model].parts.length;
+            if (!confirm(`Remove model "${model}" and its ${partCount} part(s) from the ${CATALOGS[peCatalog()].label} catalog? This cannot be undone (use Save Changes to persist).`)) return;
+            delete db.models[model];
+            pePopulateModels();
+            renderLookupTable();
+        });
         const pf = document.getElementById('pe-filter');
         if (pf) pf.addEventListener('input', peRenderTable);
         document.getElementById('pe-add-row').addEventListener('click', () => {
