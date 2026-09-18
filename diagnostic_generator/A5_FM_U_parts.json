@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-08-11T01:10:55.000Z",
+    "generatedAt": "2026-09-18T19:24:13.626Z",
     "source": "Parts - FieldPower Parts Color Coded.xlsx",
     "catalog": "fieldpower",
     "schema": 2
@@ -1339,6 +1339,196 @@
           "coverage": "Dell Warranty",
           "price": null,
           "canonical": "MOTHERBOARD"
+        }
+      ]
+    },
+    "Chromebook 11 CC11260": {
+      "aliases": [
+        "1126",
+        "cb11cc11260",
+        "chromebook 11 cc11260"
+      ],
+      "districts": [
+        "anderson",
+        "richland",
+        "union"
+      ],
+      "parts": [
+        {
+          "partNumber": "0R5VG3",
+          "description": "Screen - Touch (*USE FOR BOTH ADP AND NON-ADP*)",
+          "canonical": "LCD SCREEN",
+          "category": "Warranty",
+          "adp": "NON_ADP",
+          "price": null,
+          "source": "Manual",
+          "notes": "",
+          "coverage": "ADP"
+        },
+        {
+          "partNumber": "0P5KP7",
+          "description": "LCD Bezel",
+          "canonical": "LCD BEZEL",
+          "category": "Warranty",
+          "adp": "NON_ADP",
+          "price": null,
+          "source": "Manual",
+          "notes": "",
+          "coverage": "ADP"
+        },
+        {
+          "partNumber": "027F79",
+          "description": "Top Cover",
+          "canonical": "TOP COVER",
+          "category": "Warranty",
+          "adp": "NON_ADP",
+          "price": null,
+          "source": "Manual",
+          "notes": "",
+          "coverage": "ADP"
+        },
+        {
+          "partNumber": "0KF2HJ",
+          "description": "Bottom Cover",
+          "canonical": "BOTTOM COVER",
+          "category": "Warranty",
+          "adp": "NON_ADP",
+          "price": null,
+          "source": "Manual",
+          "notes": "",
+          "coverage": "ADP"
+        },
+        {
+          "partNumber": "019FJ1",
+          "description": "Palmrest",
+          "canonical": "PALMREST",
+          "category": "Warranty",
+          "adp": "NON_ADP",
+          "price": null,
+          "source": "Manual",
+          "notes": "",
+          "coverage": "ADP"
+        },
+        {
+          "partNumber": "01NM3Y",
+          "description": "Keyboard",
+          "canonical": "KEYBOARD",
+          "category": "Warranty",
+          "adp": "NON_ADP",
+          "price": null,
+          "source": "Manual",
+          "notes": "",
+          "coverage": "ADP"
+        },
+        {
+          "partNumber": "0054H0",
+          "description": "Left Hinge",
+          "canonical": "LEFT HINGE",
+          "category": "Warranty",
+          "adp": "NON_ADP",
+          "price": null,
+          "source": "Manual",
+          "notes": "",
+          "coverage": "ADP"
+        },
+        {
+          "partNumber": "08X84C",
+          "description": "Right Hinge",
+          "canonical": "RIGHT HINGE",
+          "category": "Warranty",
+          "adp": "NON_ADP",
+          "price": null,
+          "source": "Manual",
+          "notes": "",
+          "coverage": "ADP"
+        },
+        {
+          "partNumber": "015KKX",
+          "description": "Speakers",
+          "canonical": "SPEAKERS",
+          "category": "Warranty",
+          "adp": "NON_ADP",
+          "price": null,
+          "source": "Manual",
+          "notes": "",
+          "coverage": "ADP"
+        },
+        {
+          "partNumber": "0MD7DY",
+          "description": "Daughterboard",
+          "canonical": "DAUGHTERBOARD",
+          "category": "Warranty",
+          "adp": "NON_ADP",
+          "price": null,
+          "source": "Manual",
+          "notes": "",
+          "coverage": "Dell Warranty"
+        },
+        {
+          "partNumber": "86RFC",
+          "description": "Battery",
+          "canonical": "BATTERY",
+          "category": "Warranty",
+          "adp": "NON_ADP",
+          "price": null,
+          "source": "Manual",
+          "notes": "",
+          "coverage": "Dell Warranty"
+        },
+        {
+          "partNumber": "01FT0X",
+          "description": "Battery Cable",
+          "canonical": "BATTERY CABLE",
+          "category": "Warranty",
+          "adp": "NON_ADP",
+          "price": null,
+          "source": "Manual",
+          "notes": "",
+          "coverage": "Dell Warranty"
+        },
+        {
+          "partNumber": "0W97PT",
+          "description": "LCD Cable",
+          "canonical": "LCD CABLE",
+          "category": "Warranty",
+          "adp": "NON_ADP",
+          "price": null,
+          "source": "Manual",
+          "notes": "",
+          "coverage": "Dell Warranty"
+        },
+        {
+          "partNumber": "00V2TV",
+          "description": "Webcam",
+          "canonical": "WEBCAM",
+          "category": "Warranty",
+          "adp": "NON_ADP",
+          "price": null,
+          "source": "Manual",
+          "notes": "",
+          "coverage": "Dell Warranty"
+        },
+        {
+          "partNumber": "097N23",
+          "description": "Motherboard, Intel N100 Quad Core Processor, 4GB RAM, 64GB EMMC Drive",
+          "canonical": "MOTHERBOARD",
+          "category": "Warranty",
+          "adp": "NON_ADP",
+          "price": null,
+          "source": "Manual",
+          "notes": "",
+          "coverage": "Dell Warranty"
+        },
+        {
+          "partNumber": "0WTRCH",
+          "description": "Motherboard, Intel N100 Quad Core Processor, 4GB RAM, 64GB EMMC Drive",
+          "canonical": "MOTHERBOARD",
+          "category": "Warranty",
+          "adp": "NON_ADP",
+          "price": null,
+          "source": "Manual",
+          "notes": "",
+          "coverage": "Dell Warranty"
         }
       ]
     }
