@@ -490,14 +490,16 @@
     function getActiveDB(cat) { return cat === 'worth' ? activeWorthDB : activeDB; }
     function setActiveDB(cat, db) { if (cat === 'worth') activeWorthDB = db; else activeDB = db; }
     async function loadActiveDB() {
+        const ov = loadOverride('parts');
+        if (ov) { activeDB = ov.data; datasetBaselines.parts = ov.baseSha; checkOverrideFreshness('parts'); return "override"; }
         captureBaselineSha('parts'); // fire-and-forget: don't block the UI load on this
-        try { const cached = localStorage.getItem(PARTS_DB_KEY); if (cached) { activeDB = JSON.parse(cached); return "override"; } } catch (e) {}
         try { const res = await fetch('diagnostic_generator/A5_FM_U_parts.json?v=' + Date.now(), { cache: 'no-store' }); if (res.ok) { activeDB = await res.json(); return "file"; } } catch (e) {}
         activeDB = null; return "none";
     }
     async function loadActiveWorthDB() {
+        const ov = loadOverride('worth');
+        if (ov) { activeWorthDB = ov.data; datasetBaselines.worth = ov.baseSha; checkOverrideFreshness('worth'); return "override"; }
         captureBaselineSha('worth');
-        try { const cached = localStorage.getItem(WORTH_DB_KEY); if (cached) { activeWorthDB = JSON.parse(cached); return "override"; } } catch (e) {}
         try { const res = await fetch('diagnostic_generator/r1_worth_parts.json?v=' + Date.now(), { cache: 'no-store' }); if (res.ok) { activeWorthDB = await res.json(); return "file"; } } catch (e) {}
         activeWorthDB = null; return "none";
     }
@@ -533,7 +535,7 @@
         fileInput.addEventListener('change', e => { if (e.target.files.length) handleFile(e.target.files[0]); });
         document.getElementById('apply-import-parts').addEventListener('click', (e) => {
             if (!importedDB) return;
-            localStorage.setItem(CATALOGS.parts.key, JSON.stringify(importedDB)); activeDB = importedDB;
+            saveOverride('parts', importedDB); activeDB = importedDB;
             setStatus('import-status', 'ok', 'Saved to the FieldPower catalog. All Web Center tools will now use this parts database.');
             renderDBSummary(activeDB, 'active-db-summary', 'active-db-status');
             flashSaved(e.currentTarget);
@@ -541,7 +543,7 @@
         document.getElementById('download-import-parts').addEventListener('click', () => { if (importedDB) downloadJSON(importedDB, CATALOGS.parts.filename); });
         document.getElementById('apply-import-worth').addEventListener('click', (e) => {
             if (!importedWorthDB) return;
-            localStorage.setItem(CATALOGS.worth.key, JSON.stringify(importedWorthDB)); activeWorthDB = importedWorthDB;
+            saveOverride('worth', importedWorthDB); activeWorthDB = importedWorthDB;
             setStatus('import-status', 'ok', 'Saved to the Richland 1 / Worth catalog. All Web Center tools will now use this parts database.');
             renderDBSummary(activeWorthDB, 'active-worth-db-summary', 'active-worth-db-status');
             flashSaved(e.currentTarget);
@@ -588,7 +590,7 @@
         document.getElementById('save-json').addEventListener('click', (e) => {
             const r = validateEditor(); if (!r.ok) return;
             const cat = editorCatalog();
-            localStorage.setItem(CATALOGS[cat].key, JSON.stringify(r.db)); setActiveDB(cat, r.db);
+            saveOverride(cat, r.db); setActiveDB(cat, r.db);
             setStatus('editor-status', 'ok', 'Saved to the ' + CATALOGS[cat].label + ' catalog. Tools will use this database.');
             const summaryId = cat === 'worth' ? 'active-worth-db-summary' : 'active-db-summary';
             const statusId = cat === 'worth' ? 'active-worth-db-status' : 'active-db-status';
@@ -764,14 +766,11 @@
     let verbiageData = null;     // { Device: { ADP|NON_ADP: { Category: [lines] } } }
 
     async function loadVerbiageData() {
+        const ov = loadOverride('verbiage');
+        if (ov && ov.data && Object.keys(ov.data).length) {
+            verbiageData = ov.data; datasetBaselines.verbiage = ov.baseSha; checkOverrideFreshness('verbiage'); return 'override';
+        }
         captureBaselineSha('verbiage'); // fire-and-forget: don't block the UI load on this
-        try {
-            const cached = localStorage.getItem(VERBIAGE_KEY);
-            if (cached) {
-                const p = JSON.parse(cached);
-                if (p && Object.keys(p).length) { verbiageData = p; return 'override'; }
-            }
-        } catch (e) {}
         try {
             const res = await fetch('diagnostic_generator/verbiage.json?v=' + Date.now(), { cache: 'no-store' });
             if (res.ok) { verbiageData = await res.json(); return 'file'; }
@@ -900,7 +899,7 @@
         });
 
         document.getElementById('vb-save').addEventListener('click', (e) => {
-            localStorage.setItem(VERBIAGE_KEY, JSON.stringify(verbiageData));
+            saveOverride('verbiage', verbiageData);
             setStatus('verbiage-status', 'ok', 'Saved. The Diagnostic Generator will use this verbiage.');
             flashSaved(e.currentTarget);
         });
@@ -1056,7 +1055,7 @@
             const db = getActiveDB(cat);
             if (!db) return;
             if (db.meta) db.meta.generatedAt = new Date().toISOString();
-            localStorage.setItem(CATALOGS[cat].key, JSON.stringify(db));
+            saveOverride(cat, db);
             const summaryId = cat === 'worth' ? 'active-worth-db-summary' : 'active-db-summary';
             const statusId = cat === 'worth' ? 'active-worth-db-status' : 'active-db-status';
             renderDBSummary(db, summaryId, statusId);
@@ -1071,8 +1070,8 @@
         // After emptying locally, optionally push the empty file(s) to the repo so the deletion
         // is real for EVERY device (the generators read the repo file first). Publishing needs a
         // token pasted on the Publish tab; if none is present we tell the user to go publish.
-        async function deleteAndOfferPublish(kind, emptyObj, storageKey, label) {
-            localStorage.setItem(storageKey, JSON.stringify(emptyObj));
+        async function deleteAndOfferPublish(kind, emptyObj, label) {
+            saveOverride(kind, emptyObj);
             if (kind === 'parts') { activeDB = emptyObj; renderDBSummary(activeDB, 'active-db-summary', 'active-db-status'); }
             if (kind === 'worth') { activeWorthDB = emptyObj; renderDBSummary(activeWorthDB, 'active-worth-db-summary', 'active-worth-db-status'); }
             if (kind === peCatalog()) pePopulateModels();
@@ -1095,18 +1094,18 @@
 
         document.getElementById('pe-delete-worth').addEventListener('click', () => {
             if (!confirm('Delete ALL Richland 1 / Worth part data?\n\nThis empties the Worth catalog (r1_worth_parts.json). FieldPower data is untouched. To make it gone for everyone you must Publish afterward.')) return;
-            deleteAndOfferPublish('worth', emptyCatalog({ meta: { generatedAt: new Date().toISOString(), source: 'RICHLAND 1 Worth-Provided (wiped)', catalog: 'richland1_worth', schema: 2 } }), WORTH_DB_KEY, 'Richland 1 / Worth data');
+            deleteAndOfferPublish('worth', emptyCatalog({ meta: { generatedAt: new Date().toISOString(), source: 'RICHLAND 1 Worth-Provided (wiped)', catalog: 'richland1_worth', schema: 2 } }), 'Richland 1 / Worth data');
         });
         document.getElementById('pe-delete-fieldpower').addEventListener('click', () => {
             if (!confirm('Delete ALL FieldPower (ADP/Warranty) part data?\n\nThis empties the FieldPower catalog (A5_FM_U_parts.json). Worth data is untouched. To make it gone for everyone you must Publish afterward.')) return;
-            deleteAndOfferPublish('parts', emptyCatalog({ canonicalParts: CANONICAL_PARTS, aliasMap: {} }), PARTS_DB_KEY, 'FieldPower data');
+            deleteAndOfferPublish('parts', emptyCatalog({ canonicalParts: CANONICAL_PARTS, aliasMap: {} }), 'FieldPower data');
         });
         document.getElementById('pe-delete-all').addEventListener('click', async () => {
             if (!confirm('Delete ALL part data from BOTH catalogs?\n\nEvery model and part in FieldPower AND Worth will be removed. To make it gone for everyone you must Publish afterward. This cannot be undone (re-import or reload to restore).')) return;
             const emptyParts = emptyCatalog({ canonicalParts: CANONICAL_PARTS, aliasMap: {} });
             const emptyWorth = emptyCatalog({ meta: { generatedAt: new Date().toISOString(), source: 'RICHLAND 1 Worth-Provided (wiped)', catalog: 'richland1_worth', schema: 2 } });
-            localStorage.setItem(PARTS_DB_KEY, JSON.stringify(emptyParts));
-            localStorage.setItem(WORTH_DB_KEY, JSON.stringify(emptyWorth));
+            saveOverride('parts', emptyParts);
+            saveOverride('worth', emptyWorth);
             activeDB = emptyParts; renderDBSummary(activeDB, 'active-db-summary', 'active-db-status');
             activeWorthDB = emptyWorth; renderDBSummary(activeWorthDB, 'active-worth-db-summary', 'active-worth-db-status');
             pePopulateModels();
@@ -1162,6 +1161,44 @@
         try { datasetBaselines[kind] = await ghGetSha(GITHUB_TARGETS[kind][0]); }
         catch (e) { datasetBaselines[kind] = undefined; }
     }
+    function overrideKeyFor(kind) { return kind === 'parts' ? PARTS_DB_KEY : kind === 'worth' ? WORTH_DB_KEY : VERBIAGE_KEY; }
+    // Writes a local draft tagged with the GitHub SHA it was branched from. This is what makes the
+    // 409 conflict check below actually work for local drafts, not just same-session edits: a plain
+    // localStorage.setItem(key, data) has no memory of which published version it started from, and
+    // captureBaselineSha() always fetches whatever SHA is live *right now* -- so a draft reloaded
+    // from an old localStorage entry would get published under a baseline that matches current
+    // HEAD, sailing past the 409 check even though its CONTENT was stale. That mismatch (fresh SHA,
+    // stale content) is exactly how the verbiage.json overwrites happened.
+    function saveOverride(kind, data) {
+        const baseSha = (datasetBaselines[kind] !== undefined) ? datasetBaselines[kind] : null;
+        localStorage.setItem(overrideKeyFor(kind), JSON.stringify({ __baseSha: baseSha, data }));
+    }
+    // Reads a draft written by saveOverride. baseSha === undefined means a draft saved before this
+    // safety check existed (or otherwise untagged) -- treated as unverified, never as "safe."
+    function loadOverride(kind) {
+        let cached;
+        try { cached = localStorage.getItem(overrideKeyFor(kind)); } catch (e) { return null; }
+        if (!cached) return null;
+        try {
+            const parsed = JSON.parse(cached);
+            if (parsed && typeof parsed === 'object' && '__baseSha' in parsed && 'data' in parsed) {
+                return { data: parsed.data, baseSha: parsed.__baseSha };
+            }
+            return { data: parsed, baseSha: undefined }; // legacy/untagged draft from before this fix
+        } catch (e) { return null; }
+    }
+    // Checks a just-loaded override against the live SHA right away instead of waiting for the next
+    // 45s poll, so the sync banner can catch a stale draft the moment its tab is opened. An
+    // untagged legacy draft (baseSha undefined) is always flagged, since its real origin is unknown.
+    async function checkOverrideFreshness(kind) {
+        try {
+            const liveSha = await ghGetSha(GITHUB_TARGETS[kind][0]);
+            if (datasetBaselines[kind] === undefined || liveSha !== datasetBaselines[kind]) {
+                staleKinds.add(kind);
+                renderSyncBanner();
+            }
+        } catch (e) {}
+    }
     // Commit one file (create or update). baselineSha, when provided (string or null), is used
     // as-is instead of re-fetching the SHA — re-fetching right before the PUT would always see the
     // latest commit and defeat GitHub's own conflict check, silently overwriting another admin's
@@ -1202,6 +1239,9 @@
             lastSha = r.content && r.content.sha;
         }
         datasetBaselines[kind] = lastSha; // this publish is now the new baseline for this session
+        // The live file now matches what was just published -- drop the local draft rather than
+        // let it linger and get treated as a starting point (correctly tagged or not) later.
+        localStorage.removeItem(overrideKeyFor(kind));
         return results;
     }
 
@@ -1269,6 +1309,10 @@
 
         async function publish(kind, getData) {
             if (!githubToken) { setStatus('gh-status', 'err', 'Paste a GitHub token first.'); return; }
+            if (datasetBaselines[kind] === undefined) {
+                setStatus('gh-status', 'err', 'Can\'t verify this ' + kind + ' draft is based on the current published file (its origin wasn\'t recorded, likely a draft saved before this check existed). Click "' + (KIND_RELOAD_BTN[kind] ? 'Reload' : 'Load') + '" on the ' + KIND_LABELS[kind] + ' tab, redo any edits, then publish again.');
+                return;
+            }
             const data = getData();
             if (!data || !Object.keys(data).length) { setStatus('gh-status', 'err', 'Nothing to publish — no ' + kind + ' data loaded.'); return; }
             const paths = GITHUB_TARGETS[kind].join(', ');

@@ -1210,6 +1210,16 @@
             window.location.reload();
         }
     }, 250);
+
+    // Catch-up check for a tab that was backgrounded through a 7:00/18:00 boundary -- the
+    // interval above can be throttled while hidden and miss it entirely (see
+    // missedScheduledRefresh in shared/refresh-menu.js). 'visibilitychange' fires reliably the
+    // instant the tab is looked at again, regardless of how long it was backgrounded.
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState !== 'visible') return;
+        const lastRefresh = Number(sessionStorage.getItem(REFRESH_STALE_KEY) || 0);
+        if (missedScheduledRefresh(lastRefresh)) window.location.reload();
+    });
 </script>
 <p class="auto-refresh-note">
     Man I shouldn't have access to this but here we are.

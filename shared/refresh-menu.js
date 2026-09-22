@@ -54,6 +54,17 @@ function getPreviousRefreshTime(now = new Date()) {
     return yesterday;
 }
 
+// True if a scheduled refresh boundary (7:00/18:00) has passed since lastRefreshMs. Used to
+// catch a tab up the instant it's looked at again: browsers throttle setInterval timers in
+// backgrounded tabs, so the boundary-crossing check in each page's own refresh interval can be
+// skipped entirely for a tab that was hidden across 7:00 or 18:00. A 'visibilitychange' listener
+// firing this check is reliable regardless of how long the tab was backgrounded, because that
+// event isn't subject to the same throttling as setInterval.
+function missedScheduledRefresh(lastRefreshMs) {
+    if (!lastRefreshMs) return false;
+    return lastRefreshMs < getPreviousRefreshTime(new Date()).getTime();
+}
+
 function updateRefreshCountdown() {
     const nextRefresh = getNextRefreshTime();
     const nextRefreshElement = document.getElementById('next-refresh-time');

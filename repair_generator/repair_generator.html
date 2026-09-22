@@ -909,6 +909,18 @@
             window.location.reload();
         }
     }, 250);
+
+    // Catch-up check for a tab that was backgrounded through a 7:00/18:00 boundary -- the
+    // interval above can be throttled while hidden and miss it entirely (see
+    // missedScheduledRefresh in shared/refresh-menu.js). 'visibilitychange' fires reliably the
+    // instant the tab is looked at again, regardless of how long it was backgrounded.
+    const REFRESH_STALE_KEY = 'repair-page-last-refresh';
+    sessionStorage.setItem(REFRESH_STALE_KEY, Date.now().toString());
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState !== 'visible') return;
+        const lastRefresh = Number(sessionStorage.getItem(REFRESH_STALE_KEY) || 0);
+        if (missedScheduledRefresh(lastRefresh)) window.location.reload();
+    });
 </script> 
     <button class="btn btn-primary" onclick="location.href='https://gist.githubusercontent.com/MattIPv4/045239bc27b16b2bcf7a3a9a4648c08a/raw/2411e31293a35f3e565f61e7490a806d4720ea7e/bee%2520movie%2520script'">
     Get Hacked
