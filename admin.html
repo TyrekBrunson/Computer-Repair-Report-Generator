@@ -65,22 +65,6 @@
         .pe-table td.del-cell { text-align: center; }
         .pe-del { background: #fdecea; color: #b71c1c; border: none; border-radius: 3px; padding: 3px 8px; cursor: pointer; font-size: 0.8em; }
         .pe-worth-badge { display:inline-block; background:#1e7e34; color:#fff; border-radius:8px; padding:0 6px; font-size:0.7em; margin-left:4px; }
-        /* Trello-style suggestions board */
-        .trello-board { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
-        .trello-col { background: #eef1f4; border-radius: 8px; padding: 10px; min-height: 120px; }
-        .trello-col h3 { margin: 0 0 8px; font-size: 0.9em; color: #0056b3; text-transform: uppercase; letter-spacing: 0.5px; }
-        .trello-col.dragover { outline: 2px dashed #0056b3; }
-        .trello-card { background: #fff; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.12); padding: 8px 10px; margin-bottom: 8px; font-size: 0.85em; cursor: grab; }
-        .trello-card .meta { font-size: 0.72em; color: #888; margin-bottom: 4px; }
-        .trello-card .type-tag { display:inline-block; padding:0 6px; border-radius:8px; font-size:0.7em; color:#fff; }
-        .trello-card .type-tag.bug { background:#b71c1c; }
-        .trello-card .type-tag.suggestion { background:#0056b3; }
-        .trello-card .type-tag.manual { background:#6c757d; }
-        .trello-card .card-actions { margin-top: 6px; display: flex; gap: 4px; flex-wrap: wrap; }
-        .trello-card .card-actions button { font-size: 0.7em; padding: 2px 7px; border: none; border-radius: 3px; cursor: pointer; background: #e9eef3; color: #0056b3; }
-        .trello-card .card-actions button.del { background: #fdecea; color: #b71c1c; }
-        .trello-count { color:#999; font-weight:normal; font-size:0.85em; }
-        @media (max-width: 700px) { .trello-board { grid-template-columns: 1fr 1fr; } }
     </style>
 </head>
 <body>
@@ -102,7 +86,6 @@
             <button class="tab-btn" data-tab="editor">JSON Editor</button>
             <button class="tab-btn" data-tab="lookup">Parts Editor</button>
             <button class="tab-btn" data-tab="verbiage">Verbiage Editor</button>
-            <button class="tab-btn" data-tab="suggestions">Suggestions Board</button>
             <button class="tab-btn" data-tab="publish">Publish</button>
         </div>
         <div class="tab-panel active" id="tab-parts">
@@ -268,21 +251,6 @@
             </div>
         </div>
 
-        <div class="tab-panel" id="tab-suggestions">
-            <div class="card">
-                <h2>Suggestions Board</h2>
-                <p class="muted">Ideas and bug reports from the Idea Box appear in <strong>Inbox</strong>. Promote good ones to
-                   <strong>Priority</strong>, mark them <strong>Done</strong>, or archive. Drag between columns or use the buttons.</p>
-                <div id="sugg-status"></div>
-                <div class="row-flex" style="margin-bottom:10px;">
-                    <button class="action secondary" id="sugg-refresh">↻ Refresh</button>
-                    <button class="action secondary" id="sugg-add">+ Add Card</button>
-                    <button class="action danger" id="sugg-clear">🗑 Clear all</button>
-                </div>
-                <div class="trello-board" id="trello-board"></div>
-            </div>
-        </div>
-
         <div class="tab-panel" id="tab-publish">
             <div class="card">
                 <h2>Publish to GitHub</h2>
@@ -346,7 +314,6 @@
     // if another admin has published a newer version in the meantime (see ghPutFile/ghPublishDataset).
     // undefined = not captured yet (falls back to old fetch-fresh behavior); null = file didn't exist.
     let datasetBaselines = { parts: undefined, worth: undefined, verbiage: undefined };
-    const SUGGESTIONS_KEY = 'ebryit_suggestions_v1';
     const ALIAS_RULES = [
         ["BATTERY CABLE", ["battery cable"]],
         ["BATTERY", ["battery", "laptop battery"]],
@@ -522,7 +489,6 @@
                 if (btn.dataset.tab === 'lookup') { pePopulateModels(); renderLookupTable(); }
                 if (btn.dataset.tab === 'editor') loadActiveIntoEditor();
                 if (btn.dataset.tab === 'verbiage') { ensureVerbiageLoaded(); }
-                if (btn.dataset.tab === 'suggestions') { loadSuggBoard(); renderSuggBoard(); }
             });
         });
     }
@@ -535,16 +501,22 @@
         fileInput.addEventListener('change', e => { if (e.target.files.length) handleFile(e.target.files[0]); });
         document.getElementById('apply-import-parts').addEventListener('click', (e) => {
             if (!importedDB) return;
-            saveOverride('parts', importedDB); activeDB = importedDB;
-            setStatus('import-status', 'ok', 'Saved to the FieldPower catalog. All Web Center tools will now use this parts database.');
+            const { db, newModelNames } = mergeImportedCatalog(activeDB, importedDB);
+            if (newModelNames.length) assignDistrictsInteractively(db, newModelNames);
+            saveOverride('parts', db); activeDB = db;
+            setStatus('import-status', 'ok', 'Saved to the FieldPower catalog. All Web Center tools will now use this parts database.' +
+                (newModelNames.length ? (' New model(s): ' + newModelNames.join(', ') + '.') : ''));
             renderDBSummary(activeDB, 'active-db-summary', 'active-db-status');
             flashSaved(e.currentTarget);
         });
         document.getElementById('download-import-parts').addEventListener('click', () => { if (importedDB) downloadJSON(importedDB, CATALOGS.parts.filename); });
         document.getElementById('apply-import-worth').addEventListener('click', (e) => {
             if (!importedWorthDB) return;
-            saveOverride('worth', importedWorthDB); activeWorthDB = importedWorthDB;
-            setStatus('import-status', 'ok', 'Saved to the Richland 1 / Worth catalog. All Web Center tools will now use this parts database.');
+            const { db, newModelNames } = mergeImportedCatalog(activeWorthDB, importedWorthDB);
+            if (newModelNames.length) assignDistrictsInteractively(db, newModelNames);
+            saveOverride('worth', db); activeWorthDB = db;
+            setStatus('import-status', 'ok', 'Saved to the Richland 1 / Worth catalog. All Web Center tools will now use this parts database.' +
+                (newModelNames.length ? (' New model(s): ' + newModelNames.join(', ') + '.') : ''));
             renderDBSummary(activeWorthDB, 'active-worth-db-summary', 'active-worth-db-status');
             flashSaved(e.currentTarget);
         });
@@ -575,6 +547,48 @@
         };
         reader.onerror = () => setStatus('import-status', 'err', 'Could not read file.');
         reader.readAsArrayBuffer(file);
+    }
+    // A spreadsheet import is an update/addition, not a full replacement -- buildFromWorkbook has
+    // no way to know a model's districts (which Diagnostic Generator column(s) its button shows
+    // under; see pe-add-model below), so a freshly-parsed model never has any. Applying it directly
+    // over the active catalog used to wipe every model's districts at once, not just the new one's
+    // -- every device button in the Diagnostic Generator disappeared after any import. Merging
+    // instead: existing models keep their districts (parts/description/canonical still come from
+    // the sheet), and a model missing from this particular file is left untouched rather than
+    // deleted -- that's what the dedicated Delete buttons are for.
+    function mergeImportedCatalog(existingDb, importedDb) {
+        const existingModels = (existingDb && existingDb.models) || {};
+        const merged = Object.assign({}, existingModels);
+        // Match names case/whitespace-insensitively (mirrors the duplicate check in pe-add-model
+        // below) -- a sheet's title cell re-typed with different capitalization would otherwise
+        // read as a "new" model and create a second, duplicate entry for the same device instead
+        // of updating the one that's already there.
+        const existingKeyByLower = {};
+        for (const key of Object.keys(existingModels)) existingKeyByLower[key.trim().toLowerCase()] = key;
+        const newModelNames = [];
+        for (const [name, data] of Object.entries(importedDb.models)) {
+            const existingKey = existingKeyByLower[name.trim().toLowerCase()];
+            if (existingKey) {
+                merged[existingKey] = Object.assign({}, existingModels[existingKey], { aliases: data.aliases, parts: data.parts });
+            } else {
+                merged[name] = Object.assign({ districts: [] }, data);
+                newModelNames.push(name);
+            }
+        }
+        return { db: Object.assign({}, importedDb, { models: merged }), newModelNames };
+    }
+    // Same three-question flow as pe-add-model, run once per brand-new model an import introduces,
+    // so nothing can land with zero districts (and therefore no button) without the admin being
+    // asked about it.
+    function assignDistrictsInteractively(db, names) {
+        names.forEach(name => {
+            const districts = [];
+            if (confirm(`Show "${name}" under the Anderson / Ft. Mill column in the Diagnostic Generator?`)) districts.push('anderson');
+            if (confirm(`Show "${name}" under the Richland 1 column in the Diagnostic Generator?`)) districts.push('richland');
+            if (confirm(`Show "${name}" under the Union column in the Diagnostic Generator?`)) districts.push('union');
+            if (!districts.length) alert(`"${name}" was imported but won't show a button in the Diagnostic Generator since no district was picked. Re-import or edit it in the JSON Editor tab to assign one.`);
+            db.models[name].districts = districts;
+        });
     }
     function editorCatalog() { const sel = document.getElementById('editor-catalog'); return sel ? sel.value : 'parts'; }
     function loadActiveIntoEditor() {
@@ -656,109 +670,6 @@
         lt.innerHTML = '<table><thead><tr><th>Canonical Part</th><th>ADP / Worth</th><th>Warranty (OEM)</th><th>Description</th></tr></thead><tbody>' + rows + '</tbody></table>';
     }
     function initLookup() { document.getElementById('lookup-filter').addEventListener('input', renderLookupTable); }
-    // =====================================================================
-    // SUGGESTIONS — Trello-style board
-    // =====================================================================
-    const SUGG_BOARD_KEY = 'ebryit_suggestions_board_v1';
-    const SUGG_COLUMNS = [
-        { id: 'inbox', label: 'Inbox' },
-        { id: 'priority', label: 'Priority' },
-        { id: 'done', label: 'Done' },
-        { id: 'archive', label: 'Archive' }
-    ];
-    let suggBoard = null;
-
-    function loadSuggBoard() {
-        // 1) load existing board
-        try {
-            const b = JSON.parse(localStorage.getItem(SUGG_BOARD_KEY) || 'null');
-            if (b && b.cards) { suggBoard = b; }
-        } catch (e) {}
-        if (!suggBoard) suggBoard = { cards: [], seen: [] };
-        if (!suggBoard.seen) suggBoard.seen = [];
-
-        // 2) migrate any raw Idea Box submissions into Inbox (once each)
-        let raw = [];
-        try { raw = JSON.parse(localStorage.getItem(SUGGESTIONS_KEY) || '[]'); } catch (e) {}
-        const seenKeys = new Set([
-            ...suggBoard.cards.map(c => c.srcKey).filter(Boolean),
-            ...suggBoard.seen
-        ]);
-        let migrated = 0;
-        raw.forEach((s, i) => {
-            const srcKey = (s.when || '') + '|' + (s.text || '').slice(0, 40);
-            if (seenKeys.has(srcKey)) return;
-            suggBoard.cards.push({
-                id: 'c' + Date.now() + '_' + i + '_' + Math.floor(Math.random()*1000),
-                text: s.text || '', type: (s.type || 'Suggestion'),
-                when: s.when || '', column: 'inbox', srcKey
-            });
-            suggBoard.seen.push(srcKey);
-            seenKeys.add(srcKey);
-            migrated++;
-        });
-        if (migrated) saveSuggBoard();
-        return migrated;
-    }
-    function saveSuggBoard() { localStorage.setItem(SUGG_BOARD_KEY, JSON.stringify(suggBoard)); }
-
-    function renderSuggBoard() {
-        const board = document.getElementById('trello-board');
-        if (!board) return;
-        if (!suggBoard) loadSuggBoard();
-        board.innerHTML = SUGG_COLUMNS.map(col => {
-            const cards = suggBoard.cards.filter(c => c.column === col.id);
-            const cardsHtml = cards.map(c => {
-                const t = (c.type || 'Suggestion').toLowerCase();
-                const tag = t.includes('bug') ? 'bug' : (t.includes('manual') ? 'manual' : 'suggestion');
-                const moves = SUGG_COLUMNS.filter(x => x.id !== col.id)
-                    .map(x => `<button onclick="suggMove('${c.id}','${x.id}')">${x.label}</button>`).join('');
-                return `<div class="trello-card" draggable="true" ondragstart="suggDragStart(event,'${c.id}')">
-                    <div class="meta"><span class="type-tag ${tag}">${c.type||'Suggestion'}</span> ${c.when||''}</div>
-                    <div>${(c.text||'').replace(/</g,'&lt;')}</div>
-                    <div class="card-actions">${moves}<button class="del" onclick="suggDelete('${c.id}')">Delete</button></div>
-                </div>`;
-            }).join('') || '<div class="muted" style="font-size:0.8em;">—</div>';
-            return `<div class="trello-col" data-col="${col.id}"
-                        ondragover="suggDragOver(event)" ondrop="suggDrop(event,'${col.id}')" ondragleave="suggDragLeave(event)">
-                    <h3>${col.label} <span class="trello-count">(${cards.length})</span></h3>
-                    ${cardsHtml}
-                </div>`;
-        }).join('');
-    }
-
-    function suggMove(id, col) { const c = suggBoard.cards.find(x => x.id === id); if (c) { c.column = col; saveSuggBoard(); renderSuggBoard(); } }
-    function suggDelete(id) { suggBoard.cards = suggBoard.cards.filter(x => x.id !== id); saveSuggBoard(); renderSuggBoard(); }
-    window.suggMove = suggMove; window.suggDelete = suggDelete;
-
-    let suggDragId = null;
-    function suggDragStart(e, id) { suggDragId = id; e.dataTransfer.effectAllowed = 'move'; }
-    function suggDragOver(e) { e.preventDefault(); e.currentTarget.classList.add('dragover'); }
-    function suggDragLeave(e) { e.currentTarget.classList.remove('dragover'); }
-    function suggDrop(e, col) { e.preventDefault(); e.currentTarget.classList.remove('dragover'); if (suggDragId) suggMove(suggDragId, col); suggDragId = null; }
-    window.suggDragStart = suggDragStart; window.suggDragOver = suggDragOver; window.suggDragLeave = suggDragLeave; window.suggDrop = suggDrop;
-
-    function initSuggestionsBoard() {
-        document.getElementById('sugg-refresh').addEventListener('click', () => {
-            const n = loadSuggBoard(); renderSuggBoard();
-            setStatus('sugg-status', 'ok', n ? (n + ' new submission(s) pulled into Inbox.') : 'Board up to date.');
-        });
-        document.getElementById('sugg-add').addEventListener('click', () => {
-            const text = (prompt('New card text:') || '').trim();
-            if (!text) return;
-            suggBoard.cards.push({ id: 'c' + Date.now(), text, type: 'Manual', when: new Date().toLocaleString(), column: 'priority' });
-            saveSuggBoard(); renderSuggBoard();
-        });
-        document.getElementById('sugg-clear').addEventListener('click', () => {
-            const sure = confirm('Are you sure? This permanently clears the entire suggestions board (all cards). This cannot be undone.');
-            if (!sure) return;
-            suggBoard = { cards: [], seen: [] }; saveSuggBoard();
-            localStorage.removeItem(SUGGESTIONS_KEY); // also clear raw Idea Box queue
-            renderSuggBoard();
-            setStatus('sugg-status', 'ok', 'Board cleared.');
-        });
-    }
-
     // =====================================================================
     // VERBIAGE EDITOR
     // =====================================================================
@@ -1334,7 +1245,7 @@
     }
 
     async function initAdmin() {
-        initTabs(); initImport(); initEditor(); initLookup(); initVerbiageEditor(); initPartsEditor(); initSuggestionsBoard(); initGithubPublish();
+        initTabs(); initImport(); initEditor(); initLookup(); initVerbiageEditor(); initPartsEditor(); initGithubPublish();
         const src = await loadActiveDB();
         renderDBSummary(activeDB, 'active-db-summary', 'active-db-status');
         if (src === 'none') setStatus('active-db-status', 'warn', 'No parts database found. Import a spreadsheet to begin.');
