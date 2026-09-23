@@ -17,9 +17,10 @@
         .password-card h2 { margin-top: 0; }
         .password-card input { width: 100%; padding: 10px; margin: 12px 0; border: 1px solid #c7c7c7; border-radius: 4px; box-sizing: border-box; }
         /* The rule above is sized for the password text field; the district picker reuses
-           .password-card for its overlay/card chrome but its checkboxes need normal checkbox
-           sizing, not a full-width text-input box, or they render huge and detached from their label. */
-        .password-card input[type="checkbox"] { width: auto; padding: 0; margin: 0; border: none; }
+           .password-card for its overlay/card chrome but its radio buttons need normal sizing,
+           not a full-width text-input box, or they render huge and detached from their label. */
+        .password-card input[type="radio"] { width: auto; padding: 0; margin: 0; border: none; }
+        .password-card button:disabled { opacity: 0.5; cursor: not-allowed; }
         .password-card button { padding: 10px 20px; background-color: #0056b3; color: white; border: none; border-radius: 4px; cursor: pointer; }
         .password-error { color: #b00020; min-height: 1.2em; margin-top: 10px; }
         .tab-bar { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin: 20px 0 0; border-bottom: 2px solid #d4d9de; }
@@ -85,14 +86,13 @@
     </div>
     <div id="district-picker-overlay" class="password-overlay" style="display:none; z-index:1100;">
         <div class="password-card" style="text-align:left;">
-            <h2 style="text-align:center;">Assign District(s)</h2>
+            <h2 style="text-align:center;">Assign District</h2>
             <p style="text-align:center; font-weight:bold;" id="district-picker-model-name"></p>
-            <p class="muted">Pick which Diagnostic Generator column(s) this model's button should show under.</p>
-            <label style="display:flex; align-items:center; gap:8px; margin:10px 0;"><input type="checkbox" id="district-picker-anderson"> Anderson / Ft. Mill</label>
-            <label style="display:flex; align-items:center; gap:8px; margin:10px 0;"><input type="checkbox" id="district-picker-richland"> Richland 1</label>
-            <label style="display:flex; align-items:center; gap:8px; margin:10px 0;"><input type="checkbox" id="district-picker-union"> Union</label>
+            <p class="muted">Pick which Diagnostic Generator column this model's button should show under.</p>
+            <label style="display:flex; align-items:center; gap:8px; margin:10px 0;"><input type="radio" name="district-picker-choice" id="district-picker-anderson" value="anderson"> Anderson / Ft. Mill</label>
+            <label style="display:flex; align-items:center; gap:8px; margin:10px 0;"><input type="radio" name="district-picker-choice" id="district-picker-union" value="union"> Union</label>
             <div style="display:flex; gap:8px; justify-content:center; margin-top:16px;">
-                <button class="action" id="district-picker-confirm" type="button">Confirm</button>
+                <button class="action" id="district-picker-confirm" type="button" disabled>Confirm</button>
                 <button class="action secondary" id="district-picker-cancel" type="button">Cancel</button>
             </div>
         </div>
@@ -378,11 +378,12 @@
         const m = n.match(/(\d{3,4})(\s*2-in-1)?/); if (m) out.add((m[1] + (m[2] ? " 2-in-1" : "")).trim());
         return [...out].sort();
     }
-    // Shows a single checkbox dialog for picking a model's district(s), instead of three
-    // sequential confirm() yes/no popups -- those were trivially easy to click through without
-    // registering each one, which is exactly how a model ended up checked into every district at
-    // once. Resolves to an array of district keys, or null if the dialog was cancelled (treated
-    // the same as "picked nothing" by callers).
+    // Shows a single dialog for picking a model's district, instead of three sequential
+    // confirm() yes/no popups -- those were trivially easy to click through without registering
+    // each one, which is exactly how a model ended up checked into every district at once. It's a
+    // single choice (Anderson OR Union), not multi-select: the districts don't buy the same
+    // devices, so one model never belongs in both. Confirm stays disabled until one is picked.
+    // Resolves to a one-element array of district keys, or null if the dialog was cancelled.
     //
     // catalogKind ('parts' | 'worth') restricts which districts are even offered: the Richland
     // column's part lookup ALWAYS reads r1_worth_parts.json specifically (see
@@ -395,34 +396,41 @@
     // 'union' entry in A5_FM_U_parts.json and a separate 'richland' entry in r1_worth_parts.json.
     // For the Worth catalog there's only one valid answer, so there's nothing to actually ask --
     // it resolves immediately with ['richland'], no dialog shown at all.
+    //
+    // In the FieldPower catalog the device family decides it too: Union only buys Latitudes and
+    // Anderson / Ft. Mill only buys Chromebooks, so a name starting with either word is assigned
+    // automatically. Anything else (a new family, e.g. a future Dell Pro) still gets the dialog.
     function pickDistricts(modelName, catalogKind) {
         if (catalogKind === 'worth') return Promise.resolve(['richland']);
+        const lowerName = String(modelName).trim().toLowerCase();
+        if (lowerName.startsWith('latitude')) return Promise.resolve(['union']);
+        if (lowerName.startsWith('chromebook')) return Promise.resolve(['anderson']);
         return new Promise((resolve) => {
             const overlay = document.getElementById('district-picker-overlay');
-            const cbAnderson = document.getElementById('district-picker-anderson');
-            const cbRichland = document.getElementById('district-picker-richland');
-            const cbUnion = document.getElementById('district-picker-union');
+            // FieldPower catalog: Richland is never a valid district here (see comment above), so
+            // only Anderson and Union are offered.
+            const radios = overlay.querySelectorAll('input[name="district-picker-choice"]');
             const confirmBtn = document.getElementById('district-picker-confirm');
             const cancelBtn = document.getElementById('district-picker-cancel');
             document.getElementById('district-picker-model-name').textContent = modelName;
-            cbAnderson.checked = false; cbRichland.checked = false; cbUnion.checked = false;
-            // FieldPower catalog: Richland is never a valid district here (see comment above).
-            cbRichland.closest('label').style.display = 'none';
+            radios.forEach(r => { r.checked = false; });
+            confirmBtn.disabled = true;
             overlay.style.display = 'flex';
+            function onPick() { confirmBtn.disabled = false; }
             function cleanup() {
                 overlay.style.display = 'none';
-                cbRichland.closest('label').style.display = '';
+                radios.forEach(r => r.removeEventListener('change', onPick));
                 confirmBtn.removeEventListener('click', onConfirm);
                 cancelBtn.removeEventListener('click', onCancel);
             }
             function onConfirm() {
-                const districts = [];
-                if (cbAnderson.checked) districts.push('anderson');
-                if (cbUnion.checked) districts.push('union');
+                const picked = overlay.querySelector('input[name="district-picker-choice"]:checked');
+                if (!picked) return;
                 cleanup();
-                resolve(districts);
+                resolve([picked.value]);
             }
             function onCancel() { cleanup(); resolve(null); }
+            radios.forEach(r => r.addEventListener('change', onPick));
             confirmBtn.addEventListener('click', onConfirm);
             cancelBtn.addEventListener('click', onCancel);
         });
@@ -1082,14 +1090,11 @@
                 alert(`"${name}" already exists in the ${CATALOGS[peCatalog()].label} catalog.`);
                 return;
             }
-            // Districts decide which Diagnostic Generator column(s) this model's button shows
-            // under. A model can span more than one within this catalog (e.g. a FieldPower entry
-            // can be both Anderson and Union), so this is a checkbox picker, not a single choice
-            // -- restricted to what's actually valid for the catalog being edited right now (see
-            // pickDistricts).
+            // The district decides which Diagnostic Generator column this model's button shows
+            // under -- restricted to what's actually valid for the catalog being edited right now
+            // (see pickDistricts).
             const districts = await pickDistricts(name, peCatalog());
             if (districts === null) return; // cancelled -- don't create the model at all
-            if (!districts.length) alert(`"${name}" was created but won't show a button in the Diagnostic Generator since no district was picked. Delete and re-add it to assign one.`);
             const keys = createModelEntries(db, name, districts);
             pePopulateModels();
             document.getElementById('pe-model').value = keys[0];
