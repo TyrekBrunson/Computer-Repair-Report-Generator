@@ -428,6 +428,11 @@
         });
     }
     const DISTRICT_LABELS = { anderson: 'Anderson / Ft. Mill', richland: 'Richland 1', union: 'Union' };
+    // The clean, comparable name for a db.models entry: a split per-district copy carries its
+    // base name in `name` (its key has a district suffix), an older unsplit entry is just its key.
+    // Anything checking "is this the same model?" must compare these, never raw keys, or
+    // "Chromebook 3120" won't be recognized as the same model as "Chromebook 3120 (Union)".
+    function modelBaseName(key, model) { return String((model && model.name) || key).trim().toLowerCase(); }
     // Writes new model entries for `name` into db.models for the given districts. A single
     // district (the common case) is written exactly as before: one entry keyed by the plain
     // name, parts list empty and ready to fill in. Multiple districts get genuinely SEPARATE
@@ -704,8 +709,11 @@
         // below) -- a sheet's title cell re-typed with different capitalization would otherwise
         // read as a "new" model and create a second, duplicate entry for the same device instead
         // of updating the one that's already there.
-        const existingKeyByLower = {};
-        for (const key of Object.keys(existingModels)) existingKeyByLower[key.trim().toLowerCase()] = key;
+        // Keyed by base name (see modelBaseName), and a list rather than a single key: a model
+        // split into per-district copies has one entry per district, and every copy needs the
+        // sheet's refreshed parts -- not just whichever one happened to be seen first.
+        const existingKeysByBase = {};
+        for (const [key, m] of Object.entries(existingModels)) (existingKeysByBase[modelBaseName(key, m)] ||= []).push(key);
         // New models are collected raw here (name/aliases/parts only) rather than written into
         // `merged` immediately -- their districts aren't known yet, and a model split across
         // several districts needs the actual entries written by createModelEntries (one real key
@@ -713,9 +721,13 @@
         // keyed by the plain name.
         const newModels = [];
         for (const [name, data] of Object.entries(importedDb.models)) {
-            const existingKey = existingKeyByLower[name.trim().toLowerCase()];
-            if (existingKey) {
-                merged[existingKey] = Object.assign({}, existingModels[existingKey], { aliases: data.aliases, parts: data.parts });
+            const existingKeys = existingKeysByBase[name.trim().toLowerCase()];
+            if (existingKeys) {
+                // Independent copies per entry, same reason as createModelEntries: a later edit to
+                // one district's parts must never leak into another's through a shared reference.
+                existingKeys.forEach(k => {
+                    merged[k] = Object.assign({}, existingModels[k], { aliases: (data.aliases || []).slice(), parts: (data.parts || []).map(p => Object.assign({}, p)) });
+                });
             } else {
                 newModels.push({ name, aliases: data.aliases, parts: data.parts });
             }
@@ -1066,7 +1078,7 @@
             if (!db || !db.models) return;
             const name = (prompt('New model name (e.g. Latitude 5450):') || '').trim();
             if (!name) return;
-            if (Object.keys(db.models).some(m => m.toLowerCase() === name.toLowerCase())) {
+            if (Object.entries(db.models).some(([k, m]) => modelBaseName(k, m) === name.toLowerCase())) {
                 alert(`"${name}" already exists in the ${CATALOGS[peCatalog()].label} catalog.`);
                 return;
             }
