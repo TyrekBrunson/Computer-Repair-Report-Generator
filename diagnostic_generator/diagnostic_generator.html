@@ -204,26 +204,31 @@
 
         // A model can be defined in only one catalog (e.g. Richland/Worth-only devices like
         // Latitude 3310 2-in-1) — merge both by name so its button still shows up, unioning
-        // districts in case the same model is tagged differently in each catalog.
+        // districts in case the same model is tagged differently in each catalog. Keyed by the
+        // real (possibly district-suffixed) dictionary key so a model split into separate
+        // per-district copies gets one button per copy, each resolving to its own parts list --
+        // but the LABEL shown to a tech always uses the clean `name` field admin.html stores on
+        // a split entry (falling back to the key itself for older, unsplit models), so it never
+        // shows the internal district suffix.
         const merged = {};
         [PARTS_DB, WORTH_DB].forEach(db => {
             if (!db || !db.models) return;
-            Object.entries(db.models).forEach(([name, data]) => {
-                if (!merged[name]) merged[name] = new Set();
-                (data.districts || []).forEach(d => merged[name].add(d));
+            Object.entries(db.models).forEach(([key, data]) => {
+                if (!merged[key]) merged[key] = { districts: new Set(), label: data.name || key };
+                (data.districts || []).forEach(d => merged[key].districts.add(d));
             });
         });
 
         grid.innerHTML = DISTRICT_COLUMNS.map(col => {
             const rows = Object.entries(merged)
-                .filter(([, districts]) => districts.has(col.key))
-                .map(([name]) => {
-                    const id = `${col.key}-${slugifyForId(name)}-checkbox`;
-                    const family = deviceFamilyForModelName(name) || '';
-                    const safeName = name.replace(/"/g, '&quot;');
+                .filter(([, entry]) => entry.districts.has(col.key))
+                .map(([key, entry]) => {
+                    const id = `${col.key}-${slugifyForId(key)}-checkbox`;
+                    const family = deviceFamilyForModelName(entry.label) || '';
+                    const safeKey = key.replace(/"/g, '&quot;');
                     return `<div>
-                    <input type="radio" name="device-selection" id="${id}" data-district="${col.key}" data-model="${safeName}" data-family="${family}">
-                    <label for="${id}">${name}</label>
+                    <input type="radio" name="device-selection" id="${id}" data-district="${col.key}" data-model="${safeKey}" data-family="${family}">
+                    <label for="${id}">${entry.label}</label>
                 </div>`;
                 }).join('');
             return `<div class="device-family-column">
@@ -429,16 +434,21 @@
         };
 
         // Same model name (e.g. "Latitude 3120 2-in-1") can exist in both catalogs, so the
-        // note always names which catalog/tier is actually driving this render.
+        // note always names which catalog/tier is actually driving this render. A model split
+        // into per-district copies has a dictionary key with a district suffix (see
+        // buildDeviceSelectionGrid) -- always show its clean `name` field instead, falling back
+        // to the raw key for older, unsplit entries that don't have one.
         let modelNote;
         if (richlandSelected) {
             const richlandTier = anyAdpIssue ? 'Richland 1 / Worth' : 'Richland 1 / Dell Warranty';
+            const worthLabel = worthKey && WORTH_DB.models[worthKey] ? (WORTH_DB.models[worthKey].name || worthKey) : worthKey;
             modelNote = worthKey
-                ? `<div class="parts-model-note">Model: <strong>${worthKey}</strong> <span class="parts-model-district">(${richlandTier})</span></div>`
+                ? `<div class="parts-model-note">Model: <strong>${worthLabel}</strong> <span class="parts-model-district">(${richlandTier})</span></div>`
                 : '<div class="parts-model-note warn">No Richland 1 / Worth part data for this device.</div>';
         } else {
+            const partsLabel = selectedModelKey && PARTS_DB.models[selectedModelKey] ? (PARTS_DB.models[selectedModelKey].name || selectedModelKey) : selectedModelKey;
             modelNote = selectedModelKey
-                ? `<div class="parts-model-note">Model: <strong>${selectedModelKey}</strong> <span class="parts-model-district">(ADP / Warranty catalog)</span></div>`
+                ? `<div class="parts-model-note">Model: <strong>${partsLabel}</strong> <span class="parts-model-district">(ADP / Warranty catalog)</span></div>`
                 : '<div class="parts-model-note warn">Select a device to auto-assign part numbers.</div>';
         }
 
