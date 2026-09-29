@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-07-30T01:09:53Z",
+    "generatedAt": "2026-09-29T16:50:34.026Z",
     "source": "RICHLAND 1 Worth-Provided Color Coded Part List.xlsx",
     "catalog": "richland1_worth",
     "district": "Richland 1",
@@ -456,6 +456,28 @@
           "coverage": "Dell Warranty",
           "price": null,
           "canonical": "WEBCAM"
+        },
+        {
+          "partNumber": "W-0R3CDK",
+          "description": "128 GB Solid State Hard Drive",
+          "canonical": "SSD",
+          "category": "Warranty",
+          "adp": "NON_ADP",
+          "price": 0,
+          "source": "Manual",
+          "notes": "",
+          "coverage": "Worth"
+        },
+        {
+          "partNumber": "W-053KJ4",
+          "description": "Heat Sink",
+          "canonical": "HEAT SINK",
+          "category": "Warranty",
+          "adp": "NON_ADP",
+          "price": 43.74,
+          "source": "Manual",
+          "notes": "",
+          "coverage": "Worth"
         }
       ],
       "notes": [
