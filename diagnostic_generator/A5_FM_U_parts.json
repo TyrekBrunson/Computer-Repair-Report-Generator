@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-09-18T19:24:13.626Z",
+    "generatedAt": "2026-10-02T17:17:01.816Z",
     "source": "Parts - FieldPower Parts Color Coded.xlsx",
     "catalog": "fieldpower",
     "schema": 2
@@ -1047,6 +1047,83 @@
           "coverage": "Dell Warranty",
           "price": null,
           "canonical": "MOTHERBOARD"
+        },
+        {
+          "partNumber": "0N2309",
+          "description": "Audio Board",
+          "canonical": "DAUGHTERBOARD",
+          "category": "Warranty",
+          "adp": "NON_ADP",
+          "price": null,
+          "source": "Manual",
+          "notes": "",
+          "coverage": "Dell Warranty"
+        },
+        {
+          "partNumber": "0TXD03",
+          "description": "Battery",
+          "canonical": "BATTERY",
+          "category": "Warranty",
+          "adp": "NON_ADP",
+          "price": null,
+          "source": "Manual",
+          "notes": "",
+          "coverage": "Dell Warranty"
+        },
+        {
+          "partNumber": "0T0768",
+          "description": "Battery Cable",
+          "canonical": "BATTERY CABLE",
+          "category": "Warranty",
+          "adp": "NON_ADP",
+          "price": null,
+          "source": "Manual",
+          "notes": "",
+          "coverage": "Dell Warranty"
+        },
+        {
+          "partNumber": "T0587",
+          "description": "DC-In Jack",
+          "canonical": "DC-IN PORT",
+          "category": "Warranty",
+          "adp": "NON_ADP",
+          "price": null,
+          "source": "Manual",
+          "notes": "",
+          "coverage": "Dell Warranty"
+        },
+        {
+          "partNumber": "0T0431",
+          "description": "LCD Cable",
+          "canonical": "LCD CABLE",
+          "category": "Warranty",
+          "adp": "NON_ADP",
+          "price": null,
+          "source": "Manual",
+          "notes": "",
+          "coverage": "Dell Warranty"
+        },
+        {
+          "partNumber": "0TN2CC",
+          "description": "Solid State Hard Drive",
+          "canonical": "SSD",
+          "category": "Warranty",
+          "adp": "NON_ADP",
+          "price": null,
+          "source": "Manual",
+          "notes": "",
+          "coverage": "Dell Warranty"
+        },
+        {
+          "partNumber": "0ND233",
+          "description": "Speakers",
+          "canonical": "SPEAKERS",
+          "category": "Warranty",
+          "adp": "NON_ADP",
+          "price": null,
+          "source": "Manual",
+          "notes": "",
+          "coverage": "Dell Warranty"
         }
       ]
     },
@@ -1257,13 +1334,6 @@
       ],
       "parts": [
         {
-          "partNumber": "55C45",
-          "description": "Bezel",
-          "coverage": "ADP",
-          "price": null,
-          "canonical": "LCD BEZEL"
-        },
-        {
           "partNumber": "5816G",
           "description": "Bottom Cover (2-CELL)",
           "coverage": "ADP",
@@ -1339,6 +1409,127 @@
           "coverage": "Dell Warranty",
           "price": null,
           "canonical": "MOTHERBOARD"
+        },
+        {
+          "partNumber": "6P80N",
+          "description": "LCD Touch Screen",
+          "canonical": "LCD SCREEN",
+          "category": "Warranty",
+          "adp": "NON_ADP",
+          "price": null,
+          "source": "Manual",
+          "notes": "",
+          "coverage": "Dell Warranty"
+        },
+        {
+          "partNumber": "R4910",
+          "description": "Palmrest",
+          "canonical": "PALMREST",
+          "category": "Warranty",
+          "adp": "NON_ADP",
+          "price": null,
+          "source": "Manual",
+          "notes": "",
+          "coverage": "Dell Warranty"
+        },
+        {
+          "partNumber": "ND233",
+          "description": "Speakers",
+          "canonical": "SPEAKERS",
+          "category": "Warranty",
+          "adp": "NON_ADP",
+          "price": null,
+          "source": "Manual",
+          "notes": "",
+          "coverage": "Dell Warranty"
+        },
+        {
+          "partNumber": "P8795",
+          "description": "Top Cover (Wi-fi cable / Hall Sensor)",
+          "canonical": "TOP COVER",
+          "category": "Warranty",
+          "adp": "NON_ADP",
+          "price": null,
+          "source": "Manual",
+          "notes": "",
+          "coverage": "Dell Warranty"
+        },
+        {
+          "partNumber": "D8J87",
+          "description": "Webcam",
+          "canonical": "WEBCAM",
+          "category": "Warranty",
+          "adp": "NON_ADP",
+          "price": null,
+          "source": "Manual",
+          "notes": "",
+          "coverage": "Dell Warranty"
+        },
+        {
+          "partNumber": "TXD03",
+          "description": "Battery",
+          "canonical": "BATTERY",
+          "category": "Warranty",
+          "adp": "NON_ADP",
+          "price": null,
+          "source": "Manual",
+          "notes": "",
+          "coverage": "Dell Warranty"
+        },
+        {
+          "partNumber": "T0768",
+          "description": "Battery Cable",
+          "canonical": "BATTERY CABLE",
+          "category": "Warranty",
+          "adp": "NON_ADP",
+          "price": null,
+          "source": "Manual",
+          "notes": "",
+          "coverage": "Dell Warranty"
+        },
+        {
+          "partNumber": "T0587",
+          "description": "DC Power Input Jack",
+          "canonical": "DC-IN PORT",
+          "category": "Warranty",
+          "adp": "NON_ADP",
+          "price": null,
+          "source": "Manual",
+          "notes": "",
+          "coverage": "Dell Warranty"
+        },
+        {
+          "partNumber": "8N7Y1",
+          "description": "Audio Daughterboard",
+          "canonical": "DAUGHTERBOARD",
+          "category": "Warranty",
+          "adp": "NON_ADP",
+          "price": null,
+          "source": "Manual",
+          "notes": "",
+          "coverage": "Dell Warranty"
+        },
+        {
+          "partNumber": "TRDFV",
+          "description": "256 GB Solid State Hard Drive",
+          "canonical": "SSD",
+          "category": "Warranty",
+          "adp": "NON_ADP",
+          "price": null,
+          "source": "Manual",
+          "notes": "",
+          "coverage": "Dell Warranty"
+        },
+        {
+          "partNumber": "50D69",
+          "description": "LCD Cable",
+          "canonical": "LCD CABLE",
+          "category": "Warranty",
+          "adp": "NON_ADP",
+          "price": null,
+          "source": "Manual",
+          "notes": "",
+          "coverage": "Dell Warranty"
         }
       ]
     },
