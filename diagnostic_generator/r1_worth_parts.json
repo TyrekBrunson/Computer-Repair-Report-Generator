@@ -136,6 +136,104 @@
           "canonical": "WEBCAM",
           "coverage": "Worth",
           "price": 23.94
+        },
+        {
+          "partNumber": "0T0767",
+          "description": "Audio Board Cable",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "DAUGHTERBOARD CABLE"
+        },
+        {
+          "partNumber": "0TXD03",
+          "description": "Battery",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "BATTERY"
+        },
+        {
+          "partNumber": "0T0768",
+          "description": "Battery Cable`",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "BATTERY CABLE"
+        },
+        {
+          "partNumber": "T0587",
+          "description": "DC-In Jack",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "DC-IN PORT"
+        },
+        {
+          "partNumber": "R4910",
+          "description": "Keyboard With Palmrest",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "KEYBOARD"
+        },
+        {
+          "partNumber": "YPG7G",
+          "description": "LCD",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "LCD SCREEN"
+        },
+        {
+          "partNumber": "0T0431",
+          "description": "LCD Cable",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "LCD CABLE"
+        },
+        {
+          "partNumber": "0MY093",
+          "description": "Motherboard - 8 GB RAM - 1.1 GHz N6000 CPU - Removable MSATA Storage",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "MOTHERBOARD"
+        },
+        {
+          "partNumber": "F3Y5N",
+          "description": "Motherboard - 8 GB RAM - 1.1 GHz Quad Core CPU",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "MOTHERBOARD"
+        },
+        {
+          "partNumber": "0TN2CC",
+          "description": "Solid State Hard Drive",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "SSD"
+        },
+        {
+          "partNumber": "0ND233",
+          "description": "Speakers",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "SPEAKERS"
+        },
+        {
+          "partNumber": "P8795",
+          "description": "Top Cover",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "TOP COVER"
+        },
+        {
+          "partNumber": "M05K0",
+          "description": "Webcam",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "WEBCAM"
+        },
+        {
+          "partNumber": "0T0462",
+          "description": "Wireless Cable",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "WIFI CARD"
         }
       ],
       "notes": [
@@ -286,6 +384,90 @@
           "canonical": "SSD",
           "coverage": "Worth",
           "price": 43.74
+        },
+        {
+          "partNumber": "TRDFV",
+          "description": "256 GB Solid State Hard Drive",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "SSD"
+        },
+        {
+          "partNumber": "8N7Y1",
+          "description": "Audio Daughterboard With Cable",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "DAUGHTERBOARD"
+        },
+        {
+          "partNumber": "TXD03",
+          "description": "Battery",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "BATTERY"
+        },
+        {
+          "partNumber": "T0587",
+          "description": "DC Jack",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "DC-IN PORT"
+        },
+        {
+          "partNumber": "R4910",
+          "description": "Keyboard With Palmrest",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "KEYBOARD"
+        },
+        {
+          "partNumber": "50D69",
+          "description": "LCD Cable",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "LCD CABLE"
+        },
+        {
+          "partNumber": "6P80N",
+          "description": "LCD Screen - Touch",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "LCD SCREEN"
+        },
+        {
+          "partNumber": "PHVVR",
+          "description": "Motherboard - 8 GB RAM - 3.7 Quad Core N200 - 128 GB SSD (Integrated SSD)",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "MOTHERBOARD"
+        },
+        {
+          "partNumber": "PNKFT",
+          "description": "Motherboard - 8GB (NVMe SSD)",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "MOTHERBOARD"
+        },
+        {
+          "partNumber": "ND233",
+          "description": "Speakers",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "SPEAKERS"
+        },
+        {
+          "partNumber": "DCWWV",
+          "description": "Top Cover",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "TOP COVER"
+        },
+        {
+          "partNumber": "D8J87",
+          "description": "WebCam",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "WEBCAM"
         }
       ],
       "notes": [
@@ -657,6 +839,90 @@
           "canonical": "CPU FAN",
           "coverage": "Worth",
           "price": null
+        },
+        {
+          "partNumber": "098F8",
+          "description": "256 GB NVMe Solid State Hard Drive",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "SSD"
+        },
+        {
+          "partNumber": "55NWG",
+          "description": "Battery, 41WHR, 3 Cell, Lithium Ion, (Primary)",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "BATTERY"
+        },
+        {
+          "partNumber": "NWVD3",
+          "description": "DC-In",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "DC-IN PORT"
+        },
+        {
+          "partNumber": "PPXV",
+          "description": "Fan",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "CPU FAN"
+        },
+        {
+          "partNumber": "VD768",
+          "description": "Heatsink",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "HEATSINK"
+        },
+        {
+          "partNumber": "2Y80X",
+          "description": "LCD, HUD, Touch Screen",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "LCD SCREEN"
+        },
+        {
+          "partNumber": "T9VR3",
+          "description": "Motherboard",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "MOTHERBOARD"
+        },
+        {
+          "partNumber": "W2FFR",
+          "description": "Palm Rest with Keyboard",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "KEYBOARD"
+        },
+        {
+          "partNumber": "7C0FY",
+          "description": "Speakers",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "SPEAKERS"
+        },
+        {
+          "partNumber": "MN3NW",
+          "description": "Touchpad",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "TOUCHPAD"
+        },
+        {
+          "partNumber": "0VTFX1",
+          "description": "USB / Audio Board",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "DAUGHTERBOARD"
+        },
+        {
+          "partNumber": "XVV0P",
+          "description": "Wireless Card",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "WIFI CARD"
         }
       ],
       "notes": [
@@ -702,6 +968,13 @@
           "canonical": "WEBCAM",
           "coverage": "Worth",
           "price": null
+        },
+        {
+          "partNumber": "D3G8M",
+          "description": "LCD Screen Assembly - 13.3-inch Antiglare Touch",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "LCD SCREEN"
         }
       ],
       "notes": [
@@ -866,6 +1139,111 @@
           "canonical": "LCD CABLE",
           "coverage": "Worth",
           "price": 16
+        },
+        {
+          "partNumber": "W1KKY",
+          "description": "16 GB RAM",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "RAM"
+        },
+        {
+          "partNumber": "KX2VX",
+          "description": "256 GB Solid State Hard Drive",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "SSD"
+        },
+        {
+          "partNumber": "4FC3J",
+          "description": "Battery",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "BATTERY"
+        },
+        {
+          "partNumber": "2XYM2",
+          "description": "Battery Cable",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "BATTERY CABLE"
+        },
+        {
+          "partNumber": "38G5F",
+          "description": "DC Input",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "DC-IN PORT"
+        },
+        {
+          "partNumber": "G4CV4",
+          "description": "EDP Cable",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "LCD CABLE"
+        },
+        {
+          "partNumber": "T1NNF",
+          "description": "Fan",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "CPU FAN"
+        },
+        {
+          "partNumber": "3RX17",
+          "description": "Keyboard",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "KEYBOARD"
+        },
+        {
+          "partNumber": "3KKXR",
+          "description": "LCD Assembly",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "LCD SCREEN"
+        },
+        {
+          "partNumber": "CXJXR",
+          "description": "Motherboard",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "MOTHERBOARD"
+        },
+        {
+          "partNumber": "H7NTT",
+          "description": "Motherboard",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "MOTHERBOARD"
+        },
+        {
+          "partNumber": "2P0KT",
+          "description": "Speakers",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "SPEAKERS"
+        },
+        {
+          "partNumber": "NM1FY",
+          "description": "Top Cover",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "TOP COVER"
+        },
+        {
+          "partNumber": "52V7C",
+          "description": "USB-C Board",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "DC-IN PORT"
+        },
+        {
+          "partNumber": "G83J7",
+          "description": "Wireless Network Card",
+          "coverage": "Dell Warranty",
+          "price": null,
+          "canonical": "WIFI CARD"
         }
       ]
     },

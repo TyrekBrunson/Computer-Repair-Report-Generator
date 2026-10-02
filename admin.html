@@ -112,9 +112,12 @@
             <div class="card">
                 <h2>Import Parts Spreadsheet (XLSX)</h2>
                 <p class="muted">Drag &amp; drop either the Richland 1 Worth-Provided part list or the FieldPower (ADP/Warranty)
-                   part list — any per-model workbook works. Each row is auto-classified by its own columns (a price + <code>W-</code>/Worth
-                   category means Richland 1 / Worth; a NON/UADP category means FieldPower) and routed to the matching catalog below,
-                   so the file you drop always lands in the correct <code>.json</code> — never the wrong one.</p>
+                   part list — any per-model workbook works. Each <em>sheet</em> is auto-classified and routed to the matching catalog
+                   below, so the file you drop always lands in the correct <code>.json</code> — never the wrong one. A sheet counts as
+                   Richland 1 / Worth if its title says so or if it has a price / <code>W-</code> part number anywhere, and then
+                   <strong>both</strong> its Worth-Provided rows and its Dell Warranty side-table go to Richland 1 / Worth — the
+                   Diagnostic Generator reads only that one catalog for a Richland device, so splitting them would leave warranty
+                   parts unreachable. Any other sheet goes to FieldPower, with NON/UADP setting each row's coverage.</p>
                 <div class="dropzone" id="dropzone">
                     <div class="icon">&#128193;</div>
                     <div id="dz-title">Drag &amp; drop a Parts Sheet XLSX file here</div>
@@ -487,12 +490,15 @@
         return r;
     }
 
-    // Splits a workbook's rows into TWO catalogs by their own coverage signal — Worth-Provided
-    // rows (price column + W- prefix) go to the Richland 1 / Worth catalog, everything else
-    // (NON/UADP category, or unclassified OEM pairs) goes to the FieldPower catalog. A single
-    // sheet (like the Richland workbook's combined Worth+Warranty sections) can and does feed
-    // both — that's correct, not a bug. This is what lets one dropzone always route each row to
-    // the right file instead of the admin having to pre-select a target.
+    // Splits a workbook's rows into TWO catalogs. Routing is decided ONCE PER SHEET, not row by
+    // row: a Richland sheet carries BOTH a Worth-Provided section and a Dell Warranty side-table,
+    // and the generator needs both of them in the Richland 1 / Worth catalog -- a Richland
+    // selection reads ONLY r1_worth_parts.json and never falls back (see lookupPartNumber in
+    // diagnostic_generator.html). Classifying row by row sent that sheet's warranty rows to the
+    // FieldPower catalog instead, where the Richland path can never see them, so Richland +
+    // NON-ADP rendered an empty parts list. A non-Richland sheet still feeds the FieldPower
+    // catalog exactly as before. This is what lets one dropzone always route each row to the
+    // right file instead of the admin having to pre-select a target.
     function buildFromWorkbook(wb) {
         const fpModels = {}; const worthModels = {};
         const cleanPN = v => { if (v == null) return null; const s = String(v).trim(); return s || null; };
@@ -507,9 +513,16 @@
             const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: null });
             if (!rows.length) return;
             let titleCell = rows[0] && rows[0][0];
-            let modelName = (titleCell && String(titleCell).trim()) ? String(titleCell).trim() : sheetName.trim();
-            modelName = stripTitleBoilerplate(modelName);
+            // Keep the RAW title: stripTitleBoilerplate removes the "- RICHLAND 1 (WORTH PROVIDED)"
+            // suffix to get a clean model name, and that suffix is exactly the routing signal we
+            // need below, so it has to be read before it's thrown away.
+            const rawTitle = (titleCell && String(titleCell).trim()) ? String(titleCell).trim() : sheetName.trim();
+            const modelName = stripTitleBoilerplate(rawTitle);
             const seen = new Set();
+            // PASS 1 -- collect only; nothing is routed to a catalog yet. `worthRows` is the
+            // Worth-Provided section, `otherRows` is everything else this sheet yielded, each row
+            // carrying the coverage its own columns implied.
+            const worthRows = []; const otherRows = [];
             rows.forEach(cells => {
                 if (!cells) return;
                 // Worth-Provided layout: Part#, Desc, Price(number), Category
@@ -522,34 +535,49 @@
                     const key = pn + "||" + desc;
                     if (!seen.has(key)) {
                         seen.add(key);
-                        addPart(worthModels, modelName, { partNumber: pn, description: desc, canonical: canonicalFor(desc), coverage: 'Worth', price: toPrice(cells[2]) });
+                        worthRows.push({ partNumber: pn, description: desc, canonical: canonicalFor(desc), coverage: 'Worth', price: toPrice(cells[2]) });
                     }
                 }
-                // FieldPower layout: Part#, Desc, Category(NON/UADP), Model, Notes  — capture the ADP category FIRST.
-                let fpCaptured = false;
+                // Categorized layout: Part#, Desc, Category(NON/UADP), Model, Notes — capture the ADP category FIRST.
+                let catCaptured = false;
                 {
-                    const fpPn = cleanPN(cells[0]); const fpDesc = cleanPN(cells[1]); const fpCat = cleanPN(cells[2]);
-                    if (fpPn && fpDesc && fpCat && /^[0-9A-Z]{5,6}$/.test(fpPn) && /UADP|NON|NORMAL|ADP/i.test(fpCat) && fpDesc.toLowerCase() !== "description") {
-                        const key = fpPn + "||" + fpDesc;
+                    const cPn = cleanPN(cells[0]); const cDesc = cleanPN(cells[1]); const cCat = cleanPN(cells[2]);
+                    if (cPn && cDesc && cCat && /^[0-9A-Z]{5,6}$/.test(cPn) && /UADP|NON|NORMAL|ADP/i.test(cCat) && cDesc.toLowerCase() !== "description") {
+                        const key = cPn + "||" + cDesc;
                         if (!seen.has(key)) {
                             seen.add(key);
-                            addPart(fpModels, modelName, { partNumber: fpPn, description: fpDesc, canonical: canonicalFor(fpDesc), coverage: coverageFromCategory(fpCat), price: null });
+                            otherRows.push({ partNumber: cPn, description: cDesc, canonical: canonicalFor(cDesc), coverage: coverageFromCategory(cCat), price: null });
                         }
-                        fpCaptured = true;
+                        catCaptured = true;
                     }
                 }
-                // Secondary paired blocks (Part#/Desc/Notes at col 0 and col 4) — skip col 0 if FieldPower already took it.
-                // No category column available here, so this is always an unclassified plain OEM number.
-                // These sit alongside a Worth section in the Richland sheets (the motherboard side-table),
-                // so they belong in the FieldPower/Warranty bucket, not Worth.
+                // Secondary paired blocks (Part#/Desc/Notes at col 0 and col 4) — skip col 0 if the
+                // categorized block already took it. No category column here, so these are plain OEM
+                // numbers: in the Richland sheets this is the Dell Warranty motherboard side-table.
+                // Part-number width matches the categorized block above; it used to be exactly {5},
+                // which silently dropped every 6-char number (0T0767, 0TXD03, 0MY093, 0TN2CC, ...) --
+                // over half the Richland warranty catalog never reached either file.
                 [0,4].forEach(base => {
-                    if (base === 0 && fpCaptured) return;
+                    if (base === 0 && catCaptured) return;
                     const p2 = cleanPN(cells[base]); const d2 = cleanPN(cells[base+1]);
-                    if (p2 && d2 && /^[0-9A-Z]{5}$/.test(p2) && d2.toLowerCase() !== "description") {
+                    if (p2 && d2 && /^[0-9A-Z]{5,6}$/.test(p2) && d2.toLowerCase() !== "description") {
                         const key = p2 + "||" + d2;
-                        if (!seen.has(key)) { seen.add(key); addPart(fpModels, modelName, { partNumber: p2, description: d2, canonical: canonicalFor(d2), coverage: 'Dell Warranty', price: null }); }
+                        if (!seen.has(key)) { seen.add(key); otherRows.push({ partNumber: p2, description: d2, canonical: canonicalFor(d2), coverage: 'Dell Warranty', price: null }); }
                     }
                 });
+            });
+            // PASS 2 -- route this sheet as a whole. Either signal is enough to call it a
+            // Richland/Worth sheet: the title cell's own boilerplate, or the presence of any Worth
+            // row at all (a price column or a W- prefixed part number only ever occurs in the
+            // Richland workbook), so routing survives a title that loses its suffix.
+            const isRichlandSheet = /richland|worth[- ]provided/i.test(rawTitle) || worthRows.length > 0;
+            worthRows.forEach(p => addPart(worthModels, modelName, p));
+            otherRows.forEach(p => {
+                if (!isRichlandSheet) { addPart(fpModels, modelName, p); return; }
+                // Coverage is forced to Dell Warranty rather than passed through: the Richland path
+                // only ever asks for 'Worth' or 'Dell Warranty' (lookupPartNumber), so an 'ADP' row
+                // in this catalog would be unreachable. Matches every shipped r1_worth_parts.json.
+                addPart(worthModels, modelName, Object.assign({}, p, { coverage: 'Dell Warranty' }));
             });
         });
         const meta = (extra) => Object.assign({ generatedAt: new Date().toISOString(), source: "admin-import", schema: 2 }, extra || {});
@@ -655,7 +683,8 @@
         fileInput.addEventListener('change', e => { if (e.target.files.length) handleFile(e.target.files[0]); });
         document.getElementById('apply-import-parts').addEventListener('click', async (e) => {
             if (!importedDB) return;
-            const { db, newModels } = mergeImportedCatalog(activeDB, importedDB);
+            const { db, newModels, tierLosses } = mergeImportedCatalog(activeDB, importedDB);
+            if (!confirmTierLosses(tierLosses, CATALOGS.parts.label)) { setStatus('import-status', 'warn', 'Save cancelled — nothing was changed.'); return; }
             const newKeys = newModels.length ? await assignDistrictsInteractively(db, newModels, 'parts') : [];
             saveOverride('parts', db); activeDB = db;
             setStatus('import-status', 'ok', 'Saved to the FieldPower catalog. All Web Center tools will now use this parts database.' +
@@ -666,7 +695,8 @@
         document.getElementById('download-import-parts').addEventListener('click', () => { if (importedDB) downloadJSON(importedDB, CATALOGS.parts.filename); });
         document.getElementById('apply-import-worth').addEventListener('click', async (e) => {
             if (!importedWorthDB) return;
-            const { db, newModels } = mergeImportedCatalog(activeWorthDB, importedWorthDB);
+            const { db, newModels, tierLosses } = mergeImportedCatalog(activeWorthDB, importedWorthDB);
+            if (!confirmTierLosses(tierLosses, CATALOGS.worth.label)) { setStatus('import-status', 'warn', 'Save cancelled — nothing was changed.'); return; }
             const newKeys = newModels.length ? await assignDistrictsInteractively(db, newModels, 'worth') : [];
             saveOverride('worth', db); activeWorthDB = db;
             setStatus('import-status', 'ok', 'Saved to the Richland 1 / Worth catalog. All Web Center tools will now use this parts database.' +
@@ -728,19 +758,43 @@
         // per district, each an independent copy of this parts data), not a single placeholder
         // keyed by the plain name.
         const newModels = [];
+        // An existing model's parts are REPLACED wholesale below, so if the sheet stops yielding a
+        // whole coverage tier (a layout change, a routing bug, a section deleted from the workbook)
+        // that tier is silently deleted with no error shown. That is exactly how 68 Richland
+        // "Dell Warranty" rows were lost on 2026-09-29. Record each such loss so the caller can
+        // make the admin confirm it instead of finding out weeks later.
+        const tierLosses = [];
         for (const [name, data] of Object.entries(importedDb.models)) {
             const existingKeys = existingKeysByBase[name.trim().toLowerCase()];
             if (existingKeys) {
                 // Independent copies per entry, same reason as createModelEntries: a later edit to
                 // one district's parts must never leak into another's through a shared reference.
                 existingKeys.forEach(k => {
+                    const incoming = coverageTiers(data.parts);
+                    coverageTiers(existingModels[k].parts).forEach(tier => {
+                        if (incoming.has(tier)) return;
+                        tierLosses.push({ key: k, tier, count: (existingModels[k].parts || []).filter(p => p.coverage === tier).length });
+                    });
                     merged[k] = Object.assign({}, existingModels[k], { aliases: (data.aliases || []).slice(), parts: (data.parts || []).map(p => Object.assign({}, p)) });
                 });
             } else {
                 newModels.push({ name, aliases: data.aliases, parts: data.parts });
             }
         }
-        return { db: Object.assign({}, importedDb, { models: merged }), newModels };
+        return { db: Object.assign({}, importedDb, { models: merged }), newModels, tierLosses };
+    }
+    // The distinct `coverage` values an entry's parts actually contain.
+    function coverageTiers(parts) {
+        const tiers = new Set();
+        (parts || []).forEach(p => { if (p && p.coverage) tiers.add(p.coverage); });
+        return tiers;
+    }
+    // Blocks the save unless the admin accepts the deletions spelled out above. Returning true for
+    // "nothing to lose" keeps the normal import path a single extra function call with no prompt.
+    function confirmTierLosses(tierLosses, catalogLabel) {
+        if (!tierLosses || !tierLosses.length) return true;
+        const lines = tierLosses.map(t => `  - ${t.key}: ${t.count} "${t.tier}" part(s)`).join('\n');
+        return confirm(`This import contains NO parts for coverage tier(s) that the ${catalogLabel} catalog currently has data for:\n\n${lines}\n\nSaving REPLACES each model's parts with what this sheet produced, so those parts will be DELETED.\n\nIf that isn't what you expect, cancel and check the spreadsheet still has those sections.\n\nContinue and delete them?`);
     }
     // Same picker pe-add-model uses, run once per brand-new model an import introduces, so
     // nothing can land with zero districts (and therefore no button) without the admin being
