@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-09-29T20:01:43.609Z",
+    "generatedAt": "2026-10-07T17:43:53.773Z",
     "source": "admin-import",
     "schema": 2,
     "catalog": "richland1_worth"
@@ -923,6 +923,17 @@
           "coverage": "Dell Warranty",
           "price": null,
           "canonical": "WIFI CARD"
+        },
+        {
+          "partNumber": "08RJ93",
+          "description": "Motherboard - 16 GB RAM - 2.6 GHz Quad Core I5",
+          "canonical": "MOTHERBOARD",
+          "category": "Warranty",
+          "adp": "NON_ADP",
+          "price": null,
+          "source": "Manual",
+          "notes": "",
+          "coverage": "Dell Warranty"
         }
       ],
       "notes": [
