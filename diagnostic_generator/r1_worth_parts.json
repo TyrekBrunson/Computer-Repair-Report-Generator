@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-10-07T17:43:53.773Z",
+    "generatedAt": "2026-10-12T14:47:41.062Z",
     "source": "admin-import",
     "schema": 2,
     "catalog": "richland1_worth"
@@ -1273,13 +1273,6 @@
           "canonical": "LCD SCREEN",
           "coverage": "Worth",
           "price": 73.75
-        },
-        {
-          "partNumber": "W-0J78GJ",
-          "description": "LCD Screen",
-          "canonical": "LCD SCREEN",
-          "coverage": "Worth",
-          "price": 106.25
         },
         {
           "partNumber": "W-04FC3J",
