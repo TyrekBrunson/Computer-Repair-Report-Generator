@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-10-12T14:47:41.062Z",
+    "generatedAt": "2026-10-12T17:50:03.088Z",
     "source": "admin-import",
     "schema": 2,
     "catalog": "richland1_worth"
@@ -1371,6 +1371,116 @@
           "canonical": "TOUCHPAD",
           "coverage": "Worth",
           "price": 19
+        },
+        {
+          "partNumber": "0MD7DY",
+          "description": "Audio Daughterboard",
+          "canonical": "AUDIO BOARD",
+          "category": "Warranty",
+          "adp": "NON_ADP",
+          "price": null,
+          "source": "Manual",
+          "notes": "",
+          "coverage": "Dell Warranty"
+        },
+        {
+          "partNumber": "0XYCPK",
+          "description": "SSD",
+          "canonical": "SSD",
+          "category": "Warranty",
+          "adp": "NON_ADP",
+          "price": null,
+          "source": "Manual",
+          "notes": "",
+          "coverage": "Dell Warranty"
+        },
+        {
+          "partNumber": "04FC3J",
+          "description": "Battery",
+          "canonical": "BATTERY",
+          "category": "Warranty",
+          "adp": "NON_ADP",
+          "price": null,
+          "source": "Manual",
+          "notes": "",
+          "coverage": "Dell Warranty"
+        },
+        {
+          "partNumber": "05JJ64",
+          "description": "Palmrest",
+          "canonical": "PALMREST",
+          "category": "Warranty",
+          "adp": "NON_ADP",
+          "price": null,
+          "source": "Manual",
+          "notes": "",
+          "coverage": "Dell Warranty"
+        },
+        {
+          "partNumber": "0PW4MD",
+          "description": "Sensor Board",
+          "canonical": "SENSOR BOARD",
+          "category": "Warranty",
+          "adp": "NON_ADP",
+          "price": null,
+          "source": "Manual",
+          "notes": "",
+          "coverage": "Dell Warranty"
+        },
+        {
+          "partNumber": "0RH1T2",
+          "description": "Keyboard",
+          "canonical": "KEYBOARD",
+          "category": "Warranty",
+          "adp": "NON_ADP",
+          "price": null,
+          "source": "Manual",
+          "notes": "",
+          "coverage": "Dell Warranty"
+        },
+        {
+          "partNumber": "0J78GJ",
+          "description": "LCD Screen",
+          "canonical": "LCD SCREEN",
+          "category": "Warranty",
+          "adp": "NON_ADP",
+          "price": null,
+          "source": "Manual",
+          "notes": "",
+          "coverage": "Dell Warranty"
+        },
+        {
+          "partNumber": "0HXHP7",
+          "description": "LCD Cable",
+          "canonical": "LCD CABLE",
+          "category": "Warranty",
+          "adp": "NON_ADP",
+          "price": null,
+          "source": "Manual",
+          "notes": "",
+          "coverage": "Dell Warranty"
+        },
+        {
+          "partNumber": "00V2TV",
+          "description": "Webcam",
+          "canonical": "WEBCAM",
+          "category": "Warranty",
+          "adp": "NON_ADP",
+          "price": null,
+          "source": "Manual",
+          "notes": "",
+          "coverage": "Dell Warranty"
+        },
+        {
+          "partNumber": "02RFD0",
+          "description": "Motherboard - 8 GB RAM, N150 Processor",
+          "canonical": "MOTHERBOARD",
+          "category": "Warranty",
+          "adp": "NON_ADP",
+          "price": null,
+          "source": "Manual",
+          "notes": "",
+          "coverage": "Dell Warranty"
         }
       ]
     }
