@@ -67,6 +67,10 @@
                 <input type="checkbox" id="doa-checkbox">
                 <label for="doa-checkbox">DOA Part</label>
             </div>
+            <div class="bug-option">
+                <input type="checkbox" id="bug-checkbox">
+                <label for="bug-checkbox">Bug Unit</label>
+            </div>
         </div>
         
         <div id="initial-comment-description-container" style="display:none;">
@@ -420,7 +424,9 @@
         const richlandSelected = isSelectedDeviceRichland();
         const worthKey = getSelectedWorthModelKey(); // non-null only when richlandSelected && qualified
         const worthQualified = !!worthKey;
-        const anyAdpIssue = selectedIssues.some(i => i.type === 'ADP');
+        // Bug units order no parts, so they override every selection.
+        const partIssues = document.getElementById('bug-checkbox').checked ? [] : selectedIssues;
+        const anyAdpIssue = partIssues.some(i => i.type === 'ADP');
         // Price column + Grand Total row only appear when Richland is actually resolving to
         // the priced Worth rows — its own Dell Warranty rows carry no price data.
         const showPrice = worthQualified && anyAdpIssue;
@@ -455,7 +461,7 @@
         // Unique canonical parts from current selection (skip miscellaneous)
         const wantParts = [];
         const seen = new Set();
-        selectedIssues.forEach(issue => {
+        partIssues.forEach(issue => {
             if (issue.type === 'MISCELLANEOUS') return;
             let name = (issue.part || '').toUpperCase();
             if (!name) return;
@@ -614,7 +620,8 @@
             value: issueValue,
             type: issueType,
             part: extractPartName(issueValue, issueType, categoryKey),
-            device: cb.getAttribute('data-device') || null 
+            device: cb.getAttribute('data-device') || null,
+            percentInputId: cb.getAttribute('data-percent-input') || null
         };
 
         if (cb.checked) {
@@ -638,7 +645,24 @@
                 span.textContent = '';
                 span.style.visibility = 'hidden';
             }
+            const percentId = cb.getAttribute('data-percent-input');
+            if (percentId) {
+                document.getElementById(`${percentId}-container`).style.display = cb.checked ? 'block' : 'none';
+                if (!cb.checked) document.getElementById(percentId).value = '';
+            }
         });
+    }
+
+    // Issue verbiage with any "XX%" placeholder filled from its battery percentage input
+    function issueText(issue) {
+        if (!issue.percentInputId) return issue.value;
+        const input = document.getElementById(issue.percentInputId);
+        const pct = input ? parseInt(input.value, 10) : NaN;
+        return pct >= 1 && pct <= 99 ? issue.value.replace(/XX%/g, `${pct}%`) : issue.value;
+    }
+
+    function hasMissingBatteryPercent() {
+        return selectedIssues.some(i => issueText(i).includes('XX%'));
     }
 
     // =========================================================
@@ -729,6 +753,25 @@
                         item.appendChild(orderSpan);
                         item.appendChild(label);
                         list.appendChild(item);
+
+                        // Verbiage with an "XX%" placeholder gets a battery percentage prompt,
+                        // shown only while the issue is checked (see updateIssueOrderVisuals)
+                        if (upperIssue.includes('XX%')) {
+                            const percentId = `${safeId}-percent`;
+                            cb.setAttribute('data-percent-input', percentId);
+                            const percentBox = document.createElement('div');
+                            percentBox.className = 'battery-percent-container';
+                            percentBox.id = `${percentId}-container`;
+                            percentBox.style.display = 'none';
+                            percentBox.innerHTML = `
+                                <label for="${percentId}">What's the battery percentage?</label>
+                                <input type="text" id="${percentId}" class="battery-percent-input" placeholder="1–99" inputmode="numeric" maxlength="2" autocomplete="off">`;
+                            // Digits only, no leading zero, so the value is always blank or 1–99
+                            percentBox.querySelector('input').addEventListener('input', e => {
+                                e.target.value = e.target.value.replace(/\D/g, '').replace(/^0+/, '').slice(0, 2);
+                            });
+                            list.appendChild(percentBox);
+                        }
                     });
 
                     catDetails.appendChild(list);
@@ -781,6 +824,7 @@
             cb.nextElementSibling.textContent = '';
             cb.nextElementSibling.style.visibility = 'hidden';
         });
+        updateIssueOrderVisuals();
 
         document.getElementById('unit-description').value = '';
         document.getElementById('cannot-verify-checkbox').checked = false;
@@ -791,6 +835,7 @@
         document.getElementById('initial-comment-description-container').style.display = 'none';
         document.getElementById('ber-checkbox').checked = false;
         document.getElementById('doa-checkbox').checked = false;
+        document.getElementById('bug-checkbox').checked = false;
         document.getElementById('miscellaneous-checkbox').checked = false;
         document.getElementById('miscellaneous-comment-area').value = '';
         document.getElementById('miscellaneous-description-container').style.display = 'none';
@@ -827,13 +872,13 @@
         let nonAdpBlock = [];
         issues.forEach(issue => {
             if (issue.type === 'NON-ADP') {
-                nonAdpBlock.push(cleanIssueDescription(issue.value));
+                nonAdpBlock.push(cleanIssueDescription(issueText(issue)));
             } else {
                 if (nonAdpBlock.length > 0) {
                     sections.push('//' + nonAdpBlock.join('. // ') + './/');
                     nonAdpBlock = [];
                 }
-                sections.push(issue.value.replace(/^\([^)]+\):\s*/, ''));
+                sections.push(issueText(issue).replace(/^\([^)]+\):\s*/, ''));
             }
         });
         if (nonAdpBlock.length > 0) sections.push('//' + nonAdpBlock.join('. // ') + './/');
@@ -851,6 +896,34 @@
         const reportOutput = document.getElementById('report-output');
         const berChecked = document.getElementById('ber-checkbox').checked;
         const doaChecked = document.getElementById('doa-checkbox').checked;
+        const bugChecked = document.getElementById('bug-checkbox').checked;
+
+        // =========================================================
+        // BUG UNIT PATH — overrides everything; no issue selections needed
+        // =========================================================
+        if (bugChecked) {
+            if (hasNoInitialIssue) alert('Please make sure to add an initial issue description!');
+
+            const bugText = [
+                `UNIT PRESENTED WITH DESCRIPTION OF: ${customDescription || 'No Issue Given.'}`,
+                `UPON ARRIVAL: COULD NOT VERIFY INITIAL ISSUE: UNIT HAS INFESTATION OF BUGS. UNIT PLACED IN RED BIO-HAZARD BAG. RETURNING UNIT BACK TO CUSTOMER WITH NO REPAIRS COMPLETED.`,
+                `PARTS ORDERED: NO PARTS ORDERED.`,
+                `REPAIRS COMPLETED: NO REPAIRS COMPLETED. UNIT HAS INFESTATION OF BUGS. UNIT PLACED IN RED BIO-HAZARD BAG. RETURNING UNIT TO CUSTOMER. UNIT IS NOT FULLY FUNCTIONAL.`
+            ].join('\n');
+
+            if (hasNoInitialIssue) {
+                reportOutput.innerHTML = bugText
+                    .replace('No Issue Given.', '<span style="color: #dc3545;">No Issue Given.</span>')
+                    .replace(/\n/g, '<br>');
+            } else {
+                reportOutput.textContent = bugText;
+            }
+            document.getElementById('on-hold-output').textContent = 'ON HOLD – PENDING\nAWAITING QA.';
+            document.getElementById('required-photos-output').textContent = '';
+            selectedModelKey = getSelectedModelKey();
+            renderPartsList();
+            return;
+        }
 
         // =========================================================
         // BER PATH — overrides everything; no issue selections needed
@@ -861,6 +934,7 @@
                 return;
             }
             if (hasNoInitialIssue) alert('Please make sure to add an initial issue description!');
+            if (hasMissingBatteryPercent()) alert('Please enter a battery percentage between 1 and 99!');
 
             const berText = [
                 `UNIT PRESENTED WITH DESCRIPTION OF: ${customDescription || 'No Issue Given.'}`,
@@ -890,9 +964,10 @@
                 alert('Please select at least one NON-ADP issue to use DOA.');
                 return;
             }
+            if (hasMissingBatteryPercent()) alert('Please enter a battery percentage between 1 and 99!');
             const doaBlocks = nonAdpIssues.map(issue => {
                 const partName = issue.part;
-                const verbiage = cleanIssueDescription(issue.value);
+                const verbiage = cleanIssueDescription(issueText(issue));
                 return `THE ${partName} IS DEAD ON ARRIVAL WHEN INSTALLED. //${verbiage}.//`;
             });
             reportOutput.textContent = doaBlocks.join('\n') + '\nPPID:';
@@ -911,6 +986,7 @@
         const initialCommentDescription = document.getElementById('initial-comment-description').value.trim();
 
         if (hasNoInitialIssue) alert('Please make sure to add an initial issue description!');
+        if (hasMissingBatteryPercent()) alert('Please enter a battery percentage between 1 and 99!');
 
         const nonAdpPartObjects = selectedIssues.filter(i => i.type === 'NON-ADP');
         const uniqueNonAdpParts = [...new Set(nonAdpPartObjects.map(i => i.part.toUpperCase()))];
@@ -947,13 +1023,13 @@
                 return;
             }
             if (isNonAdp) {
-                nonAdpBlock.push(cleanIssueDescription(issue.value));
+                nonAdpBlock.push(cleanIssueDescription(issueText(issue)));
             } else {
                 if (nonAdpBlock.length > 0) {
                     reportSections.push('//' + nonAdpBlock.join('. // ') + './/');
                     nonAdpBlock = [];
                 }
-               reportSections.push(issue.value.replace(/^\([^)]+\):\s*/, ''));
+               reportSections.push(issueText(issue).replace(/^\([^)]+\):\s*/, ''));
             }
         });
         if (reimageIssue) {
