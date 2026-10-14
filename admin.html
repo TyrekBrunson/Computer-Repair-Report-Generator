@@ -67,6 +67,19 @@
         .vb-line-btns button:hover { background: #d6e2ee; }
         .vb-line-btns button.del { background: #fdecea; color: #b71c1c; }
         .vb-empty { color: #777; font-style: italic; padding: 10px; }
+        /* Organize Verbiage pop-up — mirrors the Diagnostic Generator's device / contract / category layout */
+        .organize-card { width: min(92vw, 620px); max-height: 88vh; overflow-y: auto; text-align: left; }
+        .org-device-label { margin-top: 12px; padding: 10px 14px; font-weight: bold; background: #e6f0ff; color: #0056b3; border-radius: 4px 4px 0 0; }
+        .org-contract { margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; }
+        .org-contract-label { padding: 10px; font-weight: bold; background: #e9ecef; }
+        .org-contract.adp .org-contract-label { border-left: 4px solid #0056b3; color: #0056b3; }
+        .org-contract.non-adp .org-contract-label { border-left: 4px solid #cc6600; color: #cc6600; }
+        .org-list { padding: 8px 10px; min-height: 20px; }
+        .org-cat { display: flex; align-items: center; gap: 10px; padding: 10px; margin-bottom: 6px; border: 1px solid #ccc; border-radius: 4px; background: #fff; font-weight: bold; cursor: grab; user-select: none; }
+        .org-cat:hover { border-color: #0056b3; background: #f4f8fd; }
+        .org-cat.dragging { opacity: 0.4; }
+        .org-cat .org-grip { color: #999; font-size: 1.1em; }
+        .org-cat .org-count { margin-left: auto; font-weight: normal; color: #777; font-size: 0.85em; }
         .pe-table input { width: 100%; box-sizing: border-box; padding: 4px 6px; border: 1px solid #cfd8e3; border-radius: 3px; font-family: inherit; font-size: 0.82em; }
         .pe-table input.worth { background: #eefaf0; border-color: #a3d9b1; }
         .pe-table td.del-cell { text-align: center; }
@@ -94,6 +107,20 @@
             <div style="display:flex; gap:8px; justify-content:center; margin-top:16px;">
                 <button class="action" id="district-picker-confirm" type="button" disabled>Confirm</button>
                 <button class="action secondary" id="district-picker-cancel" type="button">Cancel</button>
+            </div>
+        </div>
+    </div>
+    <div id="organize-overlay" class="password-overlay" style="display:none; z-index:1100;">
+        <div class="password-card organize-card">
+            <h2>Organize Verbiage</h2>
+            <p class="muted">Drag the category boxes into the order you want. This is the order they appear in the Diagnostic Generator. Categories can only move within their own ADP / NON-ADP section.</p>
+            <label style="font-weight:bold;">Device:
+                <select id="org-device"></select>
+            </label>
+            <div id="org-preview"></div>
+            <div style="display:flex; gap:8px; justify-content:center; margin-top:16px;">
+                <button class="action" id="org-save" type="button">💾 Save Order</button>
+                <button class="action secondary" id="org-cancel" type="button">Cancel</button>
             </div>
         </div>
     </div>
@@ -229,6 +256,7 @@
                     </label>
                     <button class="action secondary" id="vb-add-category">+ Category</button>
                     <button class="action danger" id="vb-del-category">Delete Category</button>
+                    <button class="action" id="vb-organize" title="Drag categories into the order the Diagnostic Generator shows them">🗂 Organize Verbiage</button>
                 </div>
 
                 <div id="vb-lines"></div>
@@ -984,6 +1012,115 @@
     }
     window.vbMove = vbMove;
 
+    // ---- Organize Verbiage pop-up ----
+    // Categories render in the generator in object key order, so the pop-up works on a draft
+    // of key orders ({ device: { contract: [category, ...] } }) and Save rebuilds each contract
+    // object with its keys in the new sequence. Cancel just throws the draft away.
+    let orgDraft = null;
+
+    function orgContractLabel(device, contract) {
+        if (contract === 'ADP') return device === 'Chromebook' ? '▶ ADP Issues (Physical Damage)' : '▶ ADP / Worth Provided Issues (Physical Damage)';
+        return '▶ NON-ADP Issues (System / Component Failure)';
+    }
+
+    function orgOpen() {
+        orgDraft = {};
+        for (const [device, contracts] of Object.entries(verbiageData || {})) {
+            orgDraft[device] = {};
+            for (const [contract, cats] of Object.entries(contracts)) orgDraft[device][contract] = Object.keys(cats);
+        }
+        const sel = document.getElementById('org-device');
+        sel.innerHTML = Object.keys(orgDraft).map(d => `<option value="${d}">${d === 'Latitude' ? 'Latitude / Dell Pro' : d}</option>`).join('');
+        if (orgDraft[vbCurrent().device]) sel.value = vbCurrent().device;
+        orgRender();
+        document.getElementById('organize-overlay').style.display = 'flex';
+    }
+
+    function orgClose() {
+        document.getElementById('organize-overlay').style.display = 'none';
+        orgDraft = null;
+    }
+
+    function orgRender() {
+        const device = document.getElementById('org-device').value;
+        const wrap = document.getElementById('org-preview');
+        const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+        if (!device || !orgDraft[device]) { wrap.innerHTML = '<div class="vb-empty">No verbiage loaded.</div>'; return; }
+        wrap.innerHTML = `<div class="org-device-label">${device === 'Latitude' ? 'Latitude / Dell Pro' : esc(device)}</div>` +
+            Object.entries(orgDraft[device]).map(([contract, cats]) => `
+                <div class="org-contract ${contract === 'ADP' ? 'adp' : 'non-adp'}">
+                    <div class="org-contract-label">${orgContractLabel(device, contract)}</div>
+                    <div class="org-list" data-contract="${esc(contract)}">
+                        ${cats.length ? cats.map(c => {
+                            const n = verbiageData[device][contract][c].length;
+                            return `<div class="org-cat" draggable="true" data-cat="${esc(c)}">
+                                <span class="org-grip">⠿</span>${esc(c)}<span class="org-count">${n} line${n === 1 ? '' : 's'}</span>
+                            </div>`;
+                        }).join('') : '<div class="vb-empty">No categories.</div>'}
+                    </div>
+                </div>`).join('');
+    }
+
+    // Records the new order of a list straight from the DOM after a drop
+    function orgSyncList(list) {
+        const device = document.getElementById('org-device').value;
+        orgDraft[device][list.dataset.contract] = [...list.querySelectorAll('.org-cat')].map(el => el.dataset.cat);
+    }
+
+    function initOrganizer() {
+        const preview = document.getElementById('org-preview');
+        let dragged = null;
+
+        preview.addEventListener('dragstart', e => {
+            dragged = e.target.closest('.org-cat');
+            if (!dragged) return;
+            dragged.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/plain', dragged.dataset.cat); // Firefox won't start a drag without data
+        });
+        preview.addEventListener('dragover', e => {
+            if (!dragged) return;
+            const list = e.target.closest('.org-list');
+            // Only reorder within the category's own ADP / NON-ADP section
+            if (!list || list !== dragged.parentElement) return;
+            e.preventDefault();
+            const after = [...list.querySelectorAll('.org-cat:not(.dragging)')]
+                .find(el => e.clientY < el.getBoundingClientRect().top + el.offsetHeight / 2);
+            if (after) list.insertBefore(dragged, after); else list.appendChild(dragged);
+        });
+        preview.addEventListener('drop', e => e.preventDefault());
+        preview.addEventListener('dragend', () => {
+            if (!dragged) return;
+            dragged.classList.remove('dragging');
+            orgSyncList(dragged.parentElement);
+            dragged = null;
+        });
+
+        document.getElementById('vb-organize').addEventListener('click', orgOpen);
+        document.getElementById('org-device').addEventListener('change', orgRender);
+        document.getElementById('org-cancel').addEventListener('click', orgClose);
+        document.getElementById('organize-overlay').addEventListener('click', e => { if (e.target.id === 'organize-overlay') orgClose(); });
+        document.addEventListener('keydown', e => { if (e.key === 'Escape' && orgDraft) orgClose(); });
+
+        document.getElementById('org-save').addEventListener('click', () => {
+            for (const [device, contracts] of Object.entries(orgDraft)) {
+                for (const [contract, order] of Object.entries(contracts)) {
+                    const group = verbiageData[device][contract];
+                    const reordered = {};
+                    order.forEach(k => { reordered[k] = group[k]; });
+                    verbiageData[device][contract] = reordered;
+                }
+            }
+            const keepCategory = vbCurrent().category;
+            orgClose();
+            saveOverride('verbiage', verbiageData);
+            vbPopulateCategorySelect();
+            document.getElementById('vb-category').value = keepCategory;
+            vbRenderLines();
+            setStatus('verbiage-status', 'ok', 'Category order saved to your draft. Go to the Publish tab and click ⬆ Publish Verbiage to make it live in the Diagnostic Generator.');
+        });
+    }
+
     function vbRemove(i) {
         const { device, contract, category } = vbCurrent();
         verbiageData[device][contract][category].splice(i, 1);
@@ -995,6 +1132,7 @@
         document.getElementById('vb-device').addEventListener('change', () => { vbPopulateCategorySelect(); vbRenderLines(); });
         document.getElementById('vb-contract').addEventListener('change', () => { vbPopulateCategorySelect(); vbRenderLines(); });
         document.getElementById('vb-category').addEventListener('change', vbRenderLines);
+        initOrganizer();
 
         document.getElementById('vb-add-line').addEventListener('click', () => {
             const ta = document.getElementById('vb-new-line');
