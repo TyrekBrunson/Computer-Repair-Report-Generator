@@ -6,7 +6,7 @@
     <title>Diagnostic Generator</title>
     <link rel="icon" type="image/x-icon" href="../images/laptopICO.ico">
     <link rel="stylesheet" href="../shared/shared-styles.css">
-    <link rel="stylesheet" href="diag-styles.css">
+    <link rel="stylesheet" href="diag-styles.css?v=2026-10-15">
 </head>
 <body>
 <div id="staleness-overlay" class="staleness-overlay" aria-hidden="true"></div>
@@ -744,7 +744,14 @@
                         if (leadingTag) {
                             const tag  = leadingTag[1].replace('(', '[').replace(')', ']');
                             const rest = upperIssue.slice(leadingTag[0].length);
-                            label.innerHTML = `<strong>${tag}:</strong> ${rest}`;
+                            if (issueTypeAttr === 'NON-ADP') {
+                                // Warranty lines are long, so only the bold tag shows until the box is
+                                // checked (CSS reveals .issue-full-text). The report always uses the full line.
+                                label.innerHTML = `<strong>${tag}</strong><span class="issue-full-text">: ${rest}</span>`;
+                                label.title = rest;
+                            } else {
+                                label.innerHTML = `<strong>${tag}:</strong> ${rest}`;
+                            }
                         } else {
                             label.textContent = upperIssue;
                         }
