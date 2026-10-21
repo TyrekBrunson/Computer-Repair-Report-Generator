@@ -925,7 +925,7 @@
             else if (uniqueNonAdpParts.length === 2) { partsListForStatus = `${uniqueNonAdpParts[0]} AND ${uniqueNonAdpParts[1]}`; }
             else { const c = [...uniqueNonAdpParts]; const l = c.pop(); partsListForStatus = `${c.join(', ')}, AND ${l}`; }
         }
-        const oemWarrantyText = `Waiting Warranty Part from OEM\nAWAITING DELL WARRANTY ${statusTitle}: ${partsListForStatus}.`;
+        const oemWarrantyText = `Waiting Warranty Part from OEM\nAWAITING DELL WARRANTY ${statusTitle}: ${partsListForStatus}`;
 
         const line1 = `UNIT PRESENTED WITH DESCRIPTION OF: ${customDescription || 'No Issue Given.'}`;
         let line2Prefix = `UPON ARRIVAL: VERIFIED INITIAL ISSUE: `;
