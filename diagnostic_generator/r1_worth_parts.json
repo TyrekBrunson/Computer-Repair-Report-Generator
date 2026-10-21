@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-10-12T17:50:03.088Z",
+    "generatedAt": "2026-10-21T15:16:03.127Z",
     "source": "admin-import",
     "schema": 2,
     "catalog": "richland1_worth"
@@ -264,7 +264,7 @@
           "description": "8 GB Motherboard (NVMe SSD) - FOR ALL WORTH MOBO",
           "canonical": "MOTHERBOARD",
           "coverage": "Worth",
-          "price": 227.9
+          "price": 293.75
         },
         {
           "partNumber": "W-H5CKD",
@@ -376,7 +376,7 @@
           "description": "128 GB NVMe Solid State Hard Drive M.2",
           "canonical": "SSD",
           "coverage": "Worth",
-          "price": 43.75
+          "price": 37.5
         },
         {
           "partNumber": "W-053KJ4",
@@ -468,6 +468,17 @@
           "coverage": "Dell Warranty",
           "price": null,
           "canonical": "WEBCAM"
+        },
+        {
+          "partNumber": "W-PHVVR ",
+          "description": "Motherboard  - 8GB RAM - N200, 128GB Storage",
+          "canonical": "MOTHERBOARD",
+          "category": "Warranty",
+          "adp": "NON_ADP",
+          "price": 337.5,
+          "source": "Manual",
+          "notes": "",
+          "coverage": "Worth"
         }
       ],
       "notes": [
@@ -838,7 +849,7 @@
           "description": "Fan",
           "canonical": "CPU FAN",
           "coverage": "Worth",
-          "price": null
+          "price": 37.44
         },
         {
           "partNumber": "098F8",
@@ -957,28 +968,28 @@
           "description": "Bottom Base Cover Assembly - Silver",
           "canonical": "BOTTOM COVER",
           "coverage": "Worth",
-          "price": null
+          "price": 28.74
         },
         {
           "partNumber": "W-40V0P",
           "description": "Keyboard Palmrest Assembly",
           "canonical": "KEYBOARD",
           "coverage": "Worth",
-          "price": null
+          "price": 67.14
         },
         {
           "partNumber": "W-6CVCT",
           "description": "Battery Cable",
           "canonical": "BATTERY CABLE",
           "coverage": "Worth",
-          "price": null
+          "price": 15.95
         },
         {
           "partNumber": "W-89MTT",
           "description": "RGB IR Infrared Web Camera Replacement Module",
           "canonical": "WEBCAM",
           "coverage": "Worth",
-          "price": null
+          "price": 35.94
         },
         {
           "partNumber": "D3G8M",
@@ -1009,7 +1020,7 @@
           "description": "14\" FHD Touch LCD",
           "canonical": "LCD SCREEN",
           "coverage": "Worth",
-          "price": 68.75
+          "price": 81.25
         },
         {
           "partNumber": "W-W1KKY",
@@ -1107,7 +1118,7 @@
           "description": "Motherboard",
           "canonical": "MOTHERBOARD",
           "coverage": "Worth",
-          "price": 475
+          "price": 638.84
         },
         {
           "partNumber": "W-WCPMG",
