@@ -957,7 +957,7 @@
             } else {
                 reportOutput.textContent = berText;
             }
-            document.getElementById('on-hold-output').textContent = 'ON HOLD – PENDING\nDEVICE IS BER.';
+            document.getElementById('on-hold-output').textContent = 'ON HOLD – PENDING\nDEVICE IS BER';
             document.getElementById('required-photos-output').textContent = '';
             return;
         }
@@ -1008,7 +1008,7 @@
             else if (uniqueNonAdpParts.length === 2) { partsListForStatus = `${uniqueNonAdpParts[0]} AND ${uniqueNonAdpParts[1]}`; }
             else { const c = [...uniqueNonAdpParts]; const l = c.pop(); partsListForStatus = `${c.join(', ')}, AND ${l}`; }
         }
-        const oemWarrantyText = `Waiting Warranty Part from OEM\nAWAITING DELL WARRANTY ${statusTitle}: ${partsListForStatus}.`;
+        const oemWarrantyText = `Waiting Warranty Part from OEM\nAWAITING DELL WARRANTY ${statusTitle}: ${partsListForStatus}`;
 
         const line1 = `UNIT PRESENTED WITH DESCRIPTION OF: ${customDescription || 'No Issue Given.'}`;
         let line2Prefix = `UPON ARRIVAL: VERIFIED INITIAL ISSUE: `;
@@ -1073,9 +1073,9 @@
 
         let holdStatusText = '';
         if (nonAdpCount > 0 && isRichlandWorth && adpIssuesCount === 0) holdStatusText = oemWarrantyText;
-        else if (adpIssuesCount > 0 && isRichlandWorth) holdStatusText = `ON HOLD – PENDING\nAWAITING WORTH REPAIRS.`;
+        else if (adpIssuesCount > 0 && isRichlandWorth) holdStatusText = `ON HOLD – PENDING\nAWAITING WORTH REPAIRS`;
         else if (nonAdpCount > 0 && !isRichlandWorth) holdStatusText = oemWarrantyText;
-        else if (adpIssuesCount > 0 && !isRichlandWorth) holdStatusText = `ON HOLD – PENDING\nAWAITING ADP REPAIRS.`;
+        else if (adpIssuesCount > 0 && !isRichlandWorth) holdStatusText = `ON HOLD – PENDING\nAWAITING ADP REPAIRS`;
         document.getElementById('on-hold-output').textContent = holdStatusText;
 
         const allSelectedParts = selectedIssues.map(i => i.part.toUpperCase());
