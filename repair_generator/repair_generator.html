@@ -742,7 +742,8 @@
             return;
         }
 
-        repairsOutput.textContent = reportText;
+        // An empty ${replaced} leaves a double space after "REPAIRS COMPLETED:"
+        repairsOutput.textContent = reportText.replace(/ {2,}/g, ' ');
 
         // Required photos
         const batteryOowForPhotos = document.getElementById('battery-oow-checkbox').checked;

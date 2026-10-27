@@ -1284,6 +1284,16 @@
             }
         });
 
+        // BER / DOA / Bug Unit are mutually exclusive — checking one unchecks the others
+        const reportModeIds = ['ber-checkbox', 'doa-checkbox', 'bug-checkbox'];
+        reportModeIds.forEach(id => {
+            document.getElementById(id).addEventListener('change', function () {
+                if (!this.checked) return;
+                reportModeIds.filter(other => other !== id)
+                    .forEach(other => { document.getElementById(other).checked = false; });
+            });
+        });
+
         document.getElementById('cannot-verify-checkbox').addEventListener('change', toggleCannotVerifyDescription);
         document.getElementById('initial-comment-checkbox').addEventListener('change', toggleInitialCommentDescription);
         toggleCannotVerifyDescription();
