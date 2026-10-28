@@ -468,17 +468,6 @@
           "coverage": "Dell Warranty",
           "price": null,
           "canonical": "WEBCAM"
-        },
-        {
-          "partNumber": "W-PHVVR ",
-          "description": "Motherboard  - 8GB RAM - N200, 128GB Storage",
-          "canonical": "MOTHERBOARD",
-          "category": "Warranty",
-          "adp": "NON_ADP",
-          "price": 337.5,
-          "source": "Manual",
-          "notes": "",
-          "coverage": "Worth"
         }
       ],
       "notes": [
