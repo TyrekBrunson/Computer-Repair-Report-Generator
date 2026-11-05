@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-10-02T17:17:01.816Z",
+    "generatedAt": "2026-11-05T16:48:32.615Z",
     "source": "Parts - FieldPower Parts Color Coded.xlsx",
     "catalog": "fieldpower",
     "schema": 2
@@ -341,7 +341,7 @@
         {
           "partNumber": "NYJPR",
           "description": "Webcam",
-          "coverage": "ADP",
+          "coverage": "Dell Warranty",
           "price": null,
           "canonical": "WEBCAM"
         },
