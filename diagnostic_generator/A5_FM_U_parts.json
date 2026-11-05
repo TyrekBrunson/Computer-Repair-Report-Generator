@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-11-05T16:48:32.615Z",
+    "generatedAt": "2026-11-05T17:33:13.961Z",
     "source": "Parts - FieldPower Parts Color Coded.xlsx",
     "catalog": "fieldpower",
     "schema": 2
@@ -127,14 +127,14 @@
           "description": "LCD Screen (NON TOUCH) - valid for both ADP and Non-ADP",
           "coverage": "ADP",
           "price": null,
-          "canonical": "LCD SCREEN"
+          "canonical": "NON TOUCH LCD"
         },
         {
           "partNumber": "0MWDNF",
           "description": "LCD Screen (NON TOUCH) - valid for both ADP and Non-ADP",
           "coverage": "Dell Warranty",
           "price": null,
-          "canonical": "LCD SCREEN"
+          "canonical": "NON TOUCH LCD"
         },
         {
           "partNumber": "RCCDP",
